@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/lato": "^5.3.0",
     "vue": "^3.4.38",
     "vue-router": "^4.4.3"
   },

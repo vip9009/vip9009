@@ -2,7 +2,7 @@
 import { computed, ref, watchEffect } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { productsData } from '@/data'
-import ProductCard from '@/components/ProductCard.vue'
+import VpProductCard from '@/components/VpProductCard.vue'
 import AppIcon from '@/components/AppIcon.vue'
 import { allProducts, decodeEntities } from '@/utils'
 
@@ -16,7 +16,7 @@ const products = computed(() => {
   if (!query.value) return []
   const word = query.value.toLowerCase()
   return allProducts(productsData.sections).filter((product) => {
-    const haystack = `${decodeEntities(product.title)} ${decodeEntities(product.imageAlt)}`.toLowerCase()
+    const haystack = `${decodeEntities(product.title)} ${decodeEntities(product.imageAlt || '')}`.toLowerCase()
     return haystack.includes(word)
   })
 })
@@ -36,206 +36,185 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="search-page">
-    <div class="wrapper">
-      <nav class="breadcrumb" aria-label="面包屑">
-        <RouterLink to="/">首页</RouterLink>
-        <span class="sep">/</span>
-        <span>搜索</span>
-      </nav>
+  <div class="wrapper search-page">
+    <nav class="breadcrumb">
+      <RouterLink to="/">首页</RouterLink>
+      <span>/</span>
+      <span>搜索</span>
+    </nav>
 
-      <div class="page-head">
-        <div>
-          <h1 class="page-title">搜索{{ query ? `“${query}”` : '' }}</h1>
-          <p class="page-subtitle">
-            <template v-if="query">共找到 {{ total }} 款产品</template>
-            <template v-else>输入关键词搜索产品</template>
-          </p>
-        </div>
+    <div class="search-head">
+      <h1>搜索{{ query ? `“${query}”` : '' }}</h1>
+      <p v-if="query">共找到 {{ total }} 款产品</p>
+      <p v-else>输入产品名、品牌或口味关键词</p>
+    </div>
+
+    <form class="inline-search" role="search" @submit.prevent="submit">
+      <AppIcon name="search" :size="18" />
+      <input v-model="draft" type="search" placeholder="搜索产品 / 品牌 / 口味" aria-label="搜索产品" autocomplete="off" />
+      <button type="submit">搜索</button>
+    </form>
+
+    <template v-if="query">
+      <div v-if="products.length" class="product-grid-3">
+        <VpProductCard
+          v-for="(item, index) in products"
+          :key="`${item.sectionId}-${item.index}`"
+          :product="item"
+          :section-id="item.sectionId"
+          :section-title="item.sectionTitle"
+          :index="item.index"
+          :eager="index < 6"
+        />
       </div>
-
-      <form class="inline-search" @submit.prevent="submit">
-        <AppIcon name="search" :size="18" />
-        <input v-model="draft" type="search" placeholder="搜索产品名称" aria-label="搜索产品名称" autocomplete="off" />
-        <button type="submit">搜索</button>
-      </form>
-
-      <template v-if="query">
-        <template v-if="products.length">
-          <section class="result-block">
-            <h2 class="result-title">产品 <span>{{ products.length }}</span></h2>
-            <div class="product-grid">
-              <ProductCard
-                v-for="item in products"
-                :key="`${item.sectionId}-${item.index}`"
-                :product="item"
-                :section-id="item.sectionId"
-                :index="item.index"
-              />
-            </div>
-          </section>
-        </template>
-
-        <div v-else class="empty-state">
-          <h3>没有找到“{{ query }}”相关产品</h3>
-          <p>换个关键词试试，或者直接联系客服，我们会帮你确认具体产品。</p>
-          <div class="empty-actions">
-            <RouterLink class="btn btn-primary" to="/contact">联系客服</RouterLink>
-            <RouterLink class="btn btn-ghost" to="/">返回首页</RouterLink>
-          </div>
-        </div>
-      </template>
 
       <div v-else class="empty-state">
-        <h3>搜索泡泡哥雾化</h3>
-        <p>可以搜索品牌、产品名称或口味关键词，例如“悦刻”“积木”“冰熊”。</p>
+        <h2>没有找到“{{ query }}”相关产品</h2>
+        <p>换个关键词试试，或者直接联系泡泡哥，我们帮你确认具体产品和口味。</p>
         <div class="empty-actions">
-          <RouterLink class="btn btn-primary" to="/category/hot">浏览热门产品</RouterLink>
+          <RouterLink class="black-btn" to="/contact">联系客服</RouterLink>
+          <RouterLink class="ghost-btn" to="/">返回首页</RouterLink>
         </div>
       </div>
+    </template>
+
+    <div v-else class="empty-state">
+      <h2>搜索泡泡哥雾化</h2>
+      <p>可以搜品牌（悦刻、雪加、冰熊、柚子）、系列名、口数或口味。</p>
     </div>
   </div>
 </template>
 
 <style scoped>
+.search-page {
+  padding-top: 26px;
+  padding-bottom: 50px;
+}
+
+.breadcrumb {
+  display: flex;
+  gap: 7px;
+  padding-bottom: 20px;
+  font-size: 12px;
+  color: #999999;
+}
+
+.breadcrumb a:hover {
+  color: var(--color-primary);
+}
+
+.search-head {
+  padding-bottom: 16px;
+}
+
+.search-head h1 {
+  font-size: 26px;
+}
+
+.search-head p {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #999999;
+}
+
 .inline-search {
   display: flex;
   align-items: center;
-  gap: 10px;
-  height: 48px;
-  padding: 0 6px 0 16px;
-  margin-bottom: 24px;
-  color: #999;
-  background: #fff;
-  border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(17, 58, 93, 0.05);
+  height: 44px;
+  padding-left: 12px;
+  margin-bottom: 26px;
+  border: 1px solid #dddddd;
 }
 
 .inline-search input {
   flex: 1;
   min-width: 0;
   height: 100%;
-  font-size: 14px;
-  background: none;
+  padding: 0 10px;
+  font-size: 13px;
   border: 0;
   outline: none;
 }
 
 .inline-search button {
-  height: 36px;
-  padding: 0 20px;
-  font-size: 13px;
-  color: #fff;
-  background: var(--accent);
-  border-radius: 4px;
-}
-
-.result-block {
-  margin-bottom: 24px;
-}
-
-.result-title {
-  margin-bottom: 14px;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.result-title span {
+  width: 92px;
+  height: 100%;
   font-size: 12px;
-  font-weight: 400;
-  color: #9aa0a6;
-}
-
-@media (max-width: 768px) {
-  .inline-search {
-    margin-bottom: 12px;
-  }
-
-  .result-block {
-    margin-bottom: 12px;
-  }
-
-  .result-title {
-    margin-bottom: 10px;
-    font-size: 17px;
-  }
-}
-
-/* UI UX Pro Max design system overrides */
-.inline-search {
-  height: 56px;
-  padding: 0 8px 0 18px;
-  margin-bottom: 32px;
-  color: var(--color-muted-foreground);
-  background: var(--color-card);
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
-  box-shadow: var(--shadow-card);
-}
-
-.inline-search input {
-  color: var(--color-foreground);
-  font-size: 15px;
-}
-
-.inline-search button {
-  height: 40px;
-  padding: 0 22px;
-  font-family: var(--font-heading);
-  font-weight: 600;
-  color: var(--color-on-accent);
-  background: var(--color-accent);
-  border-radius: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  background: #242125;
 }
 
 .inline-search button:hover {
-  background: #f97316;
+  background: var(--color-primary);
 }
 
-.result-block {
-  margin-bottom: 40px;
+.product-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
 }
 
-.result-title {
-  margin-bottom: 18px;
-  font-family: var(--font-heading);
-  font-size: clamp(24px, 2.6vw, 32px);
-  font-weight: 600;
-  color: var(--color-foreground);
+.empty-state {
+  padding: 70px 20px;
+  text-align: center;
+  background: #fafafa;
+  border: 1px solid #eeeeee;
 }
 
-.result-title span {
+.empty-state h2 {
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.empty-state p {
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: #888888;
+}
+
+.empty-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.black-btn,
+.ghost-btn {
   display: inline-flex;
   align-items: center;
-  height: 24px;
-  padding: 0 9px;
-  margin-left: 6px;
-  font-family: var(--font-heading);
+  height: 38px;
+  padding: 0 16px;
   font-size: 12px;
-  font-weight: 600;
-  color: var(--color-on-primary);
-  background: var(--color-primary);
-  border-radius: 999px;
+  font-weight: 700;
 }
 
-@media (max-width: 768px) {
-  .inline-search {
-    height: 50px;
-    padding-left: 14px;
-    margin-bottom: 20px;
-    border-radius: 14px;
+.black-btn {
+  color: #ffffff;
+  background: #242125;
+}
+
+.ghost-btn {
+  color: #555555;
+  border: 1px solid #dddddd;
+}
+
+.black-btn:hover {
+  background: var(--color-primary);
+}
+
+.ghost-btn:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+@media (max-width: 900px) {
+  .product-grid-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
   }
 
-  .inline-search button {
-    height: 36px;
-    padding: 0 16px;
-  }
-
-  .result-block {
-    margin-bottom: 24px;
-  }
-
-  .result-title {
+  .search-head h1 {
     font-size: 22px;
   }
 }

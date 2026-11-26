@@ -52,6 +52,13 @@ defineProps({
       <circle cx="12" cy="12" r="9" />
       <path d="M3 12h18M12 3c2.4 2.5 3.6 5.6 3.6 9S14.4 18.5 12 21c-2.4-2.5-3.6-5.6-3.6-9S9.6 5.5 12 3Z" />
     </template>
+    <template v-else-if="name === 'cart'">
+      <path d="M5 7h14l-1.2 13.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8L5 7Z" />
+      <path d="M9 7a3 3 0 0 1 6 0" />
+    </template>
+    <template v-else-if="name === 'heart'">
+      <path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 1 0-7.1 7.1L12 21l8.8-8.3a5 5 0 0 0 0-7.1Z" />
+    </template>
     <template v-else-if="name === 'truck'">
       <path d="M3 6h11v10H3zM14 9h4l3 3v4h-7z" />
       <circle cx="7" cy="18" r="2" />

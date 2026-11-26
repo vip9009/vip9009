@@ -59,7 +59,10 @@ ROOT = resolve_root()
 DATA_DIR = ROOT / "src" / "data"
 SECTIONS_DIR = DATA_DIR / "sections"
 CATEGORIES_FILE = DATA_DIR / "site" / "categories.json"
+GENERAL_FILE = DATA_DIR / "site" / "general.json"
+CONTACTS_FILE = DATA_DIR / "site" / "contacts.json"
 IMAGES_DIR = ROOT / "public" / "images" / "products"
+PAYMENT_IMAGE = ROOT / "public" / "images" / "payment-qr.webp"
 BACKUP_DIR = ROOT / "tools" / ".backups"
 CATEGORY_ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 
@@ -217,6 +220,23 @@ def check_data() -> int:
             seen_titles.add(title)
             if product.get("price") in (None, ""):
                 errors.append(f"{section_id}[{index}]: 缺少价格")
+            price_max = product.get("priceMax")
+            if price_max not in (None, ""):
+                try:
+                    if float(price_max) < float(product.get("price")):
+                        errors.append(f"{section_id}[{index}]: 价格上限小于基础价格")
+                except (TypeError, ValueError):
+                    errors.append(f"{section_id}[{index}]: 价格上限不是数字：{price_max}")
+            options = product.get("options")
+            if options is not None:
+                if not isinstance(options, list):
+                    errors.append(f"{section_id}[{index}]: options 应该是数组")
+                else:
+                    for option in options:
+                        if isinstance(option, dict) and not option.get("label"):
+                            errors.append(f"{section_id}[{index}]: 口味缺少名称")
+                        elif not isinstance(option, (str, dict)):
+                            errors.append(f"{section_id}[{index}]: 口味格式不正确")
             local_image = product.get("localImage", "")
             path = image_path(local_image)
             if not path or not path.exists():
@@ -234,6 +254,19 @@ def check_data() -> int:
     print(f"分区：{len(sections)}")
     print(f"商品：{product_count}")
     print(f"分类：{len(categories)}")
+
+    try:
+        general = load_json(GENERAL_FILE)
+        contacts = load_json(CONTACTS_FILE)
+        qr = (general.get("payment") or {}).get("qr")
+        if qr:
+            qr_path = ROOT / "public" / str(qr).lstrip("/")
+            if not qr_path.exists():
+                errors.append(f"收款二维码不存在：{qr}")
+        if not (contacts.get("qq") or {}).get("number"):
+            errors.append("contacts.json 缺少 QQ 号")
+    except Exception as error:
+        errors.append(f"站点配置读取失败：{error}")
     if errors:
         print("\n发现以下问题：")
         for error in errors:
@@ -256,6 +289,8 @@ class ProductAdmin(tk.Tk):
 
         self.sections = load_sections()
         self.categories = load_json(CATEGORIES_FILE)
+        self.general = load_json(GENERAL_FILE)
+        self.contacts = load_json(CONTACTS_FILE)
 
         self.row_map = {}
         self.product_top_labels = {}
@@ -268,6 +303,9 @@ class ProductAdmin(tk.Tk):
         self.pending_image = None
         self._preview_photo = None
         self._last_image_dir = None
+        self.extra = self._empty_extra()
+        self._pay_photo = None
+        self.pending_payment_image = None
 
         self.category_mode = "edit"
         self.editing_category = None
@@ -375,6 +413,7 @@ class ProductAdmin(tk.Tk):
         self.notebook.pack(fill="both", expand=True, padx=12, pady=(10, 0))
         self._build_products_tab()
         self._build_categories_tab()
+        self._build_settings_tab()
 
     # -- 商品页 -----------------------------------------------------------
 
@@ -498,6 +537,7 @@ class ProductAdmin(tk.Tk):
         ttk.Button(buttons, text="保存商品", style="Accent.TButton", command=self.save_product).pack(
             side="left"
         )
+        ttk.Button(buttons, text="更多信息", command=self.edit_extra).pack(side="left", padx=8)
         ttk.Button(buttons, text="清空表单", command=self.new_product).pack(side="left", padx=8)
 
     # -- 分类页 -----------------------------------------------------------
@@ -626,6 +666,186 @@ class ProductAdmin(tk.Tk):
             side="left"
         )
         ttk.Button(buttons, text="新增一级", command=self.new_top_category).pack(side="left", padx=8)
+
+    # -- 站点设置 ---------------------------------------------------------
+
+    def _build_settings_tab(self):
+        tab = ttk.Frame(self.notebook, padding=16)
+        self.notebook.add(tab, text="站点设置")
+        tab.columnconfigure(1, weight=1)
+
+        general = self.general
+        hero = general.get("hero", {})
+        shipping = general.get("shipping", {})
+        payment = general.get("payment", {})
+
+        ttk.Label(tab, text="公告文字").grid(row=0, column=0, sticky="w", pady=5)
+        self.announce_var = tk.StringVar(value=general.get("announcement", ""))
+        ttk.Entry(tab, textvariable=self.announce_var).grid(row=0, column=1, columnspan=2, sticky="ew", pady=5)
+
+        ttk.Label(tab, text="公告右侧").grid(row=1, column=0, sticky="w", pady=5)
+        self.announce_right_var = tk.StringVar(value=general.get("announcementRight", ""))
+        ttk.Entry(tab, textvariable=self.announce_right_var).grid(row=1, column=1, columnspan=2, sticky="ew", pady=5)
+
+        ttk.Label(tab, text="首页主标题").grid(row=2, column=0, sticky="w", pady=5)
+        self.hero_title_var = tk.StringVar(value=hero.get("title", ""))
+        ttk.Entry(tab, textvariable=self.hero_title_var).grid(row=2, column=1, columnspan=2, sticky="ew", pady=5)
+
+        ttk.Label(tab, text="首页副标题").grid(row=3, column=0, sticky="nw", pady=5)
+        self.hero_subtitle_text = tk.Text(tab, height=3, wrap="word", relief="solid", borderwidth=1)
+        self.hero_subtitle_text.grid(row=3, column=1, columnspan=2, sticky="ew", pady=5)
+        self.hero_subtitle_text.insert("1.0", hero.get("subtitle", ""))
+
+        ttk.Label(tab, text="首页按钮文字").grid(row=4, column=0, sticky="w", pady=5)
+        self.hero_cta_var = tk.StringVar(value=hero.get("cta", ""))
+        ttk.Entry(tab, textvariable=self.hero_cta_var).grid(row=4, column=1, columnspan=2, sticky="ew", pady=5)
+
+        ttk.Label(tab, text="首页按钮链接").grid(row=5, column=0, sticky="w", pady=5)
+        self.hero_link_var = tk.StringVar(value=hero.get("link", ""))
+        ttk.Entry(tab, textvariable=self.hero_link_var).grid(row=5, column=1, columnspan=2, sticky="ew", pady=5)
+
+        ttk.Label(tab, text="包邮门槛 / 运费").grid(row=6, column=0, sticky="w", pady=5)
+        ship_frame = ttk.Frame(tab)
+        ship_frame.grid(row=6, column=1, columnspan=2, sticky="w", pady=5)
+        self.free_over_var = tk.StringVar(value=str(shipping.get("freeOver", 138)))
+        self.ship_fee_var = tk.StringVar(value=str(shipping.get("fee", 8)))
+        ttk.Entry(ship_frame, textvariable=self.free_over_var, width=10).pack(side="left")
+        ttk.Label(ship_frame, text="元包邮，运费").pack(side="left", padx=6)
+        ttk.Entry(ship_frame, textvariable=self.ship_fee_var, width=8).pack(side="left")
+        ttk.Label(ship_frame, text="元").pack(side="left", padx=4)
+
+        ttk.Label(tab, text="客服 QQ").grid(row=7, column=0, sticky="w", pady=5)
+        self.qq_var = tk.StringVar(value=str((self.contacts.get("qq") or {}).get("number", "")))
+        ttk.Entry(tab, textvariable=self.qq_var).grid(row=7, column=1, columnspan=2, sticky="ew", pady=5)
+
+        ttk.Label(tab, text="收款二维码").grid(row=8, column=0, sticky="w", pady=5)
+        self.payment_path_var = tk.StringVar(value=payment.get("qr", ""))
+        pay_row = ttk.Frame(tab)
+        pay_row.grid(row=8, column=1, columnspan=2, sticky="ew", pady=5)
+        ttk.Entry(pay_row, textvariable=self.payment_path_var, state="readonly").pack(
+            side="left", fill="x", expand=True
+        )
+        ttk.Button(pay_row, text="选择图片", command=self.choose_payment_image).pack(side="left", padx=(6, 0))
+
+        self.payment_preview = tk.Label(
+            tab,
+            text="未选择收款码\n建议使用企业微信收款码",
+            bg="#F7FFFB",
+            fg="#9AA0A6",
+            width=22,
+            height=8,
+            relief="solid",
+            borderwidth=1,
+            justify="center",
+        )
+        self.payment_preview.grid(row=9, column=0, columnspan=3, pady=10)
+        self._show_payment_preview(payment.get("qr", ""))
+
+        ttk.Label(
+            tab,
+            text="保存后会写入 src/data/site/general.json 和 contacts.json；发布时会一并提交收款码图片。",
+            foreground="#777",
+        ).grid(row=10, column=0, columnspan=3, sticky="w")
+
+        ttk.Button(tab, text="保存站点设置", style="Accent.TButton", command=self.save_settings).grid(
+            row=11, column=0, columnspan=3, sticky="w", pady=(14, 0)
+        )
+
+    def choose_payment_image(self):
+        initial = self._last_image_dir
+        if not initial:
+            pictures = Path.home() / "Pictures"
+            initial = str(pictures if pictures.exists() else ROOT)
+        path = filedialog.askopenfilename(
+            title="选择收款二维码图片",
+            initialdir=initial,
+            filetypes=[
+                ("图片文件", "*.jpg *.jpeg *.png *.webp *.bmp"),
+                ("所有文件", "*.*"),
+            ],
+        )
+        if not path:
+            return
+        self._last_image_dir = str(Path(path).parent)
+        self.pending_payment_image = path
+        self.payment_path_var.set(path)
+        self._show_payment_preview(path)
+        self.status_var.set("已选择收款码，点“保存站点设置”后生效")
+
+    def _show_payment_preview(self, path_value):
+        self._pay_photo = None
+        if not path_value:
+            self.payment_preview.configure(image="", text="未选择收款码\n建议使用企业微信收款码")
+            return
+        path = Path(path_value)
+        if not path.is_absolute():
+            path = ROOT / "public" / str(path_value).lstrip("/")
+        if not path.exists():
+            self.payment_preview.configure(image="", text="图片不存在")
+            return
+        try:
+            with Image.open(path) as opened:
+                image = opened.convert("RGB")
+                resampling = getattr(Image, "Resampling", Image)
+                image.thumbnail((180, 180), resampling.LANCZOS)
+                self._pay_photo = ImageTk.PhotoImage(image)
+            self.payment_preview.configure(image=self._pay_photo, text="")
+        except Exception as error:
+            self.payment_preview.configure(image="", text=f"预览失败：{error}")
+
+    def _process_payment_image(self, source):
+        if Image is None:
+            raise RuntimeError("缺少 Pillow")
+        PAYMENT_IMAGE.parent.mkdir(parents=True, exist_ok=True)
+        with Image.open(source) as opened:
+            image = ImageOps.exif_transpose(opened) if ImageOps else opened
+            if image.mode in ("RGBA", "LA"):
+                background = Image.new("RGB", image.size, (255, 255, 255))
+                background.paste(image, mask=image.split()[-1])
+                image = background
+            else:
+                image = image.convert("RGB")
+            resampling = getattr(Image, "Resampling", Image)
+            image.thumbnail((700, 700), resampling.LANCZOS)
+            image.save(PAYMENT_IMAGE, "WEBP", quality=90, method=6)
+        return "/images/payment-qr.webp"
+
+    def save_settings(self):
+        try:
+            free_over = compact_price(self.free_over_var.get().strip())
+            ship_fee = compact_price(self.ship_fee_var.get().strip())
+            if float(free_over) < 0 or float(ship_fee) < 0:
+                raise ValueError
+        except (TypeError, ValueError):
+            messagebox.showwarning("金额不正确", "包邮门槛和运费需要填写大于等于 0 的数字。")
+            return
+
+        if self.pending_payment_image:
+            try:
+                qr_path = self._process_payment_image(self.pending_payment_image)
+            except Exception as error:
+                messagebox.showerror("收款码处理失败", str(error))
+                return
+            self.payment_path_var.set(qr_path)
+            self.pending_payment_image = None
+
+        self.general["announcement"] = self.announce_var.get().strip()
+        self.general["announcementRight"] = self.announce_right_var.get().strip()
+        hero = self.general.setdefault("hero", {})
+        hero["title"] = self.hero_title_var.get().strip()
+        hero["subtitle"] = self.hero_subtitle_text.get("1.0", "end").strip()
+        hero["cta"] = self.hero_cta_var.get().strip()
+        hero["link"] = self.hero_link_var.get().strip()
+        self.general.setdefault("shipping", {})["freeOver"] = free_over
+        self.general["shipping"]["fee"] = ship_fee
+        self.general.setdefault("payment", {})["qr"] = self.payment_path_var.get().strip()
+        self.contacts.setdefault("qq", {})["number"] = self.qq_var.get().strip()
+
+        write_json(GENERAL_FILE, self.general)
+        write_json(CONTACTS_FILE, self.contacts)
+        self._show_payment_preview(self.payment_path_var.get().strip())
+        self.status_var.set("站点设置已保存")
+        messagebox.showinfo("保存成功", "站点设置已保存。发布到 GitHub 后前台生效。")
 
     # -- 分类辅助 ---------------------------------------------------------
 
@@ -828,10 +1048,226 @@ class ProductAdmin(tk.Tk):
         except Exception as error:
             self.preview_label.configure(image="", text=f"预览失败：{error}")
 
+    @staticmethod
+    def _empty_extra():
+        return {
+            "brand": "",
+            "badges": [],
+            "priceMax": None,
+            "stock": True,
+            "hot": False,
+            "options": [],
+            "specs": {},
+        }
+
+    def _extra_has_data(self):
+        extra = self.extra
+        return bool(
+            extra.get("brand")
+            or extra.get("badges")
+            or extra.get("priceMax")
+            or extra.get("hot")
+            or extra.get("options")
+            or extra.get("specs")
+            or extra.get("stock", True) is False
+        )
+
+    @staticmethod
+    def _options_text(options):
+        lines = []
+        for item in options or []:
+            if isinstance(item, dict):
+                lines.append(f"{item.get('label', '')}|{item.get('price', '')}")
+            else:
+                lines.append(str(item))
+        return "\n".join(lines)
+
+    @staticmethod
+    def _specs_text(specs):
+        if not isinstance(specs, dict):
+            return ""
+        return "\n".join(f"{key}|{value}" for key, value in specs.items())
+
+    def _extra_from_product(self, product):
+        extra = self._empty_extra()
+        if not product:
+            return extra
+        extra["brand"] = str(product.get("brand", ""))
+        extra["badges"] = list(product.get("badges") or [])
+        extra["priceMax"] = product.get("priceMax")
+        extra["stock"] = product.get("stock", True) is not False
+        extra["hot"] = product.get("hot") is True
+        extra["options"] = list(product.get("options") or [])
+        extra["specs"] = dict(product.get("specs") or {})
+        return extra
+
+    def _extra_to_product(self, product):
+        extra = self.extra
+        product["brand"] = str(extra.get("brand", "")).strip()
+        if not product["brand"]:
+            product.pop("brand", None)
+
+        badges = [str(item).strip() for item in extra.get("badges") or [] if str(item).strip()]
+        if badges:
+            product["badges"] = badges
+        else:
+            product.pop("badges", None)
+
+        price_max = extra.get("priceMax")
+        if price_max not in (None, ""):
+            product["priceMax"] = compact_price(price_max)
+        else:
+            product.pop("priceMax", None)
+
+        if extra.get("stock", True) is False:
+            product["stock"] = False
+        else:
+            product.pop("stock", None)
+
+        if extra.get("hot"):
+            product["hot"] = True
+        else:
+            product.pop("hot", None)
+
+        if extra.get("options"):
+            product["options"] = extra["options"]
+        else:
+            product.pop("options", None)
+
+        if extra.get("specs"):
+            product["specs"] = extra["specs"]
+        else:
+            product.pop("specs", None)
+
+    def edit_extra(self):
+        dialog = tk.Toplevel(self)
+        dialog.title("更多商品信息")
+        dialog.geometry("640x700")
+        dialog.transient(self)
+        dialog.grab_set()
+        dialog.columnconfigure(1, weight=1)
+
+        brand_var = tk.StringVar(value=self.extra.get("brand", ""))
+        badges_var = tk.StringVar(value="，".join(self.extra.get("badges") or []))
+        price_max_var = tk.StringVar(value=str(self.extra.get("priceMax") or ""))
+        stock_var = tk.BooleanVar(value=self.extra.get("stock", True))
+        hot_var = tk.BooleanVar(value=self.extra.get("hot", False))
+
+        ttk.Label(dialog, text="品牌").grid(row=0, column=0, sticky="w", padx=12, pady=6)
+        ttk.Entry(dialog, textvariable=brand_var).grid(row=0, column=1, columnspan=2, sticky="ew", padx=(0, 12), pady=6)
+
+        ttk.Label(dialog, text="角标 / 标签").grid(row=1, column=0, sticky="w", padx=12, pady=6)
+        ttk.Entry(dialog, textvariable=badges_var).grid(row=1, column=1, columnspan=2, sticky="ew", padx=(0, 12), pady=6)
+        ttk.Label(dialog, text="多个用逗号分隔，例如：HOT，上新，上新口味", foreground="#777").grid(
+            row=2, column=1, columnspan=2, sticky="w", padx=(0, 12)
+        )
+
+        ttk.Label(dialog, text="价格上限").grid(row=3, column=0, sticky="w", padx=12, pady=6)
+        ttk.Entry(dialog, textvariable=price_max_var, width=16).grid(row=3, column=1, sticky="w", padx=(0, 12), pady=6)
+        ttk.Label(dialog, text="留空表示单一价格；填写后前台显示价格区间", foreground="#777").grid(
+            row=4, column=1, columnspan=2, sticky="w", padx=(0, 12)
+        )
+
+        ttk.Checkbutton(dialog, text="现货（取消勾选显示“无货”）", variable=stock_var).grid(
+            row=5, column=1, sticky="w", padx=(0, 12), pady=6
+        )
+        ttk.Checkbutton(dialog, text="在卡片显示 HOT 角标", variable=hot_var).grid(
+            row=6, column=1, sticky="w", padx=(0, 12), pady=6
+        )
+
+        ttk.Label(dialog, text="口味 / 规格").grid(row=7, column=0, sticky="nw", padx=12, pady=6)
+        options_text = tk.Text(dialog, height=7, wrap="word", relief="solid", borderwidth=1)
+        options_text.grid(row=7, column=1, columnspan=2, sticky="nsew", padx=(0, 12), pady=6)
+        options_text.insert("1.0", self._options_text(self.extra.get("options")))
+        ttk.Label(dialog, text="每行一个口味；需要单独价格时写：名称|价格", foreground="#777").grid(
+            row=8, column=1, columnspan=2, sticky="w", padx=(0, 12)
+        )
+
+        ttk.Label(dialog, text="参数").grid(row=9, column=0, sticky="nw", padx=12, pady=6)
+        specs_text = tk.Text(dialog, height=6, wrap="word", relief="solid", borderwidth=1)
+        specs_text.grid(row=9, column=1, columnspan=2, sticky="nsew", padx=(0, 12), pady=6)
+        specs_text.insert("1.0", self._specs_text(self.extra.get("specs")))
+        ttk.Label(dialog, text="每行一个参数，格式：键|值，例如 口数|18000", foreground="#777").grid(
+            row=10, column=1, columnspan=2, sticky="w", padx=(0, 12)
+        )
+
+        dialog.rowconfigure(9, weight=1)
+
+        def save_extra():
+            brand = brand_var.get().strip()
+            badges = [
+                item.strip()
+                for item in re.split(r"[,，]", badges_var.get())
+                if item.strip()
+            ]
+            price_max_raw = price_max_var.get().strip()
+            try:
+                price_max = compact_price(price_max_raw) if price_max_raw else None
+                if price_max is not None and float(price_max) <= 0:
+                    raise ValueError
+            except (TypeError, ValueError):
+                messagebox.showwarning("价格上限不正确", "价格上限需要留空或填写大于 0 的数字。", parent=dialog)
+                return
+
+            options = []
+            for line in options_text.get("1.0", "end").splitlines():
+                line = line.strip()
+                if not line:
+                    continue
+                if "|" in line:
+                    label, price = line.split("|", 1)
+                    label = label.strip()
+                    try:
+                        price_value = compact_price(price.strip())
+                        if float(price_value) <= 0:
+                            raise ValueError
+                    except (TypeError, ValueError):
+                        messagebox.showwarning("口味价格不正确", f"这一行价格不正确：{line}", parent=dialog)
+                        return
+                    if not label:
+                        messagebox.showwarning("口味名称缺失", f"这一行缺少名称：{line}", parent=dialog)
+                        return
+                    options.append({"label": label, "price": price_value})
+                else:
+                    options.append(line)
+
+            specs = {}
+            for line in specs_text.get("1.0", "end").splitlines():
+                line = line.strip()
+                if not line:
+                    continue
+                if "|" not in line:
+                    messagebox.showwarning("参数格式不正确", f"请使用 键|值 格式：{line}", parent=dialog)
+                    return
+                key, value = line.split("|", 1)
+                key = key.strip()
+                if not key:
+                    messagebox.showwarning("参数名称缺失", f"这一行缺少名称：{line}", parent=dialog)
+                    return
+                specs[key] = value.strip()
+
+            self.extra = {
+                "brand": brand,
+                "badges": badges,
+                "priceMax": price_max,
+                "stock": bool(stock_var.get()),
+                "hot": bool(hot_var.get()),
+                "options": options,
+                "specs": specs,
+            }
+            dialog.destroy()
+            self.status_var.set("更多信息已更新，记得点“保存商品”")
+
+        buttons = ttk.Frame(dialog)
+        buttons.grid(row=11, column=0, columnspan=3, sticky="e", padx=12, pady=12)
+        ttk.Button(buttons, text="保存", style="Accent.TButton", command=save_extra).pack(side="left")
+        ttk.Button(buttons, text="取消", command=dialog.destroy).pack(side="left", padx=8)
+
     def new_product(self):
         self.current_section = None
         self.current_index = None
         self.pending_image = None
+        self.extra = self._empty_extra()
         self.title_var.set("")
         self.price_var.set("")
         self.image_var.set("")
@@ -870,6 +1306,7 @@ class ProductAdmin(tk.Tk):
         self.current_section = section_id
         self.current_index = index
         self.pending_image = None
+        self.extra = self._extra_from_product(product)
 
         self.title_var.set(product.get("title", ""))
         self.price_var.set(str(product.get("price", "")))
@@ -963,6 +1400,7 @@ class ProductAdmin(tk.Tk):
                 "localImage": local_image,
             }
         )
+        self._extra_to_product(product)
         if sub_id:
             product["subcategory"] = sub_id
         else:
@@ -1333,7 +1771,7 @@ class ProductAdmin(tk.Tk):
         price = self.price_var.get().strip()
         description = self.description_text.get("1.0", "end").strip()
         image = self.image_var.get().strip()
-        if not any((title, price, description, image)):
+        if not any((title, price, description, image)) and not self._extra_has_data():
             return False
         if not self.current_section or self.current_index is None:
             return True
@@ -1352,6 +1790,7 @@ class ProductAdmin(tk.Tk):
             or image != str(product.get("localImage", ""))
             or top_id != existing_top_id
             or sub_id != (product.get("subcategory") or None)
+            or self.extra != self._extra_from_product(product)
         )
 
     def reset_data(self):
@@ -1501,7 +1940,10 @@ class ProductAdmin(tk.Tk):
         self.status_var.set("正在提交并推送...")
         self.update_idletasks()
 
-        add = self._run_git(["add", "src/data", "public/images/products"])
+        add_paths = ["src/data", "public/images/products"]
+        if PAYMENT_IMAGE.exists():
+            add_paths.append("public/images/payment-qr.webp")
+        add = self._run_git(["add", *add_paths])
         if add.returncode != 0:
             messagebox.showerror("git add 失败", self._command_output(add))
             return

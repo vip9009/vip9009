@@ -1,10 +1,10 @@
 # 泡泡哥雾化 · Vue 静态站点
 
-使用 **UI UX Pro Max** 生成的 E-commerce 设计系统重设计的响应式电子烟信息展示站，基于 **Vue 3 + Vite** 构建，纯静态、无后端，可直接托管到 **GitHub Pages**。
+基于 **Vue 3 + Vite** 构建的响应式电子雾化商城，纯静态、无后端，可直接托管到 **GitHub Pages**。整体版式参考 vapepu.com 的黑白 + 粉色极简风格，品牌、商品和图片使用泡泡哥自己的内容。
 
-设计系统：**Feature-Rich Showcase + Vibrant & Block-based**，主色松石绿、CTA 橙色，字体 Rubik / Nunito Sans。
+设计系统：**黑白极简 + 粉色强调**，字体 Lato，细边框、无圆角卡片、三列商品网格。
 
-> 本站仅做商品信息展示，不包含下单、购物车、支付等交易功能。页面中的商品、价格、图片和文案为演示数据，正式使用前请替换为你自己的品牌素材与内容。
+> 本站包含本地购物车、结算页和扫码支付说明，但**不接入任何支付接口**；下单后由客服人工确认并扫码付款。页面商品、价格、图片为演示数据，正式使用前请替换为真实内容。
 
 > 完整操作、打包、部署说明见 [`tools/使用手册.md`](tools/使用手册.md)。
 
@@ -15,20 +15,21 @@
 - Vite 4
 - 原生 CSS（Grid + Flex，响应式）
 - 数据源：本地 JSON，无需接口
-- UI/UX 设计系统：UI UX Pro Max（`design-system/laovape/MASTER.md`）
+- 购物车 / 订单：浏览器 localStorage
+- 字体：Lato（`@fontsource/lato`，本地打包）
 
 ## 页面与设计
 
-- 顶部深绿工具栏：网站地图、产品搜索
-- 主导航：品牌文字 Logo、7 个栏目、多级下拉、橙色「立即咨询」CTA
-- 新 Hero：大字号标题、信任徽章、CTA、产品拼贴卡、浮动保障标签
-- 「按分类找产品」分类入口：一次性、烟弹、烟杆、烟油、积木、国标系列
-- 热门产品、一次性电子烟、积木电子烟、烟弹 4 个商品区
-- 商品卡：4:5 图片、品牌与口数标签、参考价、看详情，桌面 4 列 / 手机 2 列
-- 深绿 5 栏页脚：品牌介绍、客服 CTA、下单方式、4 组链接
-- 右侧悬浮客服：微信二维码、QQ 号展示（不跳转），移动端默认收起
-- 桌面、平板、手机三档响应式；手机端双列商品卡、抽屉菜单、触控热区优化
-- 附加页面：分类列表、商品详情、搜索、联系我们、帮助页、网站地图、404
+- 黑色公告条：公告文案、在线客服 / 订单查询 / 我的收藏入口
+- 居中 Logo 头部：左侧导航 + 搜索、右侧购物车，移动端抽屉菜单
+- 首页：黑粉大 Banner、8 个手绘分类入口、NEW 分页商品、TAG / BRAND / NEWS 切换、NO SMOKING 分割、品牌墙
+- 分类页：左侧分类栏 + 三列商品网格 + 排序 / 分页，移动端筛选折叠
+- 商品页：大图、品牌 / 标签订、价格区间、口味规格、数量、加入购物车、详情 Tabs
+- 购物车、结算页（收货信息 + 扫码支付二维码）、订单查询、我的收藏
+- 18+ 年龄验证弹层
+- 右下角粉色客服按钮：在线客服（微信二维码 + QQ 复制）、订单查询、我的收藏
+- 桌面 / 手机响应式：桌面三列商品，手机两列
+- 附加页面：搜索、联系泡泡哥、帮助页、网站地图、404
 
 ## 目录结构
 
@@ -120,6 +121,8 @@ python tools/product_admin.py
 | 商品归类 | 保存商品时可直接选到末级分类，例如「一次性电子烟 / 悦刻一次性电子烟」 |
 | 移动商品 | 改商品的一级 / 二级分类后保存，前台立即归到新分类 |
 | 选择图片 | 自动转成 800px WebP，写入 `public/images/products/` |
+| 商品更多信息 | 品牌、角标、价格区间、库存、HOT、口味/规格、参数 |
+| 站点设置 | 公告、首页标题/副标题/按钮、包邮门槛/运费、QQ、收款二维码 |
 | 排序 | 商品上移 / 下移；分类用「排序」数字控制导航顺序 |
 | 保存 | 直接写回 `src/data/` 下的 JSON，并自动备份旧文件 |
 | 导出数据包 | 没有 Git 的电脑可用：导出 `src/data` + 商品图片的 zip，拷回主电脑发布 |
@@ -189,6 +192,13 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
     {
       "title": "商品名称",
       "price": 288,
+      "priceMax": 318,
+      "brand": "ZGAR",
+      "badges": ["HOT", "上新"],
+      "stock": true,
+      "hot": true,
+      "options": ["黑色", { "label": "蓝色", "price": 298 }],
+      "specs": { "口数": "30000", "电池": "800mAh" },
       "imageAlt": "图片描述",
       "localImage": "/images/products/disposables-1-800.webp",
       "subcategory": "relx-disposable",
@@ -205,8 +215,16 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
 - `description` 可选，留空时商品详情使用默认介绍文案：
   「加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。泡泡哥只做正品，支持扫码验证，不同国家与地区的配送方式由泡泡哥一对一确认。」
 - 商品详情路由为 `/product/:sectionId/:index`，`index` 是商品在分区中的下标（从 0 开始）。
-- 商品卡只展示产品名称与参考价，不再展示库存、人气、折扣和划线原价。
-- HOT / NEW 角标是部分商品图片本身自带的效果，无需额外字段。
+- 可选字段：
+  - `brand`：品牌，留空时自动从标题识别
+  - `badges`：卡片右上角角标，例如 `["HOT", "上新"]`
+  - `priceMax`：价格区间上限，前台显示 `¥最低 – ¥最高`
+  - `stock`：`false` 时显示“无货”并禁用购买
+  - `hot`：`true` 时显示 HOT 标记
+  - `options`：口味/规格，字符串数组或 `{label, price}` 数组；有值时商品卡显示 SELECT 下拉
+  - `specs`：参数对象，显示在商品页“参数”Tab
+  - `gallery`：详情图数组，留空使用 `localImage`
+- 工具里的「更多信息」可以编辑以上字段，不需要手改 JSON。
 
 ### 分类与导航
 
@@ -251,7 +269,7 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
 
 | 文件 | 内容 |
 | --- | --- |
-| `general.json` | 品牌信息、顶部链接（主导航由 `categories.json` 自动生成） |
+| `general.json` | 品牌、公告、首页 Banner、包邮门槛 / 运费、收款二维码 |
 | `categories.json` | 一级 / 二级分类、导航顺序、商品分区映射 |
 | `footer.json` | 页脚四组链接（含下单方式） |
 | `contacts.json` | 微信二维码、QQ 号 |
@@ -345,19 +363,16 @@ python .opencode/skills/ui-ux-pro-max/scripts/search.py "mobile menu touch targe
 
 | 角色 | 值 |
 | --- | --- |
-| 主色 | `#0B3D2E` 深森林绿 |
-| 辅助色 | `#1F6F54` |
-| CTA | `#E85D04` |
-| 背景 | `#F7F3EA` 暖米白 |
-| 前景 | `#10231B` |
-| 卡片 | `#FFFFFF` |
-| 弱化背景 | `#EFE9DD` |
-| 弱化文字 | `#5C665F` |
-| 边框 | `#DCD5C6` |
-| 标题字体 | Rubik |
-| 正文字体 | Nunito Sans |
+| 主色 / CTA | `#E6007E` 粉色 |
+| 深色 | `#242125` |
+| 背景 | `#FFFFFF` |
+| 弱化背景 | `#F5F5F5` |
+| 弱化文字 | `#777777` |
+| 边框 | `#E5E5E5` |
+| 标题字体 | Lato 700 / 900 |
+| 正文字体 | Lato 400 |
 
-> 当前 UI 方向：**深绿 + 米白 + 橙色**的买手店风格，强调真人选品、扫码验真和一对一售后。
+> 当前 UI 方向：**黑白 + 粉色**的极简商城风格，参考 vapepu.com 的版式：细边框、无圆角卡片、三列商品、居中 Logo、右下角客服按钮。
 
 所有颜色、圆角、阴影、字体均已收敛到 `src/assets/styles/main.css` 的 CSS 变量中。
 
@@ -386,6 +401,10 @@ python .opencode/skills/ui-ux-pro-max/scripts/search.py "mobile menu touch targe
 | `/product/:section/:index` | 商品详情 |
 | `/search?q=关键词` | 产品搜索 |
 | `/contact` | 联系我们 |
+| `/cart` | 购物车 |
+| `/checkout` | 付款详情 / 扫码支付 |
+| `/order-query` | 订单查询 |
+| `/wishlist` | 我的收藏 |
 | `/info/:slug` | 帮助页 |
 | `/sitemap` | 网站地图 |
 

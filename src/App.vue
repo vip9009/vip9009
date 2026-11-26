@@ -4,6 +4,7 @@ import { RouterView, useRouter } from 'vue-router'
 import SiteHeader from '@/components/SiteHeader.vue'
 import SiteFooter from '@/components/SiteFooter.vue'
 import ContactWidget from '@/components/ContactWidget.vue'
+import AgeGate from '@/components/AgeGate.vue'
 import { preloadPrimaryViews, preloadView } from '@/router/lazyViews'
 import { prefetchPathImages } from '@/utils/prefetch'
 
@@ -48,6 +49,10 @@ function preloadForPath(path) {
   else if (pathname.startsWith('/product')) preloadView('product')
   else if (pathname === '/search') preloadView('search')
   else if (pathname === '/contact') preloadView('contact')
+  else if (pathname === '/cart') preloadView('cart')
+  else if (pathname === '/checkout') preloadView('checkout')
+  else if (pathname === '/order-query') preloadView('orderQuery')
+  else if (pathname === '/wishlist') preloadView('wishlist')
   else if (pathname.startsWith('/info/')) preloadView('info')
   else if (pathname === '/sitemap') preloadView('sitemap')
 
@@ -97,6 +102,7 @@ onBeforeUnmount(() => {
     </main>
     <SiteFooter />
     <ContactWidget />
+    <AgeGate />
   </div>
 </template>
 

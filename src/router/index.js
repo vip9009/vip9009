@@ -12,6 +12,10 @@ const router = createRouter({
     { path: '/product/:section/:index', name: 'product', component: lazyViews.product },
     { path: '/search', name: 'search', component: lazyViews.search, meta: { title: '搜索 - 泡泡哥雾化' } },
     { path: '/contact', name: 'contact', component: lazyViews.contact, meta: { title: '联系我们 - 泡泡哥雾化' } },
+    { path: '/cart', name: 'cart', component: lazyViews.cart, meta: { title: '购物车 - 泡泡哥雾化' } },
+    { path: '/checkout', name: 'checkout', component: lazyViews.checkout, meta: { title: '付款详情 - 泡泡哥雾化' } },
+    { path: '/order-query', name: 'order-query', component: lazyViews.orderQuery, meta: { title: '订单查询 - 泡泡哥雾化' } },
+    { path: '/wishlist', name: 'wishlist', component: lazyViews.wishlist, meta: { title: '我的收藏 - 泡泡哥雾化' } },
     { path: '/info/:slug', name: 'info', component: lazyViews.info },
     { path: '/sitemap', name: 'sitemap', component: lazyViews.sitemap, meta: { title: '网站地图 - 泡泡哥雾化' } },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: lazyViews.notFound, meta: { title: '页面不存在 - 泡泡哥雾化' } }

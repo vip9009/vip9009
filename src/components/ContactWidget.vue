@@ -6,135 +6,114 @@ import { asset } from '@/utils'
 import AppIcon from '@/components/AppIcon.vue'
 
 const route = useRoute()
-const collapsed = ref(true)
-const sheetOpen = ref(false)
-const hidden = ref(false)
-const isContactPage = computed(() => route.path === '/contact')
-let observer = null
+const menuOpen = ref(false)
+const contactOpen = ref(false)
+const copied = ref(false)
+const isCheckout = computed(() => ['/checkout', '/cart', '/order-query'].includes(route.path))
 
-function onKeydown(event) {
-  if (event.key === 'Escape' && sheetOpen.value) {
-    sheetOpen.value = false
+let copyTimer = null
+
+function closeAll() {
+  menuOpen.value = false
+  contactOpen.value = false
+}
+
+async function copyQQ() {
+  const number = site.contacts.qq?.number
+  if (!number) return
+  try {
+    await navigator.clipboard.writeText(number)
+    copied.value = true
+    clearTimeout(copyTimer)
+    copyTimer = setTimeout(() => {
+      copied.value = false
+    }, 1600)
+  } catch {
+    copied.value = false
   }
 }
 
+function onKeydown(event) {
+  if (event.key === 'Escape') closeAll()
+}
+
+watch(contactOpen, (open) => {
+  document.body.style.overflow = open ? 'hidden' : ''
+})
+
 onMounted(() => {
   document.addEventListener('keydown', onKeydown)
-  const footer = document.querySelector('.footer') || document.querySelector('.footer-bottom-bar')
-  if (footer && 'IntersectionObserver' in window) {
-    observer = new IntersectionObserver(
-      ([entry]) => {
-        hidden.value = entry.isIntersecting
-      },
-      { rootMargin: '0px 0px -8% 0px' }
-    )
-    observer.observe(footer)
-  }
 })
 
 onBeforeUnmount(() => {
-  observer?.disconnect()
   document.removeEventListener('keydown', onKeydown)
   document.body.style.overflow = ''
-})
-
-watch(sheetOpen, (open) => {
-  document.body.style.overflow = open ? 'hidden' : ''
+  clearTimeout(copyTimer)
 })
 </script>
 
 <template>
-  <aside
-    class="contact-dock"
-    :class="{ 'is-hidden': hidden || isContactPage }"
-    aria-label="在线客服"
-  >
-    <div class="contact-dock__bar">
-      <button type="button" class="dock-btn dock-btn--wx" @click="sheetOpen = true">
-        <AppIcon name="chat" :size="18" />
-        微信咨询
-      </button>
-      <RouterLink class="dock-btn dock-btn--shop" to="/category/hot">
-        <AppIcon name="blocks" :size="18" />
-        全部商品
-      </RouterLink>
-    </div>
-
-    <div class="contact-panel" :class="{ 'is-collapsed': collapsed }">
-      <button
-        class="contact-panel__toggle"
-        type="button"
-        :aria-expanded="!collapsed"
-        aria-controls="contact-panel-body"
-        @click="collapsed = !collapsed"
-      >
-        {{ collapsed ? '联系泡泡哥' : '收起' }}
-      </button>
-
-      <div id="contact-panel-body" class="contact-panel__body">
-        <div class="contact-panel__head">
-          <img
-            class="contact-panel__avatar"
-            :src="asset(site.contacts.wechat.avatar)"
-            alt="泡泡哥"
-            width="36"
-            height="36"
-          />
-          <span>{{ site.contacts.wechat.name }}</span>
-        </div>
-        <img
-          class="contact-panel__qr"
-          :src="asset(site.contacts.wechat.image)"
-          width="116"
-          height="116"
-          alt="泡泡哥微信二维码"
-          loading="lazy"
-        />
-        <span class="contact-panel__tagline">{{ site.contacts.wechat.tagline }}</span>
-        <div v-if="site.contacts.qq?.number" class="contact-panel__qq">
-          <span>{{ site.contacts.qq.label }}</span>
-          <b>{{ site.contacts.qq.number }}</b>
-        </div>
+  <div class="dock" :class="{ 'is-hidden': isCheckout }">
+    <Transition name="menu">
+      <div v-if="menuOpen" class="dock-menu">
+        <button type="button" @click="contactOpen = true; menuOpen = false">在线客服</button>
+        <RouterLink to="/order-query" @click="closeAll">订单查询</RouterLink>
+        <RouterLink to="/wishlist" @click="closeAll">我的收藏</RouterLink>
       </div>
-    </div>
-  </aside>
+    </Transition>
+
+    <button
+      class="dock-fab"
+      type="button"
+      :aria-label="menuOpen ? '收起菜单' : '打开客服菜单'"
+      :aria-expanded="menuOpen"
+      @click="menuOpen = !menuOpen"
+    >
+      <AppIcon :name="menuOpen ? 'close' : 'chat'" :size="24" />
+    </button>
+  </div>
 
   <Teleport to="body">
-    <Transition name="sheet">
-      <div v-if="sheetOpen" class="contact-sheet" role="dialog" aria-modal="true" aria-label="微信咨询">
-        <button class="contact-sheet__mask" type="button" aria-label="关闭" @click="sheetOpen = false" />
-        <div class="contact-sheet__panel">
-          <div class="contact-sheet__head">
-            <span>加泡泡哥微信</span>
-            <button type="button" aria-label="关闭" @click="sheetOpen = false">
+    <Transition name="fade">
+      <div v-if="contactOpen" class="contact-modal" role="dialog" aria-modal="true" aria-label="在线客服">
+        <button class="contact-mask" type="button" aria-label="关闭" @click="contactOpen = false" />
+        <div class="contact-card">
+          <div class="contact-head">
+            <div>
+              <b>{{ site.contacts.wechat.name }}</b>
+              <span>{{ site.contacts.wechat.tagline }}</span>
+            </div>
+            <button type="button" aria-label="关闭" @click="contactOpen = false">
               <AppIcon name="close" :size="20" />
             </button>
           </div>
-          <div class="contact-sheet__body">
-            <img
-              class="contact-sheet__avatar"
-              :src="asset(site.contacts.wechat.avatar)"
-              alt="泡泡哥"
-              width="52"
-              height="52"
-            />
-            <b>{{ site.contacts.wechat.name }}</b>
-            <img
-              class="contact-sheet__qr"
-              :src="asset(site.contacts.wechat.image)"
-              width="200"
-              height="200"
-              alt="泡泡哥微信二维码"
-            />
-            <p>{{ site.contacts.wechat.tagline }}</p>
-            <div v-if="site.contacts.qq?.number" class="contact-sheet__qq">
-              <span>{{ site.contacts.qq.label }}</span>
-              <b>{{ site.contacts.qq.number }}</b>
-            </div>
-            <button class="contact-sheet__done" type="button" @click="sheetOpen = false">
-              我加好了
-            </button>
-          </div>
+
+          <img
+            class="contact-avatar"
+            :src="asset(site.contacts.wechat.avatar)"
+            alt="泡泡哥"
+            width="56"
+            height="56"
+          />
+          <img
+            class="contact-qr"
+            :src="asset(site.contacts.wechat.image)"
+            width="210"
+            height="210"
+            alt="泡泡哥微信二维码"
+          />
+
+          <p class="contact-tip">扫码加微信，或直接加 QQ 咨询口味、价格和物流。</p>
+
+          <button class="contact-qq" type="button" @click="copyQQ">
+            <span>{{ site.contacts.qq?.label || '泡泡哥 QQ' }}</span>
+            <b>{{ site.contacts.qq?.number }}</b>
+            <em>{{ copied ? '已复制' : '点击复制' }}</em>
+          </button>
+
+          <RouterLink class="contact-order" to="/order-query" @click="contactOpen = false">
+            查询我的订单
+          </RouterLink>
         </div>
       </div>
     </Transition>
@@ -142,317 +121,218 @@ watch(sheetOpen, (open) => {
 </template>
 
 <style scoped>
-.contact-dock {
+.dock {
   position: fixed;
-  right: 18px;
-  bottom: 24px;
-  z-index: 99;
+  right: 22px;
+  bottom: 34px;
+  z-index: 120;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 8px;
-  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s;
+  gap: 10px;
 }
 
-.contact-dock.is-hidden {
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(14px);
-}
-
-.contact-dock__bar {
+.dock.is-hidden {
   display: none;
 }
 
-.contact-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-  width: 148px;
-}
-
-.contact-panel__toggle {
-  min-width: 84px;
-  padding: 10px 14px;
-  font-family: var(--font-heading);
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.2;
-  color: var(--color-on-accent);
-  background: var(--color-accent);
-  border-radius: 12px;
-  box-shadow: 0 12px 26px rgba(232, 93, 4, 0.28);
-  transition: background 0.16s ease, transform 0.16s ease;
-}
-
-.contact-panel__toggle:hover {
-  background: #f97316;
-  transform: translateY(-1px);
-}
-
-.contact-panel.is-collapsed .contact-panel__body {
-  display: none;
-}
-
-.contact-panel__body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  width: 148px;
-  padding: 10px;
-  text-align: center;
-  background: var(--color-card);
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
-  box-shadow: var(--shadow-card);
-}
-
-.contact-panel__head {
+.dock-fab {
   display: flex;
   align-items: center;
-  gap: 7px;
-  width: 100%;
-  padding: 0 2px 8px;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.contact-panel__avatar {
-  display: block;
-  flex: 0 0 30px;
-  width: 30px;
-  height: 30px;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.contact-panel__head span {
-  font-family: var(--font-heading);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-foreground);
-}
-
-.contact-panel__qr {
-  display: block;
-  width: 118px;
-  height: 118px;
-  object-fit: contain;
-  background: #fff;
-  border-radius: 8px;
-}
-
-.contact-panel__tagline {
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.4;
-  color: var(--color-accent);
-}
-
-.contact-panel__qq {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  width: 100%;
-  padding: 7px 8px;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
   color: #ffffff;
   background: var(--color-primary);
-  border-radius: 10px;
-  user-select: all;
+  border-radius: 50%;
+  box-shadow: 0 14px 30px rgba(230, 0, 126, 0.32);
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
-.contact-panel__qq span {
-  font-size: 9px;
-  letter-spacing: 0.06em;
-  opacity: 0.8;
+.dock-fab:hover {
+  background: #c2006a;
+  transform: translateY(-2px);
 }
 
-.contact-panel__qq b {
-  font-family: var(--font-heading);
+.dock-menu {
+  display: flex;
+  flex-direction: column;
+  min-width: 128px;
+  padding: 6px;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
+}
+
+.dock-menu a,
+.dock-menu button {
+  padding: 10px 14px;
   font-size: 13px;
-  line-height: 1.2;
+  text-align: left;
+  color: #444444;
 }
 
-/* Mobile bottom dock */
-@media (max-width: 960px) {
-  .contact-dock {
-    right: 12px;
-    bottom: calc(10px + env(safe-area-inset-bottom));
-    left: 12px;
-    align-items: stretch;
-  }
-
-  .contact-panel {
-    display: none;
-  }
-
-  .contact-dock__bar {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    padding: 8px;
-    background: rgba(247, 243, 234, 0.94);
-    border: 1px solid var(--color-border);
-    border-radius: 16px;
-    box-shadow: 0 14px 34px rgba(11, 61, 46, 0.18);
-    backdrop-filter: blur(10px);
-  }
-
-  .dock-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    min-height: 46px;
-    font-family: var(--font-heading);
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 11px;
-  }
-
-  .dock-btn--wx {
-    color: #ffffff;
-    background: var(--color-primary);
-  }
-
-  .dock-btn--shop {
-    color: var(--color-foreground);
-    background: var(--color-card);
-    border: 1px solid var(--color-border);
-  }
+.dock-menu a:hover,
+.dock-menu button:hover {
+  color: #ffffff;
+  background: var(--color-primary);
 }
 
-/* Mobile QR sheet */
-.contact-sheet {
+.contact-modal {
   position: fixed;
   inset: 0;
-  z-index: 210;
+  z-index: 300;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
+  padding: 20px;
 }
 
-.contact-sheet__mask {
+.contact-mask {
   position: absolute;
   inset: 0;
-  background: rgba(8, 25, 19, 0.6);
+  background: rgba(0, 0, 0, 0.58);
 }
 
-.contact-sheet__panel {
+.contact-card {
   position: relative;
-  width: 100%;
-  max-width: 520px;
-  padding: 18px 20px calc(20px + env(safe-area-inset-bottom));
-  background: var(--color-card);
-  border-radius: 24px 24px 0 0;
-  box-shadow: 0 -18px 50px rgba(8, 25, 19, 0.28);
-}
-
-.contact-sheet__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 12px;
-  font-family: var(--font-heading);
-  font-size: 16px;
-  font-weight: 600;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.contact-sheet__head button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  color: var(--color-foreground);
-  background: var(--color-muted);
-  border-radius: 10px;
-}
-
-.contact-sheet__body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding-top: 16px;
+  width: min(100%, 360px);
+  padding: 22px;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
 }
 
-.contact-sheet__avatar {
-  width: 52px;
-  height: 52px;
+.contact-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.contact-head b {
+  display: block;
+  font-size: 15px;
+  color: #242125;
+}
+
+.contact-head span {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  color: #999999;
+}
+
+.contact-head button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: #666666;
+}
+
+.contact-avatar {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 10px;
   object-fit: cover;
-  border: 2px solid var(--color-border);
   border-radius: 50%;
 }
 
-.contact-sheet__body > b {
-  font-family: var(--font-heading);
-  font-size: 15px;
-  color: var(--color-foreground);
-}
-
-.contact-sheet__qr {
-  width: 200px;
-  height: 200px;
-  margin: 4px 0;
+.contact-qr {
+  width: 210px;
+  height: 210px;
   object-fit: contain;
-  border-radius: 12px;
 }
 
-.contact-sheet__body p {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--color-accent);
+.contact-tip {
+  margin: 10px 0 14px;
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: center;
+  color: #777777;
 }
 
-.contact-sheet__qq {
-  display: inline-flex;
+.contact-qq {
+  display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 14px;
-  color: var(--color-muted-foreground);
-  background: var(--color-muted);
-  border-radius: 999px;
-  user-select: all;
-}
-
-.contact-sheet__qq b {
-  font-family: var(--font-heading);
-  color: var(--color-foreground);
-}
-
-.contact-sheet__done {
   width: 100%;
-  min-height: 48px;
-  margin-top: 8px;
-  font-family: var(--font-heading);
-  font-size: 15px;
-  font-weight: 600;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: #f7f7f7;
+  border: 1px solid #eeeeee;
+}
+
+.contact-qq span {
+  font-size: 11px;
+  color: #999999;
+}
+
+.contact-qq b {
+  flex: 1;
+  font-size: 14px;
+  color: #242125;
+  text-align: left;
+}
+
+.contact-qq em {
+  font-size: 10px;
+  font-style: normal;
+  color: var(--color-primary);
+}
+
+.contact-order {
+  width: 100%;
+  padding: 11px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
   color: #ffffff;
+  background: #242125;
+}
+
+.contact-order:hover {
   background: var(--color-primary);
-  border-radius: 12px;
 }
 
-.sheet-enter-active,
-.sheet-leave-active {
-  transition: opacity 0.22s ease;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
 }
 
-.sheet-enter-active .contact-sheet__panel,
-.sheet-leave-active .contact-sheet__panel {
-  transition: transform 0.24s ease;
-}
-
-.sheet-enter-from,
-.sheet-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 
-.sheet-enter-from .contact-sheet__panel,
-.sheet-leave-to .contact-sheet__panel {
-  transform: translateY(100%);
+.menu-enter-active,
+.menu-leave-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.menu-enter-from,
+.menu-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+@media (max-width: 640px) {
+  .dock {
+    right: 14px;
+    bottom: calc(18px + env(safe-area-inset-bottom));
+  }
+
+  .dock-fab {
+    width: 50px;
+    height: 50px;
+  }
 }
 </style>

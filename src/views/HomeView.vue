@@ -1,206 +1,215 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { site, productsData } from '@/data'
-import ProductSection from '@/components/ProductSection.vue'
-import AppIcon from '@/components/AppIcon.vue'
-import { asset } from '@/utils'
+import VpProductCard from '@/components/VpProductCard.vue'
+import CategoryGlyph from '@/components/CategoryGlyph.vue'
 
-function moreLinkFor(sectionId) {
-  const entry = Object.entries(site.categories).find(
-    ([, category]) => !category.parent && category.section === sectionId
-  )
-  return entry ? `/category/${entry[0]}` : '/category/hot'
-}
+const activeTab = ref('tag')
+const page = ref(0)
+const pageSize = 6
 
-const heroProducts = productsData.sections[0]?.products.slice(0, 4) || []
-const visibleSections = computed(() =>
-  productsData.sections.filter((section) => section.products && section.products.length)
+const hero = computed(() => site.hero || {})
+
+const allProducts = computed(() =>
+  productsData.sections
+    .filter((section) => section.id !== 'hot')
+    .flatMap((section) =>
+      (section.products || []).map((product, index) => ({
+        ...product,
+        sectionId: section.id,
+        sectionTitle: section.title,
+        index
+      }))
+    )
 )
 
-const trustItems = [
-  { icon: 'user', title: '真人选品', text: '按口味帮你配' },
-  { icon: 'scan', title: '扫码验真', text: '收到货先验再抽' },
-  { icon: 'truck', title: '物流可查', text: '发出后给单号' },
-  { icon: 'shield', title: '一对一售后', text: '不合适帮你调' }
-]
+const heroProducts = computed(() => allProducts.value.slice(0, 3))
 
-const categoryIcons = {
-  disposables: 'zap',
-  pods: 'droplet',
-  'pod-system': 'device',
-  'e-liquid': 'flask',
-  jimu: 'blocks',
-  gbxl: 'shield'
-}
+const tiles = computed(() => {
+  const glyphMap = {
+    disposables: 'disposable',
+    pods: 'pod',
+    jimu: 'box',
+    'pod-system': 'device',
+    'e-liquid': 'liquid',
+    gbxl: 'gbxl'
+  }
+  const fromCategories = Object.entries(site.categories)
+    .filter(([id, item]) => !item.parent && id !== 'hot' && id !== 'contact' && item.section)
+    .sort((a, b) => (a[1].sort ?? 999) - (b[1].sort ?? 999))
+    .map(([id, item]) => ({
+      title: item.title,
+      to: `/category/${id}`,
+      glyph: glyphMap[id] || 'disposable',
+      accent: false
+    }))
+  return [
+    ...fromCategories,
+    { title: '组合专区', to: '/category/hot', glyph: 'combo', accent: false },
+    { title: '优惠活动', to: '/category/hot', glyph: 'promo', accent: true }
+  ].slice(0, 8)
+})
 
-const categoryCards = computed(() =>
-  Object.entries(site.categories)
-    .filter(([id, category]) => id !== 'hot' && !category.parent && category.section)
-    .map(([id, category]) => {
-      const section = productsData.sections.find((item) => item.id === category.section)
-      return {
-        id,
-        title: category.title,
-        desc: category.desc,
-        count: section?.products.length || 0,
-        icon: categoryIcons[id] || 'blocks'
-      }
-    })
+const newProducts = computed(() => allProducts.value.slice(0, 24))
+const pageCount = computed(() => Math.max(1, Math.ceil(newProducts.value.length / pageSize)))
+const visibleProducts = computed(() =>
+  newProducts.value.slice(page.value * pageSize, (page.value + 1) * pageSize)
 )
+
+const tags = computed(() => site.tags || [])
+const brands = computed(() => site.brands || [])
+const news = computed(() => site.news || [])
+
+function setPage(index) {
+  page.value = index
+}
 </script>
 
 <template>
   <div class="home-page">
-    <section class="hero">
-      <div class="hero-shape hero-shape-a" aria-hidden="true" />
-      <div class="hero-shape hero-shape-b" aria-hidden="true" />
-      <div class="wrapper hero-grid">
+    <div class="wrapper home-top">
+      <RouterLink class="hero-banner" :to="hero.link || '/category/hot'">
         <div class="hero-copy">
-          <span class="eyebrow"><i /> PAOPAO SELECT · 真人选品</span>
-          <h1>别盲买。<br /><em>把口味告诉我</em></h1>
-          <p class="hero-lede">
-            悦刻、雪加、冰熊、柚子现货。按你的口感、预算和目的地，泡泡哥帮你配一套抽得住的选择，
-            确认价格与物流后再发。
-          </p>
-
-          <div class="hero-actions">
-            <RouterLink class="btn btn-primary" to="/contact">
-              让泡泡哥帮我选
-              <AppIcon name="arrow-right" :size="18" />
-            </RouterLink>
-            <RouterLink class="btn btn-ghost" to="/category/hot">先看现货</RouterLink>
-          </div>
-
-          <ul class="hero-trust">
-            <li v-for="item in trustItems" :key="item.title">
-              <span class="trust-icon"><AppIcon :name="item.icon" :size="18" /></span>
-              <span>
-                <b>{{ item.title }}</b>
-                <small>{{ item.text }}</small>
-              </span>
-            </li>
-          </ul>
+          <span class="hero-eyebrow">{{ hero.eyebrow }}</span>
+          <h1>{{ hero.title }}</h1>
+          <p>{{ hero.subtitle }}</p>
+          <span class="hero-cta">{{ hero.cta }} →</span>
+          <small>{{ hero.note }}</small>
         </div>
 
-        <div class="hero-visual">
-          <div class="hero-panel" aria-hidden="true" />
-          <div class="hero-collage" v-if="heroProducts.length">
-            <div
-              v-for="(product, index) in heroProducts"
-              :key="product.title"
-              class="collage-item"
-              :class="`collage-item-${index + 1}`"
-            >
-              <img :src="asset(product.localImage)" alt="" />
-            </div>
-          </div>
-          <div v-else class="hero-empty">
-            <img :src="asset('/images/paopao-face.jpg')" alt="泡泡哥" width="64" height="64" />
-            <div>
-              <b>本周现货更新中</b>
-              <p>加泡泡哥微信，先看最新到货和口味。</p>
-            </div>
-          </div>
-          <div class="floating-badge floating-badge-top">
-            <AppIcon name="user" :size="18" />
-            真人选品
-          </div>
-          <div class="floating-badge floating-badge-bottom">
-            <AppIcon name="scan" :size="18" />
-            扫码验真
-          </div>
-          <div class="hero-sticker" aria-hidden="true">
-            <b>1v1</b>
-            <span>帮你选</span>
+        <div v-if="heroProducts.length" class="hero-products">
+          <div v-for="(product, idx) in heroProducts" :key="product.title" class="hero-product" :class="`hero-product-${idx + 1}`">
+            <img :src="product.localImage" :alt="product.title" />
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="seller-section">
-      <div class="wrapper">
-        <div class="seller-card">
-          <img
-            class="seller-photo"
-            :src="asset('/images/paopao-avatar-600.jpg')"
-            alt="泡泡哥"
-            width="180"
-            height="180"
-          />
-          <div class="seller-copy">
-            <span class="section-eyebrow">MEET PAOPAO</span>
-            <h2>我不是平台，我是泡泡哥</h2>
-            <p>
-              每一批货我自己验，每一个新口味我自己试。你不需要研究参数，把常抽的口感和预算告诉我；
-              不合适，我帮你换方案。
-            </p>
-          </div>
-          <RouterLink class="btn btn-primary seller-btn" to="/contact">
-            加微信，发我口味
-            <AppIcon name="arrow-right" :size="17" />
-          </RouterLink>
+        <div v-else class="hero-wordmark" aria-hidden="true">
+          <b>PAOPAO</b>
+          <span>SELECT</span>
         </div>
-      </div>
-    </section>
+      </RouterLink>
+    </div>
 
     <section class="category-section">
       <div class="wrapper">
-        <div class="section-head">
-          <div>
-            <span class="section-eyebrow">SHOP BY CATEGORY</span>
-            <h2>先选品类，再选口味</h2>
-          </div>
-          <p>不知道一次性、换弹、积木怎么选？直接问泡泡哥，30 秒讲明白。页面价为参考价，最终以微信确认为准。</p>
-        </div>
-
-        <div class="category-grid">
+        <div class="category-tiles">
           <RouterLink
-            v-for="category in categoryCards"
-            :key="category.id"
-            class="category-card"
-            :to="`/category/${category.id}`"
+            v-for="tile in tiles"
+            :key="tile.title"
+            class="category-tile"
+            :class="{ accent: tile.accent }"
+            :to="tile.to"
           >
-            <span class="category-icon"><AppIcon :name="category.icon" :size="24" /></span>
-            <span class="category-info">
-              <b>{{ category.title }}</b>
-              <small>{{ category.desc }}</small>
-            </span>
-            <span class="category-meta">
-              {{ category.count ? `${category.count} 款` : '咨询客服' }}
-              <AppIcon name="arrow-right" :size="15" />
-            </span>
+            <span class="category-glyph"><CategoryGlyph :name="tile.glyph" /></span>
+            <b>{{ tile.title }}</b>
           </RouterLink>
         </div>
       </div>
     </section>
 
-    <ProductSection
-      v-for="section in visibleSections"
-      :key="section.id"
-      :section="section"
-      :more-to="moreLinkFor(section.id)"
-    />
-
-    <section class="final-cta-section">
+    <section class="new-section">
       <div class="wrapper">
-        <div class="final-cta">
-          <div class="final-cta-copy">
-            <span class="section-eyebrow section-eyebrow-light">ONE MESSAGE AWAY</span>
-            <h2>不用自己研究参数。<br />把口味和预算发我。</h2>
-            <p>
-              泡泡哥按你的口感、预算和目的地配一套方案，确认价格与物流后再发。
-              选品和答疑不收服务费。
-            </p>
-          </div>
-          <div class="final-cta-actions">
-            <RouterLink class="btn btn-primary" to="/contact">
-              加微信，发我口味
-              <AppIcon name="arrow-right" :size="18" />
-            </RouterLink>
-            <RouterLink class="btn btn-cta-light" to="/category/hot">先看现货</RouterLink>
-          </div>
-          <div class="final-cta-shape" aria-hidden="true" />
+        <div class="new-divider" aria-hidden="true">
+          <span class="divider-arrow left" />
+          <b>NEW</b>
+          <span class="divider-arrow right" />
+        </div>
+
+        <div v-if="newProducts.length" class="page-tabs">
+          <button
+            v-for="index in pageCount"
+            :key="index"
+            type="button"
+            class="page-tab"
+            :class="{ active: page === index - 1 }"
+            @click="setPage(index - 1)"
+          >
+            {{ index }}
+          </button>
+        </div>
+
+        <div v-if="visibleProducts.length" class="product-grid-3">
+          <VpProductCard
+            v-for="(product, index) in visibleProducts"
+            :key="`${product.sectionId}-${product.index}`"
+            :product="product"
+            :section-id="product.sectionId"
+            :section-title="product.sectionTitle"
+            :index="product.index"
+            :eager="index < 3"
+          />
+        </div>
+
+        <div v-else class="empty-new">
+          <b>本周上新更新中</b>
+          <p>加泡泡哥微信，先看最新到货、口味和价格。</p>
+          <RouterLink class="empty-cta" to="/contact">加微信</RouterLink>
+        </div>
+      </div>
+    </section>
+
+    <section class="tag-section">
+      <div class="wrapper">
+        <div class="tag-bar">
+          <button type="button" :class="{ active: activeTab === 'tag' }" @click="activeTab = 'tag'">TAG</button>
+          <button type="button" :class="{ active: activeTab === 'brand' }" @click="activeTab = 'brand'">BRAND</button>
+          <button type="button" :class="{ active: activeTab === 'news' }" @click="activeTab = 'news'">NEWS</button>
+        </div>
+
+        <div v-if="activeTab === 'tag'" class="tag-cloud">
+          <RouterLink
+            v-for="tag in tags"
+            :key="tag.label"
+            class="tag-pill"
+            :class="`tone-${tag.tone}`"
+            :to="`/search?q=${encodeURIComponent(tag.label)}`"
+          >
+            {{ tag.label }}
+          </RouterLink>
+        </div>
+
+        <div v-else-if="activeTab === 'brand'" class="brand-wall">
+          <RouterLink
+            v-for="brand in brands"
+            :key="brand"
+            class="brand-word"
+            :to="`/search?q=${encodeURIComponent(brand.split(' ').pop())}`"
+          >
+            {{ brand }}
+          </RouterLink>
+        </div>
+
+        <div v-else class="news-grid">
+          <RouterLink v-for="(item, index) in news" :key="item.title" class="news-card" :to="item.to || '/info/about'">
+            <span class="news-thumb" :class="`news-thumb-${(index % 3) + 1}`">
+              <b>PAOPAO</b>
+              <small>NEWS</small>
+            </span>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.excerpt }}</p>
+            <time>{{ item.date }}</time>
+          </RouterLink>
+        </div>
+      </div>
+    </section>
+
+    <div class="no-smoking" aria-hidden="true">
+      <span class="ns-arrow left" />
+      <b>NO SMOKING</b>
+      <span class="ns-arrow right" />
+    </div>
+
+    <section class="brand-strip">
+      <div class="wrapper">
+        <div class="brand-strip-grid">
+          <RouterLink
+            v-for="brand in brands"
+            :key="brand"
+            class="brand-logo"
+            :to="`/search?q=${encodeURIComponent(brand.split(' ').pop())}`"
+          >
+            {{ brand }}
+          </RouterLink>
         </div>
       </div>
     </section>
@@ -208,743 +217,659 @@ const categoryCards = computed(() =>
 </template>
 
 <style scoped>
-.hero {
-  position: relative;
-  padding: 28px 0 72px;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 88% 10%, rgba(232, 93, 4, 0.08) 0, transparent 30%),
-    linear-gradient(180deg, #fbf8f1 0%, var(--color-background) 100%);
+.home-page {
+  background: #ffffff;
 }
 
-.hero-grid {
+.home-top {
+  padding-top: 28px;
+}
+
+.hero-banner {
   position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
-  gap: 48px;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+  height: 336px;
+  padding: 0 58px;
+  overflow: hidden;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 78% 20%, rgba(230, 0, 126, 0.95) 0, rgba(230, 0, 126, 0.4) 22%, transparent 48%),
+    linear-gradient(115deg, #111111 0%, #1b0b15 55%, #2a0a1c 100%);
+  border-radius: 4px;
+}
+
+.hero-banner::before {
+  content: '';
+  position: absolute;
+  inset: 14px;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 2px;
+  pointer-events: none;
 }
 
 .hero-copy {
-  max-width: 620px;
-}
-
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  margin-bottom: 24px;
-  font-family: var(--font-heading);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  color: var(--color-primary-strong);
-  background: var(--color-card);
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
-  box-shadow: 0 8px 20px rgba(6, 78, 59, 0.06);
-}
-
-.eyebrow i {
-  width: 8px;
-  height: 8px;
-  background: var(--color-accent);
-  border-radius: 50%;
-  box-shadow: 0 0 0 4px rgba(232, 93, 4, 0.14);
-}
-
-.hero h1 {
-  margin-bottom: 20px;
-  font-size: clamp(44px, 5.2vw, 72px);
-  font-weight: 700;
-  line-height: 1.02;
-  letter-spacing: -0.04em;
-  color: var(--color-foreground);
-}
-
-.hero h1 em {
   position: relative;
-  z-index: 1;
-  font-style: normal;
-  color: var(--color-primary);
-}
-
-.hero h1 em::after {
-  content: '';
-  position: absolute;
-  right: -6px;
-  bottom: 8px;
-  left: -6px;
-  z-index: -1;
-  height: 18px;
-  background: rgba(232, 93, 4, 0.16);
-  border-radius: 4px;
-  transform: rotate(-1deg);
-}
-
-.hero-lede {
-  max-width: 580px;
-  margin-bottom: 28px;
-  font-size: 16px;
-  line-height: 1.85;
-  color: var(--color-muted-foreground);
-}
-
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 30px;
-}
-
-.hero-actions .btn {
-  min-height: 52px;
-  padding: 0 26px;
-}
-
-.hero-trust {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px 20px;
+  z-index: 2;
   max-width: 520px;
 }
 
-.hero-trust li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.trust-icon {
-  display: flex;
-  flex: 0 0 34px;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  color: var(--color-primary);
-  background: var(--color-card);
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-}
-
-.hero-trust b {
-  display: block;
+.hero-eyebrow {
+  display: inline-block;
+  margin-bottom: 12px;
   font-family: var(--font-heading);
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.3;
-  color: var(--color-foreground);
-}
-
-.hero-trust small {
-  display: block;
   font-size: 11px;
-  line-height: 1.4;
-  color: var(--color-muted-foreground);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  color: #ff77bb;
 }
 
-.hero-visual {
-  position: relative;
-  display: flex;
+.hero-copy h1 {
+  margin-bottom: 12px;
+  font-size: clamp(38px, 4.4vw, 58px);
+  font-weight: 900;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+}
+
+.hero-copy p {
+  max-width: 460px;
+  margin-bottom: 18px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.hero-cta {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  min-height: 540px;
+  height: 42px;
+  padding: 0 20px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  background: var(--color-primary);
 }
 
-.hero-panel {
-  position: absolute;
-  inset: 18px 10px;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  border-radius: 32px;
-  transform: rotate(-4deg);
-  box-shadow: 0 30px 70px rgba(11, 61, 46, 0.24);
+.hero-copy small {
+  display: block;
+  margin-top: 14px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.5);
 }
 
-.hero-panel::after {
-  content: '';
-  position: absolute;
-  inset: 18px;
-  border: 2px dashed rgba(255, 255, 255, 0.32);
-  border-radius: 22px;
-}
-
-.hero-collage {
+.hero-products {
   position: relative;
   z-index: 2;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  width: min(100%, 430px);
-  transform: rotate(2deg);
+  width: 380px;
+  height: 270px;
 }
 
-.collage-item {
+.hero-product {
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 1 / 1;
-  padding: 10px;
-  background: var(--color-card);
-  border: 2px solid rgba(255, 255, 255, 0.9);
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(6, 78, 59, 0.16);
-  transition: transform 0.25s ease;
+  width: 150px;
+  height: 190px;
+  padding: 8px;
+  background: #ffffff;
+  border-radius: 2px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
 }
 
-.collage-item:hover {
-  transform: translateY(-4px) rotate(-1deg);
-}
-
-.collage-item img {
-  display: block;
+.hero-product img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-.hero-empty {
+.hero-product-1 {
+  top: 34px;
+  left: 0;
+  transform: rotate(-5deg);
+}
+
+.hero-product-2 {
+  top: 0;
+  left: 118px;
+  transform: rotate(3deg);
+}
+
+.hero-product-3 {
+  top: 74px;
+  left: 238px;
+  transform: rotate(8deg);
+}
+
+.hero-wordmark {
   position: relative;
   z-index: 2;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 16px;
-  width: min(100%, 380px);
-  padding: 24px;
-  background: var(--color-card);
-  border-radius: 22px;
-  box-shadow: var(--shadow-card);
-  transform: rotate(2deg);
+  color: #ffffff;
+  transform: rotate(-4deg);
 }
 
-.hero-empty img {
-  flex: 0 0 64px;
-  width: 64px;
-  height: 64px;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.hero-empty b {
-  display: block;
-  margin-bottom: 4px;
+.hero-wordmark b {
   font-family: var(--font-heading);
-  font-size: 16px;
-  color: var(--color-foreground);
+  font-size: 64px;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 1;
 }
 
-.hero-empty p {
-  font-size: 12px;
-  line-height: 1.6;
-  color: var(--color-muted-foreground);
+.hero-wordmark span {
+  font-size: 11px;
+  letter-spacing: 0.5em;
+  color: #ff77bb;
 }
 
-.collage-item-2 {
-  transform: translateY(18px);
+.category-section {
+  padding: 34px 0 8px;
 }
 
-.collage-item-3 {
-  transform: translateY(-18px);
+.category-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  row-gap: 26px;
 }
 
-.floating-badge {
-  position: absolute;
-  z-index: 3;
-  display: inline-flex;
+.category-tile {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  font-family: var(--font-heading);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--color-foreground);
-  background: var(--color-card);
-  border: 2px solid var(--color-border);
-  border-radius: 14px;
-  box-shadow: var(--shadow-card);
-  animation: float-badge 4s ease-in-out infinite;
+  gap: 2px;
+  color: #242125;
+  transition: color 0.18s ease;
 }
 
-.floating-badge :deep(svg) {
+.category-tile:hover {
   color: var(--color-primary);
 }
 
-.floating-badge-top {
-  top: 9%;
-  right: 0;
+.category-glyph {
+  width: 128px;
+  height: 128px;
 }
 
-.floating-badge-bottom {
-  bottom: 10%;
-  left: -4px;
-  animation-delay: -2s;
+.category-tile b {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
-@keyframes float-badge {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
+.category-tile.accent b {
+  color: var(--color-primary);
 }
 
-.hero-sticker {
+.new-section {
+  padding-top: 28px;
+}
+
+.new-divider {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 10px;
+}
+
+.new-divider b {
+  font-family: var(--font-heading);
+  font-size: 40px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  font-style: italic;
+  color: #242125;
+}
+
+.divider-arrow {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: #dddddd;
+}
+
+.divider-arrow::before,
+.divider-arrow::after {
+  content: '';
   position: absolute;
-  top: 12%;
-  left: 2%;
-  z-index: 3;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  border-top: 1px solid #999999;
+  border-right: 1px solid #999999;
+}
+
+.divider-arrow.left::before {
+  left: 0;
+  transform: rotate(-135deg);
+}
+
+.divider-arrow.left::after {
+  left: 14px;
+  transform: rotate(-135deg);
+}
+
+.divider-arrow.right::before {
+  right: 0;
+  transform: rotate(45deg);
+}
+
+.divider-arrow.right::after {
+  right: 14px;
+  transform: rotate(45deg);
+}
+
+.page-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.page-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  font-size: 11px;
+  color: #999999;
+  border: 1px solid #dddddd;
+  border-radius: 50%;
+  transition: color 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+}
+
+.page-tab:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.page-tab.active {
+  color: #ffffff;
+  background: #242125;
+  border-color: #242125;
+}
+
+.product-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.empty-new {
+  padding: 54px 20px;
+  text-align: center;
+  background: #fafafa;
+  border: 1px solid #eeeeee;
+}
+
+.empty-new b {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 18px;
+}
+
+.empty-new p {
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #888888;
+}
+
+.empty-cta {
+  display: inline-flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 18px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  background: var(--color-primary);
+}
+
+.tag-section {
+  padding-top: 36px;
+}
+
+.tag-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 64px;
+  height: 34px;
+  background: #111111;
+  clip-path: polygon(2% 0, 98% 0, 100% 50%, 98% 100%, 2% 100%, 0 50%);
+}
+
+.tag-bar button {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #777777;
+  transition: color 0.18s ease;
+}
+
+.tag-bar button.active,
+.tag-bar button:hover {
+  color: #ffffff;
+}
+
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  max-width: 760px;
+  padding: 20px 0 4px;
+  margin: 0 auto;
+}
+
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 9px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  background: #242125;
+}
+
+.tone-pink { background: #e6007e; }
+.tone-black { background: #111111; }
+.tone-cyan { background: #16c8d6; color: #083a3e; }
+.tone-green { background: #14c98e; color: #063b2a; }
+.tone-purple { background: #7500c0; }
+.tone-blue { background: #3a37ff; }
+.tone-coral { background: #ff5a5a; }
+.tone-lime { background: #a8f000; color: #1a2b00; }
+.tone-gray { background: #9a9a9a; }
+
+.brand-wall {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  max-width: 900px;
+  padding: 22px 0 8px;
+  margin: 0 auto;
+}
+
+.brand-word {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 900;
+  color: #999999;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.brand-word:hover {
+  color: var(--color-primary);
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  padding-top: 22px;
+}
+
+.news-card {
+  display: block;
+  border: 1px solid #eeeeee;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.news-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.08);
+}
+
+.news-thumb {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 92px;
-  height: 92px;
-  color: var(--color-on-accent);
-  background: var(--color-accent);
-  border-radius: 24px;
-  transform: rotate(-8deg);
-  box-shadow: 0 18px 34px rgba(234, 88, 12, 0.28);
-}
-
-.hero-sticker b {
-  font-family: var(--font-heading);
-  font-size: 24px;
-  line-height: 1;
-}
-
-.hero-sticker span {
-  margin-top: 4px;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.hero-shape {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.hero-shape-a {
-  top: -120px;
-  right: -100px;
-  width: 360px;
-  height: 360px;
-  background: rgba(11, 61, 46, 0.05);
-}
-
-.hero-shape-b {
-  bottom: -140px;
-  left: -80px;
-  width: 300px;
-  height: 300px;
-  background: rgba(232, 93, 4, 0.05);
-}
-
-.seller-section {
-  padding-bottom: var(--section-gap);
-}
-
-.seller-card {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  padding: 24px;
-  background: var(--color-card);
-  border: 1px solid var(--color-border);
-  border-radius: 28px;
-  box-shadow: var(--shadow-card);
-}
-
-.seller-photo {
-  flex: 0 0 180px;
-  width: 180px;
-  height: 180px;
-  object-fit: cover;
-  border: 3px solid var(--color-border);
-  border-radius: 20px;
-}
-
-.seller-copy {
-  flex: 1;
-  min-width: 0;
-}
-
-.seller-copy h2 {
-  margin-bottom: 10px;
-  font-size: clamp(24px, 2.6vw, 34px);
-  color: var(--color-foreground);
-}
-
-.seller-copy p {
-  max-width: 680px;
-  font-size: 14px;
-  line-height: 1.85;
-  color: var(--color-muted-foreground);
-}
-
-.seller-btn {
-  flex: 0 0 auto;
-}
-
-.category-section {
-  padding-bottom: var(--section-gap);
-}
-
-.section-head {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 32px;
-  margin-bottom: 24px;
-}
-
-.section-eyebrow {
-  display: block;
-  margin-bottom: 8px;
-  font-family: var(--font-heading);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  color: var(--color-primary-strong);
-}
-
-.section-eyebrow-light {
-  color: #cbe3d6;
-}
-
-.section-head h2 {
-  font-size: clamp(28px, 3.4vw, 40px);
-  color: var(--color-foreground);
-}
-
-.section-head > p {
-  max-width: 430px;
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--color-muted-foreground);
-}
-
-.category-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
-}
-
-.category-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 22px;
-  background: var(--color-card);
-  border: 1px solid var(--color-border);
-  border-radius: 20px;
-  box-shadow: var(--shadow-card);
-  transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
-}
-
-.category-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-hover);
-}
-
-.category-icon {
-  display: flex;
-  flex: 0 0 48px;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
+  height: 120px;
   color: #ffffff;
-  background: var(--color-primary);
-  border-radius: 14px;
+  background: linear-gradient(135deg, #111111, #e6007e);
 }
 
-.category-info {
-  flex: 1;
-  min-width: 0;
+.news-thumb-2 {
+  background: linear-gradient(135deg, #e6007e, #7500c0);
 }
 
-.category-info b {
-  display: block;
-  margin-bottom: 5px;
+.news-thumb-3 {
+  background: linear-gradient(135deg, #111111, #16c8d6);
+}
+
+.news-thumb b {
   font-family: var(--font-heading);
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--color-foreground);
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
 }
 
-.category-info small {
+.news-thumb small {
+  font-size: 9px;
+  letter-spacing: 0.4em;
+}
+
+.news-card h3 {
+  padding: 12px 12px 4px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #242125;
+}
+
+.news-card p {
+  padding: 0 12px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #888888;
   display: -webkit-box;
   overflow: hidden;
-  font-size: 12px;
-  line-height: 1.7;
-  color: var(--color-muted-foreground);
-  -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
-.category-meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  flex: 0 0 auto;
-  padding-top: 3px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-primary-strong);
-  white-space: nowrap;
+.news-card time {
+  display: block;
+  padding: 10px 12px 12px;
+  font-size: 10px;
+  color: #aaaaaa;
 }
 
-.final-cta-section {
-  padding-bottom: var(--section-gap);
-}
-
-.final-cta {
-  position: relative;
+.no-smoking {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-  padding: 48px;
-  overflow: hidden;
-  color: #ffffff;
-  background: linear-gradient(135deg, var(--color-primary-strong), var(--color-secondary));
-  border-radius: 28px;
-  box-shadow: 0 30px 70px rgba(11, 61, 46, 0.24);
+  justify-content: center;
+  gap: 22px;
+  padding: 46px 20px 26px;
 }
 
-.final-cta-copy {
+.no-smoking b {
+  font-family: var(--font-heading);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -0.03em;
+  color: #242125;
+}
+
+.ns-arrow {
   position: relative;
-  z-index: 1;
-  max-width: 620px;
+  width: 80px;
+  height: 1px;
+  background: #cccccc;
 }
 
-.final-cta h2 {
-  margin-bottom: 12px;
-  font-size: clamp(30px, 3.6vw, 44px);
-  color: #ffffff;
+.ns-arrow::before,
+.ns-arrow::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  border-top: 1px solid #999999;
+  border-right: 1px solid #999999;
 }
 
-.final-cta p {
-  font-size: 14px;
-  line-height: 1.8;
-  color: #cbe3d6;
+.ns-arrow.left::before {
+  left: 0;
+  transform: rotate(-135deg);
 }
 
-.final-cta-actions {
-  position: relative;
-  z-index: 1;
+.ns-arrow.right::before {
+  right: 0;
+  transform: rotate(45deg);
+}
+
+.brand-strip {
+  padding: 10px 0 40px;
+}
+
+.brand-strip-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 18px 38px;
+  padding: 18px 0;
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
 }
 
-.btn-cta-light {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.38);
+.brand-logo {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #b5b5b5;
 }
 
-.btn-cta-light:hover {
-  color: var(--color-foreground);
-  background: #ffffff;
-  border-color: #ffffff;
+.brand-logo:hover {
+  color: var(--color-primary);
 }
 
-.final-cta-shape {
-  position: absolute;
-  top: -80px;
-  right: -40px;
-  width: 260px;
-  height: 260px;
-  border: 40px solid rgba(255, 255, 255, 0.06);
-  border-radius: 50%;
-}
-
-@media (max-width: 1024px) {
-  .hero-grid {
-    gap: 28px;
+@media (max-width: 900px) {
+  .home-top {
+    padding-top: 16px;
   }
 
-  .hero-visual {
-    min-height: 460px;
-  }
-
-  .hero-collage {
-    width: min(100%, 360px);
-  }
-
-  .category-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 768px) {
-  .hero {
-    padding: 18px 0 44px;
-  }
-
-  .hero-grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 36px;
+  .hero-banner {
+    height: 230px;
+    padding: 0 22px;
   }
 
   .hero-copy {
-    max-width: none;
+    max-width: 100%;
   }
 
-  .hero h1 {
-    font-size: clamp(38px, 10vw, 52px);
+  .hero-copy h1 {
+    font-size: 32px;
   }
 
-  .hero-lede {
-    font-size: 15px;
+  .hero-copy p {
+    font-size: 12px;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 
-  .hero-actions {
-    flex-direction: column;
-    margin-bottom: 24px;
+  .hero-products {
+    display: none;
   }
 
-  .hero-actions .btn {
-    flex: none;
-    width: 100%;
-    min-height: 50px;
-    padding: 0 16px;
+  .hero-copy small {
+    display: none;
   }
 
-  .hero-trust {
-    gap: 10px 12px;
+  .hero-products {
+    width: 120px;
+    height: 180px;
   }
 
-  .hero-visual {
-    min-height: 360px;
+  .hero-product {
+    width: 82px;
+    height: 110px;
+    padding: 4px;
   }
 
-  .hero-panel {
-    inset: 8px 0;
-    border-radius: 24px;
+  .hero-product-1 {
+    top: 30px;
+    left: -10px;
   }
 
-  .hero-collage {
-    width: min(84%, 320px);
-    gap: 10px;
+  .hero-product-2 {
+    top: 0;
+    left: 30px;
   }
 
-  .collage-item {
-    border-radius: 16px;
+  .hero-product-3 {
+    display: none;
   }
 
-  .floating-badge {
-    padding: 8px 10px;
-    font-size: 11px;
-    border-radius: 11px;
+  .hero-wordmark b {
+    font-size: 40px;
   }
 
-  .floating-badge-top {
-    top: 4%;
-    right: -2px;
+  .category-section {
+    padding-top: 22px;
   }
 
-  .floating-badge-bottom {
-    bottom: 4%;
-    left: -2px;
+  .category-glyph {
+    width: 74px;
+    height: 74px;
   }
 
-  .hero-sticker {
-    top: 6%;
-    left: 0;
-    width: 72px;
-    height: 72px;
-    border-radius: 18px;
-  }
-
-  .hero-sticker b {
-    font-size: 19px;
-  }
-
-  .hero-sticker span {
-    font-size: 9px;
-  }
-
-  .section-head {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .section-head > p {
-    max-width: none;
-  }
-
-  .category-grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
-  }
-
-  .seller-card {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 18px;
-    border-radius: 20px;
-  }
-
-  .seller-photo {
-    flex: 0 0 140px;
-    width: 140px;
-    height: 140px;
-    border-radius: 16px;
-  }
-
-  .seller-copy h2 {
-    font-size: 22px;
-  }
-
-  .seller-copy p {
+  .category-tile b {
     font-size: 13px;
   }
 
-  .seller-btn {
-    width: 100%;
+  .category-tiles {
+    row-gap: 16px;
   }
 
-  .category-card {
-    padding: 18px;
+  .new-divider b {
+    font-size: 30px;
   }
 
-  .category-icon {
-    flex-basis: 42px;
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
+  .product-grid-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
   }
 
-  .category-info b {
-    font-size: 16px;
+  .tag-bar {
+    gap: 40px;
   }
 
-  .final-cta {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 28px;
-    border-radius: 22px;
+  .brand-wall {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .final-cta-actions {
-    flex-direction: column;
-    width: 100%;
+  .news-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .final-cta-actions .btn {
-    flex: none;
-    width: 100%;
+  .no-smoking {
+    padding: 30px 16px 18px;
+  }
+
+  .ns-arrow {
+    width: 40px;
   }
 }
 </style>
