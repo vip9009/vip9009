@@ -200,7 +200,7 @@ function setPage(index) {
           <div class="news-track">
             <RouterLink v-for="item in visibleNews" :key="item.title" class="news-card" :to="item.to || '/info/news'">
               <span class="news-thumb">
-                <img v-if="item.image" :src="asset(item.image)" :alt="item.title" loading="lazy" />
+                <img v-if="item.image" :src="asset(item.image)" :alt="item.title" />
                 <template v-else>
                   <b>PAOPAO</b>
                   <small>NEWS</small>
