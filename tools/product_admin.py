@@ -291,6 +291,8 @@ class ProductAdmin(tk.Tk):
         style.configure("Treeview.Heading", font=("Microsoft YaHei UI", 10, "bold"))
         style.configure("Accent.TButton", background="#EA580C", foreground="#000000", padding=(12, 6))
         style.map("Accent.TButton", background=[("active", "#F97316")])
+        style.configure("Danger.TButton", background="#B91C1C", foreground="#FFFFFF", padding=(12, 6))
+        style.map("Danger.TButton", background=[("active", "#DC2626")])
         style.configure("Secondary.TButton", padding=(10, 5))
 
     def _build_header(self):
@@ -393,6 +395,9 @@ class ProductAdmin(tk.Tk):
         self.search_var.trace_add("write", lambda *_args: self._refresh_product_tree())
         ttk.Entry(toolbar, textvariable=self.search_var, width=26).pack(side="left", padx=6)
 
+        ttk.Button(toolbar, text="初始化数据", style="Danger.TButton", command=self.reset_data).pack(
+            side="right", padx=(18, 0)
+        )
         ttk.Button(toolbar, text="新增商品", style="Accent.TButton", command=self.new_product).pack(side="right")
 
         paned = ttk.PanedWindow(tab, orient=tk.HORIZONTAL)
@@ -1347,6 +1352,77 @@ class ProductAdmin(tk.Tk):
             or image != str(product.get("localImage", ""))
             or top_id != existing_top_id
             or sub_id != (product.get("subcategory") or None)
+        )
+
+    def reset_data(self):
+        product_count = sum(
+            len(section.get("products", [])) for section in self.sections.values()
+        )
+        image_count = (
+            sum(1 for path in IMAGES_DIR.rglob("*") if path.is_file())
+            if IMAGES_DIR.exists()
+            else 0
+        )
+        if product_count == 0 and image_count == 0:
+            messagebox.showinfo("已经是空数据", "当前没有商品和商品图片，不需要初始化。")
+            return
+
+        if not messagebox.askyesno(
+            "初始化数据",
+            f"将删除全部 {product_count} 个商品和 {image_count} 张商品图片。\n\n"
+            "分类、导航、品牌信息、微信二维码会保留。\n\n"
+            "清空前会自动备份到 tools\\.backups\\。\n"
+            "不会自动发布，线上数据要等你点「发布到 GitHub」才会更新。\n\n"
+            "确定继续吗？",
+            icon="warning",
+            default=messagebox.NO,
+        ):
+            return
+
+        stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+        backup_path = BACKUP_DIR / f"reset-{stamp}.zip"
+        try:
+            BACKUP_DIR.mkdir(parents=True, exist_ok=True)
+            with zipfile.ZipFile(backup_path, "w", zipfile.ZIP_DEFLATED) as archive:
+                for folder in (DATA_DIR, IMAGES_DIR):
+                    if not folder.exists():
+                        continue
+                    for path in folder.rglob("*"):
+                        if path.is_file():
+                            archive.write(path, path.relative_to(ROOT).as_posix())
+        except Exception as error:
+            messagebox.showerror("备份失败，已取消初始化", str(error))
+            return
+
+        for section in self.sections.values():
+            section["products"] = []
+        self.save_all()
+
+        removed_images = 0
+        if IMAGES_DIR.exists():
+            for path in IMAGES_DIR.rglob("*"):
+                if not path.is_file():
+                    continue
+                try:
+                    path.unlink()
+                    removed_images += 1
+                except OSError:
+                    pass
+
+        self.current_section = None
+        self.current_index = None
+        self.pending_image = None
+        self.new_product()
+        self._refresh_all()
+        self.status_var.set(
+            f"已初始化：删除 {product_count} 个商品、{removed_images} 张图片"
+        )
+        messagebox.showinfo(
+            "初始化完成",
+            f"已删除 {product_count} 个商品、{removed_images} 张商品图片。\n"
+            "分类和导航已保留。\n\n"
+            f"备份：{backup_path}\n\n"
+            "添加完真实商品后，点「发布到 GitHub」才会更新线上。",
         )
 
     def export_package(self):

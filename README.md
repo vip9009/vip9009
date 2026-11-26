@@ -123,6 +123,7 @@ python tools/product_admin.py
 | 排序 | 商品上移 / 下移；分类用「排序」数字控制导航顺序 |
 | 保存 | 直接写回 `src/data/` 下的 JSON，并自动备份旧文件 |
 | 导出数据包 | 没有 Git 的电脑可用：导出 `src/data` + 商品图片的 zip，拷回主电脑发布 |
+| 初始化数据 | 清空全部商品和商品图片，保留分类；清空前自动备份 |
 | 发布 | 一键提交 `src/data` + `public/images/products` 并 push，GitHub Actions 自动重新部署 |
 
 注意事项：
