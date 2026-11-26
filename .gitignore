@@ -6,5 +6,8 @@ dist
 
 # 本地商品管理工具
 tools/.backups/
+tools/build/
+tools/dist/
+tools/*.spec
 __pycache__/
 *.pyc

@@ -24,6 +24,7 @@ import re
 import shutil
 import subprocess
 import sys
+import zipfile
 from datetime import datetime
 from pathlib import Path
 import tkinter as tk
@@ -37,7 +38,24 @@ except ImportError:  # 允许 --check 在没有 Pillow 的环境下运行
     ImageTk = None
 
 
-ROOT = Path(__file__).resolve().parents[1]
+def resolve_root() -> Path:
+    """Find the project folder both when running as .py and as a frozen .exe."""
+    starts = []
+    if getattr(sys, "frozen", False):
+        starts.append(Path(sys.executable).resolve().parent)
+        starts.append(Path.cwd())
+    else:
+        starts.append(Path(__file__).resolve().parent)
+    for start in starts:
+        for candidate in [start, *start.parents]:
+            if (candidate / "src" / "data" / "site" / "categories.json").exists():
+                return candidate
+    if getattr(sys, "frozen", False):
+        return Path(sys.executable).resolve().parent
+    return Path(__file__).resolve().parents[1]
+
+
+ROOT = resolve_root()
 DATA_DIR = ROOT / "src" / "data"
 SECTIONS_DIR = DATA_DIR / "sections"
 CATEGORIES_FILE = DATA_DIR / "site" / "categories.json"
@@ -310,6 +328,19 @@ class ProductAdmin(tk.Tk):
             header,
             text="打开数据目录",
             command=self.open_data_dir,
+            bg="#0B7A5F",
+            fg="#FFFFFF",
+            activebackground="#059669",
+            relief="flat",
+            font=("Microsoft YaHei UI", 9),
+            padx=12,
+            pady=7,
+            cursor="hand2",
+        ).pack(side="right", padx=6)
+        tk.Button(
+            header,
+            text="导出数据包",
+            command=self.export_package,
             bg="#0B7A5F",
             fg="#FFFFFF",
             activebackground="#059669",
@@ -1305,6 +1336,46 @@ class ProductAdmin(tk.Tk):
             or sub_id != (product.get("subcategory") or None)
         )
 
+    def export_package(self):
+        if not CATEGORIES_FILE.exists():
+            messagebox.showerror(
+                "找不到项目数据",
+                "没有找到 src/data/site/categories.json。\n\n"
+                "请把工具放在项目文件夹里（例如 tools\\）再打开。",
+            )
+            return
+        self.save_all()
+        stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+        desktop = Path.home() / "Desktop"
+        target = filedialog.asksaveasfilename(
+            title="导出商品数据包",
+            defaultextension=".zip",
+            initialfile=f"paopao-data-{stamp}.zip",
+            initialdir=str(desktop if desktop.exists() else ROOT),
+            filetypes=[("ZIP 压缩包", "*.zip")],
+        )
+        if not target:
+            return
+        try:
+            with zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as archive:
+                for folder in (DATA_DIR, IMAGES_DIR):
+                    if not folder.exists():
+                        continue
+                    for path in folder.rglob("*"):
+                        if path.is_file():
+                            archive.write(path, path.relative_to(ROOT).as_posix())
+        except Exception as error:
+            messagebox.showerror("导出失败", str(error))
+            return
+        self.status_var.set(f"已导出数据包：{target}")
+        messagebox.showinfo(
+            "导出成功",
+            "已导出商品数据和图片：\n\n"
+            + target
+            + "\n\n在另一台有 Git 的电脑上，把压缩包解压并覆盖到项目根目录，"
+            "然后打开工具点「发布到 GitHub」即可。",
+        )
+
     def publish(self):
         if self._has_unsaved_changes():
             if not messagebox.askyesno(
@@ -1315,8 +1386,21 @@ class ProductAdmin(tk.Tk):
             if not self.save_product():
                 return
         self.save_all()
+        if not shutil.which("git"):
+            self.status_var.set("已保存到本地；这台电脑没有 Git，无法直接发布")
+            messagebox.showwarning(
+                "这台电脑没有 Git",
+                "数据已经保存到本地，但这台电脑没有安装 Git，不能直接发布。\n\n"
+                "请点「导出数据包」，把 zip 拷到有 Git 的电脑上，解压覆盖项目后发布。",
+            )
+            return
         if not (ROOT / ".git").exists():
-            messagebox.showerror("不是 Git 仓库", "当前项目目录不是 Git 仓库，无法发布。")
+            self.status_var.set("已保存到本地；当前目录不是 Git 仓库")
+            messagebox.showwarning(
+                "不是 Git 仓库",
+                "数据已经保存到本地，但当前目录不是 Git 仓库，不能直接发布。\n\n"
+                "请点「导出数据包」，把 zip 拷到有 Git 的项目里发布。",
+            )
             return
         if not messagebox.askyesno(
             "发布到 GitHub",
@@ -1364,16 +1448,21 @@ class ProductAdmin(tk.Tk):
 
     def _run_git(self, args):
         flags = subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
-        return subprocess.run(
-            ["git", *args],
-            cwd=ROOT,
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-            timeout=180,
-            creationflags=flags,
-        )
+        try:
+            return subprocess.run(
+                ["git", *args],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=180,
+                creationflags=flags,
+            )
+        except FileNotFoundError:
+            return subprocess.CompletedProcess(
+                args, 127, stdout="", stderr="git not found"
+            )
 
     @staticmethod
     def _command_output(result):
@@ -1401,6 +1490,17 @@ def main() -> int:
             "商品图片处理需要 Pillow。\n\n请在项目目录执行：\n"
             "pip install -r tools/requirements.txt\n\n"
             "然后重新打开工具。",
+        )
+        root.destroy()
+        return 1
+    if not CATEGORIES_FILE.exists():
+        root = tk.Tk()
+        root.withdraw()
+        messagebox.showerror(
+            "找不到项目数据",
+            "没有找到 src/data/site/categories.json。\n\n"
+            "请把工具放在项目文件夹里（例如 tools\\）再打开。\n\n"
+            f"工具当前查找的目录：\n{ROOT}",
         )
         root.destroy()
         return 1

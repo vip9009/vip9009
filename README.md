@@ -116,6 +116,7 @@ python tools/product_admin.py
 | 选择图片 | 自动转成 800px WebP，写入 `public/images/products/` |
 | 排序 | 商品上移 / 下移；分类用「排序」数字控制导航顺序 |
 | 保存 | 直接写回 `src/data/` 下的 JSON，并自动备份旧文件 |
+| 导出数据包 | 没有 Git 的电脑可用：导出 `src/data` + 商品图片的 zip，拷回主电脑发布 |
 | 发布 | 一键提交 `src/data` + `public/images/products` 并 push，GitHub Actions 自动重新部署 |
 
 注意事项：
@@ -133,6 +134,36 @@ python tools/product_admin.py --check
 ```
 
 > 新增一级分类后，如果本地 `npm run dev` 还开着，需要重启一次开发服务器，Vite 才会加载新的分区 JSON。线上构建不受影响。
+
+### 没有 Python 的电脑（独立 exe）
+
+另一台 Windows 电脑没有 Python 也可以使用，直接双击打包好的独立程序：
+
+```text
+tools\dist\泡泡哥商品管理工具.exe
+```
+
+它内置了 Python、Tkinter 和 Pillow，不需要安装任何环境。
+
+注意：
+
+- exe 必须放在项目文件夹里（例如 `tools\dist\`），因为它要读写项目的 `src\data` 和 `public\images\products`。
+- 换电脑时把**整个项目文件夹**拷过去（包含 exe），不要只拷 exe。
+- exe 约 25MB，不提交到 Git。工具代码更新后需要重新打包：
+
+```bash
+python -m pip install pyinstaller
+python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥商品管理工具" --icon "tools\app.ico" --distpath "tools\dist" --workpath "tools\build" --specpath "tools" "tools\product_admin.py"
+```
+
+### 没有 Git / GitHub 的电脑
+
+没有 Git 也能正常新增、修改、保存商品和分类，数据会写到本地 JSON，只是不能直接发布：
+
+- 点「发布到 GitHub」时，工具会提示没有 Git，并建议改用「导出数据包」。
+- 点「导出数据包」会生成一个 zip，里面是 `src/data` 和 `public/images/products`。
+- 把 zip 拷到有 Git 的主电脑，解压并覆盖到项目根目录，再打开工具点「发布到 GitHub」。
+- 也可以把项目放在 OneDrive / 网盘同步目录，在另一台电脑改完，回主电脑发布。
 
 ## 修改数据
 
