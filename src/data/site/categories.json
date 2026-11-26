@@ -13,7 +13,6 @@
     "sort": 1,
     "nav": true,
     "children": [
-      "paoapoge",
       "relx-disposable",
       "snowplus-disposable",
       "icebear-disposable",
@@ -213,28 +212,5 @@
     "parent": "gbxl",
     "sort": 3,
     "desc": "国标烟杆现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "paoapoge": {
-    "title": "泡泡哥",
-    "desc": "我是泡泡啊泡怕啊泡泡破婆婆",
-    "parent": "disposables",
-    "sort": 1
-  },
-  "paoapo": {
-    "title": "一级泡泡哥",
-    "desc": "测试一下一级菜单",
-    "section": "paoapo",
-    "sort": 8,
-    "nav": true,
-    "children": [
-      "er-paoapo"
-    ]
-  },
-  "er-paoapo": {
-    "title": "泡泡哥小弟鹅",
-    "desc": "打家劫舍开口就是",
-    "parent": "paoapo",
-    "sort": 1,
-    "nav": true
   }
 }
