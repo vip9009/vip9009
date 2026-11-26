@@ -1940,7 +1940,7 @@ class ProductAdmin(tk.Tk):
         self.status_var.set("正在提交并推送...")
         self.update_idletasks()
 
-        add_paths = ["src/data", "public/images/products"]
+        add_paths = ["src/data", "public/images/products", "public/images/categories"]
         if PAYMENT_IMAGE.exists():
             add_paths.append("public/images/payment-qr.webp")
         if (ROOT / "public" / "animations").exists():
