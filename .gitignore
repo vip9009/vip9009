@@ -8,6 +8,6 @@ dist
 tools/.backups/
 tools/build/
 tools/dist/
-tools/*.spec
+*.spec
 __pycache__/
 *.pyc

@@ -350,6 +350,19 @@ class ProductAdmin(tk.Tk):
             pady=7,
             cursor="hand2",
         ).pack(side="right", padx=6)
+        tk.Button(
+            header,
+            text="使用说明",
+            command=self.open_manual,
+            bg="#0B7A5F",
+            fg="#FFFFFF",
+            activebackground="#059669",
+            relief="flat",
+            font=("Microsoft YaHei UI", 9),
+            padx=12,
+            pady=7,
+            cursor="hand2",
+        ).pack(side="right", padx=6)
 
     def _build_status(self):
         self.status_var = tk.StringVar(value="就绪")
@@ -1467,6 +1480,25 @@ class ProductAdmin(tk.Tk):
     @staticmethod
     def _command_output(result):
         return ((result.stdout or "") + (result.stderr or "")).strip()[-4000:]
+
+    def open_manual(self):
+        candidates = (ROOT / "tools" / "使用手册.md", ROOT / "README.md")
+        path = next((item for item in candidates if item.exists()), None)
+        if not path:
+            messagebox.showwarning(
+                "找不到使用说明",
+                "没有找到 tools\\使用手册.md。\n\n请确认工具和项目文件夹在一起。",
+            )
+            return
+        try:
+            if os.name == "nt":
+                os.startfile(path)  # type: ignore[attr-defined]
+            else:
+                subprocess.Popen(
+                    ["open" if sys.platform == "darwin" else "xdg-open", str(path)]
+                )
+        except OSError:
+            subprocess.Popen(["notepad.exe", str(path)])
 
     def open_data_dir(self):
         target = DATA_DIR

@@ -6,6 +6,8 @@
 
 > 本站仅做商品信息展示，不包含下单、购物车、支付等交易功能。页面中的商品、价格、图片和文案为演示数据，正式使用前请替换为你自己的品牌素材与内容。
 
+> 完整操作、打包、部署说明见 [`tools/使用手册.md`](tools/使用手册.md)。
+
 ## 技术栈
 
 - Vue 3（`<script setup>`）
@@ -65,7 +67,11 @@ vip9009/
 ├─ tools/                          # 本地商品管理工具（不参与打包）
 │  ├─ product_admin.py             # Tkinter 管理界面
 │  ├─ requirements.txt             # Pillow
-│  └─ 启动商品管理工具.bat         # Windows 双击启动
+│  ├─ app.ico                      # exe 图标
+│  ├─ build_exe.bat                # 一键打包免 Python 的 exe
+│  ├─ make_package.py              # 一键打包“发给别人”的 zip
+│  ├─ 启动商品管理工具.bat         # Windows 双击启动（需要 Python）
+│  └─ 使用手册.md                  # 完整操作、打包、部署手册
 ├─ vite.config.js                 # base: './'，支持仓库子路径部署
 └─ package.json
 ```
@@ -153,7 +159,7 @@ tools\dist\泡泡哥商品管理工具.exe
 
 ```bash
 python -m pip install pyinstaller
-python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥商品管理工具" --icon "tools\app.ico" --distpath "tools\dist" --workpath "tools\build" --specpath "tools" "tools\product_admin.py"
+python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥商品管理工具" --icon "tools\app.ico" --distpath "tools\dist" --workpath "tools\build" --specpath "." "tools\product_admin.py"
 ```
 
 ### 没有 Git / GitHub 的电脑
