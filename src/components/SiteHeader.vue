@@ -4,7 +4,7 @@ import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { site } from '@/data'
 import AppIcon from '@/components/AppIcon.vue'
 import { useCart } from '@/stores/cart'
-import { formatPrice } from '@/utils'
+import { asset, formatPrice } from '@/utils'
 
 const route = useRoute()
 const router = useRouter()
@@ -166,8 +166,7 @@ onBeforeUnmount(() => {
         </nav>
 
         <RouterLink class="logo" to="/" aria-label="泡泡哥雾化首页">
-          <span class="logo-cn">泡泡哥<span class="logo-dot" /></span>
-          <span class="logo-en">PAOPAO VAPE</span>
+          <img class="logo-img" :src="asset('/images/ui/logo-vapepu.webp')" alt="VAPEPU" />
         </RouterLink>
 
         <RouterLink class="cart-pill" to="/cart" aria-label="购物车">
@@ -374,6 +373,12 @@ onBeforeUnmount(() => {
   line-height: 1;
   letter-spacing: -0.07em;
   color: #242125;
+}
+
+.logo-img {
+  display: block;
+  width: auto;
+  height: 26px;
 }
 
 .logo-dot {
@@ -769,6 +774,10 @@ onBeforeUnmount(() => {
     position: absolute;
     top: 0;
     right: 0;
+  }
+
+  .logo-img {
+    height: 21px;
   }
 
   .logo-cn {

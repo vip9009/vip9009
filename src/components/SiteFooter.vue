@@ -5,7 +5,7 @@ import { site } from '@/data'
 <template>
   <footer class="footer">
     <div class="wrapper footer-inner">
-      <p>Copyright 2026 © {{ site.brand?.name || '泡泡哥雾化' }}</p>
+      <p>Copyright 2026 © VAPEPU</p>
       <div class="pay-marks" aria-label="支付方式">
         <span>微信支付</span>
         <span>支付宝</span>
