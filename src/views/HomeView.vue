@@ -4,6 +4,7 @@ import { RouterLink } from 'vue-router'
 import { site, productsData } from '@/data'
 import VpProductCard from '@/components/VpProductCard.vue'
 import CategoryGlyph from '@/components/CategoryGlyph.vue'
+import { asset } from '@/utils'
 
 const activeTab = ref('tag')
 const page = ref(0)
@@ -80,7 +81,7 @@ function setPage(index) {
 
         <div v-if="heroProducts.length" class="hero-products">
           <div v-for="(product, idx) in heroProducts" :key="product.title" class="hero-product" :class="`hero-product-${idx + 1}`">
-            <img :src="product.localImage" :alt="product.title" />
+            <img :src="asset(product.localImage)" :alt="product.title" />
           </div>
         </div>
         <div v-else class="hero-wordmark" aria-hidden="true">
