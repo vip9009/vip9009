@@ -40,6 +40,7 @@ vip9009/
 ├─ design-system/laovape/         # 设计系统 MASTER.md
 ├─ public/
 │  ├─ images/                     # 二维码、商品图（WebP）
+│  ├─ animations/                 # FAQ / 火箭 / NO SMOKING Lottie（占位）
 │  └─ .nojekyll
 ├─ src/
 │  ├─ assets/styles/main.css      # 全局基础样式与响应式
@@ -373,6 +374,8 @@ python .opencode/skills/ui-ux-pro-max/scripts/search.py "mobile menu touch targe
 | 正文字体 | Lato 400 |
 
 > 当前 UI 方向：**黑白 + 粉色**的极简商城风格，参考 vapepu.com 的版式：细边框、无圆角卡片、三列商品、居中 Logo、右下角客服按钮。
+>
+> 首页 FAQ 横幅、优惠活动小火箭、NO SMOKING 动画暂时使用参考站的 Lottie 素材作为占位（`public/animations/*.json`），正式上线前请替换为自己的动画素材。
 
 所有颜色、圆角、阴影、字体均已收敛到 `src/assets/styles/main.css` 的 CSS 变量中。
 

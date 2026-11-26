@@ -4,7 +4,7 @@ import { RouterLink } from 'vue-router'
 import { site, productsData } from '@/data'
 import VpProductCard from '@/components/VpProductCard.vue'
 import CategoryGlyph from '@/components/CategoryGlyph.vue'
-import { asset } from '@/utils'
+import LottieBox from '@/components/LottieBox.vue'
 
 const activeTab = ref('tag')
 const page = ref(0)
@@ -24,8 +24,6 @@ const allProducts = computed(() =>
       }))
     )
 )
-
-const heroProducts = computed(() => allProducts.value.slice(0, 3))
 
 const tiles = computed(() => {
   const glyphMap = {
@@ -48,7 +46,7 @@ const tiles = computed(() => {
   return [
     ...fromCategories,
     { title: '组合专区', to: '/category/hot', glyph: 'combo', accent: false },
-    { title: '优惠活动', to: '/category/hot', glyph: 'promo', accent: true }
+    { title: '优惠活动', to: '/category/hot', glyph: 'promo', accent: true, lottie: '/animations/rocket.json' }
   ].slice(0, 8)
 })
 
@@ -70,24 +68,8 @@ function setPage(index) {
 <template>
   <div class="home-page">
     <div class="wrapper home-top">
-      <RouterLink class="hero-banner" :to="hero.link || '/category/hot'">
-        <div class="hero-copy">
-          <span class="hero-eyebrow">{{ hero.eyebrow }}</span>
-          <h1>{{ hero.title }}</h1>
-          <p>{{ hero.subtitle }}</p>
-          <span class="hero-cta">{{ hero.cta }} →</span>
-          <small>{{ hero.note }}</small>
-        </div>
-
-        <div v-if="heroProducts.length" class="hero-products">
-          <div v-for="(product, idx) in heroProducts" :key="product.title" class="hero-product" :class="`hero-product-${idx + 1}`">
-            <img :src="asset(product.localImage)" :alt="product.title" />
-          </div>
-        </div>
-        <div v-else class="hero-wordmark" aria-hidden="true">
-          <b>PAOPAO</b>
-          <span>SELECT</span>
-        </div>
+      <RouterLink class="hero-banner hero-lottie" :to="hero.link || '/info/about'">
+        <LottieBox src="/animations/faq.json" label="常见问题 FAQ 动画" />
       </RouterLink>
     </div>
 
@@ -101,8 +83,11 @@ function setPage(index) {
             :class="{ accent: tile.accent }"
             :to="tile.to"
           >
-            <span class="category-glyph"><CategoryGlyph :name="tile.glyph" /></span>
-            <b>{{ tile.title }}</b>
+            <span class="category-glyph" :class="{ 'is-lottie': tile.lottie }">
+              <LottieBox v-if="tile.lottie" :src="tile.lottie" label="优惠活动动画" />
+              <CategoryGlyph v-else :name="tile.glyph" />
+            </span>
+            <b v-if="!tile.lottie">{{ tile.title }}</b>
           </RouterLink>
         </div>
       </div>
@@ -129,7 +114,7 @@ function setPage(index) {
           </button>
         </div>
 
-        <div v-if="visibleProducts.length" class="product-grid-3">
+        <div v-if="visibleProducts.length" :key="page" class="product-grid-3 page-slide">
           <VpProductCard
             v-for="(product, index) in visibleProducts"
             :key="`${product.sectionId}-${product.index}`"
@@ -194,10 +179,8 @@ function setPage(index) {
       </div>
     </section>
 
-    <div class="no-smoking" aria-hidden="true">
-      <span class="ns-arrow left" />
-      <b>NO SMOKING</b>
-      <span class="ns-arrow right" />
+    <div class="no-smoking">
+      <LottieBox src="/animations/no-smoking.json" fit="cover" :speed="0.5" label="NO SMOKING 动画" />
     </div>
 
     <section class="brand-strip">
@@ -248,6 +231,21 @@ function setPage(index) {
   border: 1px dashed rgba(255, 255, 255, 0.18);
   border-radius: 2px;
   pointer-events: none;
+}
+
+.hero-banner.hero-lottie {
+  display: block;
+  padding: 0;
+  background: #000000;
+}
+
+.hero-banner.hero-lottie::before {
+  display: none;
+}
+
+.hero-lottie .lottie-box {
+  width: 100%;
+  height: 100%;
 }
 
 .hero-copy {
@@ -396,6 +394,16 @@ function setPage(index) {
 .category-glyph {
   width: 128px;
   height: 128px;
+  transition: transform 0.25s ease;
+}
+
+.category-tile:hover .category-glyph {
+  transform: translateY(-4px) scale(1.04);
+}
+
+.category-glyph.is-lottie {
+  width: 150px;
+  height: 150px;
 }
 
 .category-tile b {
@@ -503,6 +511,21 @@ function setPage(index) {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+}
+
+.page-slide {
+  animation: page-slide 0.38s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes page-slide {
+  from {
+    opacity: 0;
+    transform: translateX(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .empty-new {
@@ -693,11 +716,16 @@ function setPage(index) {
 }
 
 .no-smoking {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-  padding: 46px 20px 26px;
+  width: 100%;
+  max-width: 1050px;
+  height: 300px;
+  padding: 0;
+  margin: 0 auto;
+}
+
+.no-smoking .lottie-box {
+  width: 100%;
+  height: 100%;
 }
 
 .no-smoking b {
@@ -774,6 +802,12 @@ function setPage(index) {
     padding: 0 22px;
   }
 
+  .hero-banner.hero-lottie {
+    height: auto;
+    padding: 0;
+    aspect-ratio: 750 / 227;
+  }
+
   .hero-copy {
     max-width: 100%;
   }
@@ -836,6 +870,11 @@ function setPage(index) {
     height: 74px;
   }
 
+  .category-glyph.is-lottie {
+    width: 90px;
+    height: 90px;
+  }
+
   .category-tile b {
     font-size: 13px;
   }
@@ -866,7 +905,7 @@ function setPage(index) {
   }
 
   .no-smoking {
-    padding: 30px 16px 18px;
+    height: 150px;
   }
 
   .ns-arrow {

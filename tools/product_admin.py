@@ -1943,6 +1943,8 @@ class ProductAdmin(tk.Tk):
         add_paths = ["src/data", "public/images/products"]
         if PAYMENT_IMAGE.exists():
             add_paths.append("public/images/payment-qr.webp")
+        if (ROOT / "public" / "animations").exists():
+            add_paths.append("public/animations")
         add = self._run_git(["add", *add_paths])
         if add.returncode != 0:
             messagebox.showerror("git add 失败", self._command_output(add))
