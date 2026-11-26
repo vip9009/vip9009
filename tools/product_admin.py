@@ -345,19 +345,20 @@ class ProductAdmin(tk.Tk):
             row=3, column=2, sticky="w", padx=(6, 0)
         )
 
+        preview_box = tk.Frame(right, height=210, bg="#F7FFFB", relief="solid", borderwidth=1)
+        preview_box.grid(row=4, column=0, columnspan=3, pady=(6, 10), sticky="ew")
+        preview_box.grid_propagate(False)
         self.preview_label = tk.Label(
-            right,
+            preview_box,
             text="未选择图片",
             bg="#F7FFFB",
             fg="#9AA0A6",
-            width=24,
-            height=10,
-            relief="solid",
-            borderwidth=1,
         )
-        self.preview_label.grid(row=4, column=0, columnspan=3, pady=10, sticky="ew")
+        self.preview_label.pack(fill="both", expand=True)
 
-        ttk.Label(right, text="商品描述").grid(row=5, column=0, sticky="nw", pady=4)
+        ttk.Label(right, text="商品描述\n（显示在详情页）", justify="left").grid(
+            row=5, column=0, sticky="nw", pady=4
+        )
         self.description_text = tk.Text(
             right,
             height=9,
@@ -581,7 +582,7 @@ class ProductAdmin(tk.Tk):
             with Image.open(path) as opened:
                 image = opened.convert("RGB")
                 resampling = getattr(Image, "Resampling", Image)
-                image.thumbnail((220, 220), resampling.LANCZOS)
+                image.thumbnail((320, 200), resampling.LANCZOS)
                 self._preview_photo = ImageTk.PhotoImage(image)
             self.preview_label.configure(image=self._preview_photo, text="")
         except Exception as error:
@@ -658,23 +659,23 @@ class ProductAdmin(tk.Tk):
         title = self.title_var.get().strip()
         if not title:
             messagebox.showwarning("缺少名称", "请填写商品名称。")
-            return
+            return False
         try:
             price = compact_price(self.price_var.get().strip())
             if float(price) <= 0:
                 raise ValueError
         except (TypeError, ValueError):
             messagebox.showwarning("价格不正确", "请填写大于 0 的商品价格。")
-            return
+            return False
 
         category_id = self.label_to_category.get(self.product_category_var.get())
         if not category_id:
             messagebox.showwarning("缺少分类", "请选择一个已关联商品分区的分类。")
-            return
+            return False
         section_id = self.categories.get(category_id, {}).get("section")
         if not section_id or section_id not in self.sections:
             messagebox.showwarning("分类未关联分区", "该分类没有可用商品分区，请先在分类管理中处理。")
-            return
+            return False
 
         existing = None
         if self.current_section and self.current_index is not None:
@@ -688,10 +689,10 @@ class ProductAdmin(tk.Tk):
                 local_image = process_image(self.pending_image, section_id)
             except Exception as error:
                 messagebox.showerror("图片处理失败", str(error))
-                return
+                return False
         if not local_image:
             messagebox.showwarning("缺少图片", "请选择一张商品图片。")
-            return
+            return False
 
         product = dict(existing) if existing else {}
         product.update(
@@ -730,6 +731,7 @@ class ProductAdmin(tk.Tk):
         self.current_index = target_index
         self.pending_image = None
         self.status_var.set(f"已保存商品：{title}")
+        return True
 
     def delete_product(self):
         selection = self.product_tree.selection()
@@ -894,7 +896,44 @@ class ProductAdmin(tk.Tk):
             write_json(SECTIONS_DIR / f"{section_id}.json", section)
         write_json(CATEGORIES_FILE, self.categories)
 
+    def _has_unsaved_changes(self):
+        title = self.title_var.get().strip()
+        price = self.price_var.get().strip()
+        description = self.description_text.get("1.0", "end").strip()
+        category_label = self.product_category_var.get().strip()
+        image = self.image_var.get().strip()
+        if not any((title, price, description, category_label, image)):
+            return False
+        if not self.current_section or self.current_index is None:
+            return True
+
+        products = self.sections.get(self.current_section, {}).get("products", [])
+        if self.current_index >= len(products):
+            return True
+        product = products[self.current_index]
+
+        category_id, _title = self._category_for_section(self.current_section)
+        current_label = next(
+            (label for label, cid in self.label_to_category.items() if cid == category_id),
+            "",
+        )
+        return (
+            title != str(product.get("title", ""))
+            or price != str(product.get("price", ""))
+            or description != str(product.get("description", ""))
+            or category_label != current_label
+            or image != str(product.get("localImage", ""))
+        )
+
     def publish(self):
+        if self._has_unsaved_changes():
+            if not messagebox.askyesno(
+                "有未保存的修改",
+                "当前表单里的商品信息还没有保存，直接发布会丢失这些修改。\n\n是否先保存商品，再发布？",
+            ):
+                return
+            if not self.save_product():
+                return
         self.save_all()
         if not (ROOT / ".git").exists():
             messagebox.showerror("不是 Git 仓库", "当前项目目录不是 Git 仓库，无法发布。")
