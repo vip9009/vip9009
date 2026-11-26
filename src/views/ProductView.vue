@@ -456,6 +456,13 @@ watchEffect(() => {
   border-radius: 2px;
 }
 
+.option-row select:focus,
+.option-row select:focus-visible {
+  outline: none;
+  border-color: #dddddd;
+  box-shadow: none;
+}
+
 .buy-row {
   display: flex;
   gap: 8px;

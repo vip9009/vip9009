@@ -201,7 +201,7 @@ function addToCart() {
 }
 
 .card-badges:not(.single) .card-badge {
-  animation: badge-in 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: badge-in 3s cubic-bezier(0.22, 0.61, 0.36, 1) infinite both;
 }
 
 @keyframes badge-pulse {
@@ -217,13 +217,22 @@ function addToCart() {
 }
 
 @keyframes badge-in {
-  from {
+  0% {
     opacity: 0;
     transform: translateX(-12px);
   }
-  to {
+  12% {
     opacity: 1;
     transform: translateX(0);
+  }
+  78% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: translateX(-12px);
   }
 }
 
@@ -326,6 +335,13 @@ function addToCart() {
   background: #ffffff;
   border: 1px solid #dddddd;
   border-radius: 2px;
+}
+
+.card-buy select:focus,
+.card-buy select:focus-visible {
+  outline: none;
+  border-color: #dddddd;
+  box-shadow: none;
 }
 
 .get-btn {
