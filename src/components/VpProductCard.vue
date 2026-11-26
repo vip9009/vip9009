@@ -100,10 +100,10 @@ function addToCart() {
 
     <RouterLink class="card-image" :to="route">
       <img :src="image" :alt="title" :loading="eager ? 'eager' : 'lazy'" decoding="async" />
+      <span v-if="isHot" class="card-hot">HOT</span>
     </RouterLink>
 
     <span v-if="!stock" class="card-sold">无货</span>
-    <span v-if="isHot" class="card-hot">HOT</span>
 
     <div class="card-body">
       <span class="card-cat">{{ sectionTitle }}</span>
@@ -243,6 +243,7 @@ function addToCart() {
 }
 
 .card-image {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -282,6 +283,26 @@ function addToCart() {
   font-weight: 900;
   color: #ffffff;
   background: #242125;
+  transform: translateY(-50%);
+  animation: hot-blink 1.8s ease-in-out infinite;
+}
+
+@keyframes hot-blink {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.42;
+    transform: translateY(-50%) scale(1.07);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-hot {
+    animation: none;
+  }
 }
 
 .card-body {
