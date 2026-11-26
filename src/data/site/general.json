@@ -147,5 +147,35 @@
       "label": "网站地图",
       "to": "/sitemap"
     }
-  ]
+  ],
+  "brandLogos": {
+    "RELX": "/images/brands/relx.webp",
+    "YOOZ": "/images/brands/yooz.webp",
+    "MOTI": "/images/brands/moti.webp",
+    "Snowplus": "/images/brands/snowplus.webp",
+    "ZGAR": "/images/brands/zgar.webp",
+    "ELFBAR": "/images/brands/elfbar.webp",
+    "VOZOL": "/images/brands/vozol.webp",
+    "LAMI": "/images/brands/lami.webp",
+    "BEARFBAR": "/images/brands/bearfbar.webp",
+    "SOLOBAR": "/images/brands/solobar.webp",
+    "AL FAKHER": "/images/brands/al-fakher.webp",
+    "WE VAPE": "/images/brands/we-vape.webp",
+    "SONG": "/images/brands/song.webp",
+    "GEEKBAR": "/images/brands/geekbar.webp",
+    "UTBAR": "/images/brands/utbar.webp",
+    "TESIYI": "/images/brands/tesiyi.webp",
+    "OLIT": "/images/brands/olit.webp",
+    "PANDORA": "/images/brands/pandora.webp",
+    "FLOAT X": "/images/brands/float-x.webp",
+    "COCONINA": "/images/brands/coconina.webp",
+    "DRAGONBAR": "/images/brands/dragonbar.webp",
+    "DOJO": "/images/brands/dojo.webp",
+    "JEX": "/images/brands/jex.webp",
+    "other": "/images/brands/other.webp",
+    "SnowPlus": "/images/brands/snowplus.webp",
+    "Float X": "/images/brands/float-x.webp",
+    "Dragon Bar": "/images/brands/dragonbar.webp",
+    "Bubblemon": "/images/brands/we-vape.webp"
+  }
 }

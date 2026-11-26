@@ -27,6 +27,7 @@ let addedTimer = null
 
 const title = computed(() => decodeEntities(product.value?.title || ''))
 const brand = computed(() => detectBrand(product.value || {}))
+const brandLogo = computed(() => site.brandLogos?.[brand.value] || '')
 const image = computed(() => asset(product.value?.localImage || ''))
 const gallery = computed(() => {
   const list = Array.isArray(product.value?.gallery) ? product.value.gallery : []
@@ -150,7 +151,8 @@ watchEffect(() => {
 
       <div class="product-main">
         <div class="gallery">
-          <span class="gallery-brand">{{ brand }}</span>
+          <img v-if="brandLogo" class="gallery-brand-logo" :src="asset(brandLogo)" :alt="brand" />
+          <span v-else class="gallery-brand">{{ brand }}</span>
           <div class="gallery-tags">
             <span v-for="badge in badges" :key="badge">{{ badge }}</span>
           </div>
@@ -345,6 +347,15 @@ watchEffect(() => {
   font-weight: 900;
   letter-spacing: 0.08em;
   color: #242125;
+}
+
+.gallery-brand-logo {
+  display: block;
+  max-width: 110px;
+  max-height: 26px;
+  margin-bottom: 8px;
+  object-fit: contain;
+  object-position: left center;
 }
 
 .gallery-tags {

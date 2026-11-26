@@ -4,6 +4,7 @@ import { RouterLink } from 'vue-router'
 import AppIcon from '@/components/AppIcon.vue'
 import { useCart } from '@/stores/cart'
 import { useWishlist } from '@/stores/wishlist'
+import { site } from '@/data'
 import { asset, decodeEntities, detectBrand, formatPrice, productRoute } from '@/utils'
 
 const props = defineProps({
@@ -20,6 +21,7 @@ const option = ref('')
 
 const title = computed(() => decodeEntities(props.product.title))
 const brand = computed(() => detectBrand(props.product))
+const brandLogo = computed(() => site.brandLogos?.[brand.value] || '')
 const route = computed(() => productRoute(props.sectionId, props.index))
 const image = computed(() => asset(props.product.localImage))
 const badges = computed(() => {
@@ -84,7 +86,8 @@ function toggleWishlist() {
 <template>
   <article class="vp-card" :class="{ 'is-sold': !stock }">
     <div class="card-top">
-      <span class="card-brand">{{ brand }}</span>
+      <img v-if="brandLogo" class="card-brand-logo" :src="asset(brandLogo)" :alt="brand" />
+      <span v-else class="card-brand">{{ brand }}</span>
       <div class="card-badges">
         <span v-for="badge in badges" :key="badge" class="card-badge">{{ badge }}</span>
       </div>
@@ -170,6 +173,14 @@ function toggleWishlist() {
   text-transform: uppercase;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.card-brand-logo {
+  display: block;
+  max-width: 72px;
+  max-height: 22px;
+  object-fit: contain;
+  object-position: left center;
 }
 
 .card-badges {

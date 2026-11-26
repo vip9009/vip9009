@@ -72,6 +72,9 @@ const visibleProducts = computed(() =>
 
 const tags = computed(() => site.tags || [])
 const brands = computed(() => site.brands || [])
+const brandItems = computed(() =>
+  brands.value.map((name) => ({ name, logo: site.brandLogos?.[name] || '' }))
+)
 const news = computed(() => site.news || [])
 
 function setPage(index) {
@@ -168,12 +171,13 @@ function setPage(index) {
 
         <div v-else-if="activeTab === 'brand'" class="brand-wall">
           <RouterLink
-            v-for="brand in brands"
-            :key="brand"
+            v-for="item in brandItems"
+            :key="item.name"
             class="brand-word"
-            :to="`/search?q=${encodeURIComponent(brand.split(' ').pop())}`"
+            :to="`/search?q=${encodeURIComponent(item.name.split(' ').pop())}`"
           >
-            {{ brand }}
+            <img v-if="item.logo" :src="asset(item.logo)" :alt="item.name" />
+            <span v-else>{{ item.name }}</span>
           </RouterLink>
         </div>
 
@@ -199,12 +203,13 @@ function setPage(index) {
       <div class="wrapper">
         <div class="brand-strip-grid">
           <RouterLink
-            v-for="brand in brands"
-            :key="brand"
+            v-for="item in brandItems"
+            :key="item.name"
             class="brand-logo"
-            :to="`/search?q=${encodeURIComponent(brand.split(' ').pop())}`"
+            :to="`/search?q=${encodeURIComponent(item.name.split(' ').pop())}`"
           >
-            {{ brand }}
+            <img v-if="item.logo" :src="asset(item.logo)" :alt="item.name" />
+            <span v-else>{{ item.name }}</span>
           </RouterLink>
         </div>
       </div>
@@ -657,6 +662,12 @@ function setPage(index) {
   text-align: center;
 }
 
+.brand-word img {
+  max-width: 120px;
+  max-height: 38px;
+  object-fit: contain;
+}
+
 .brand-word:hover {
   color: var(--color-primary);
 }
@@ -800,11 +811,28 @@ function setPage(index) {
 }
 
 .brand-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-heading);
   font-size: 13px;
   font-weight: 900;
   letter-spacing: 0.04em;
   color: #b5b5b5;
+}
+
+.brand-logo img {
+  max-width: 96px;
+  max-height: 28px;
+  object-fit: contain;
+  filter: grayscale(1);
+  opacity: 0.65;
+  transition: filter 0.2s ease, opacity 0.2s ease;
+}
+
+.brand-logo:hover img {
+  filter: none;
+  opacity: 1;
 }
 
 .brand-logo:hover {
