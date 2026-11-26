@@ -430,7 +430,7 @@ onBeforeUnmount(() => {
 }
 
 .search-row {
-  padding-bottom: 14px;
+  padding: 0 16px 14px;
 }
 
 .header-search {
@@ -790,7 +790,7 @@ onBeforeUnmount(() => {
   }
 
   .search-row {
-    padding-bottom: 10px;
+    padding: 0 16px 10px;
   }
 
   .header-search {
