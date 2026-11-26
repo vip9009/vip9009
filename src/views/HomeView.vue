@@ -76,6 +76,20 @@ const brandItems = computed(() =>
   brands.value.map((name) => ({ name, logo: site.brandLogos?.[name] || '' }))
 )
 const news = computed(() => site.news || [])
+const newsPage = ref(0)
+const newsPerPage = 2
+const newsPages = computed(() => Math.max(1, Math.ceil(news.value.length / newsPerPage)))
+const visibleNews = computed(() =>
+  news.value.slice(newsPage.value * newsPerPage, (newsPage.value + 1) * newsPerPage)
+)
+
+function prevNews() {
+  newsPage.value = (newsPage.value - 1 + newsPages.value) % newsPages.value
+}
+
+function nextNews() {
+  newsPage.value = (newsPage.value + 1) % newsPages.value
+}
 
 function setPage(index) {
   page.value = index
@@ -181,16 +195,35 @@ function setPage(index) {
           </RouterLink>
         </div>
 
-        <div v-else class="news-grid">
-          <RouterLink v-for="(item, index) in news" :key="item.title" class="news-card" :to="item.to || '/info/about'">
-            <span class="news-thumb" :class="`news-thumb-${(index % 3) + 1}`">
-              <b>PAOPAO</b>
-              <small>NEWS</small>
-            </span>
-            <h3>{{ item.title }}</h3>
-            <p>{{ item.excerpt }}</p>
-            <time>{{ item.date }}</time>
-          </RouterLink>
+        <div v-else class="news-carousel">
+          <button class="news-arrow prev" type="button" aria-label="上一组新闻" @click="prevNews">‹</button>
+          <div class="news-track">
+            <RouterLink v-for="item in visibleNews" :key="item.title" class="news-card" :to="item.to || '/info/news'">
+              <span class="news-thumb">
+                <img v-if="item.image" :src="asset(item.image)" :alt="item.title" loading="lazy" />
+                <template v-else>
+                  <b>PAOPAO</b>
+                  <small>NEWS</small>
+                </template>
+              </span>
+              <h3>{{ item.title }}</h3>
+              <div class="news-meta">
+                <time>{{ item.date }}</time>
+                <span v-if="item.comments">{{ item.comments }} 评论</span>
+              </div>
+            </RouterLink>
+          </div>
+          <button class="news-arrow next" type="button" aria-label="下一组新闻" @click="nextNews">›</button>
+        </div>
+        <div v-if="activeTab === 'news' && newsPages > 1" class="news-dots">
+          <button
+            v-for="index in newsPages"
+            :key="index"
+            type="button"
+            :class="{ active: newsPage === index - 1 }"
+            :aria-label="`第 ${index} 页新闻`"
+            @click="newsPage = index - 1"
+          />
         </div>
       </div>
     </section>
@@ -205,22 +238,6 @@ function setPage(index) {
         <LottieBox src="/animations/no-smoking.json" fit="contain" :speed="0.5" label="NO SMOKING 动画" />
       </div>
     </div>
-
-    <section class="brand-strip">
-      <div class="wrapper">
-        <div class="brand-strip-grid">
-          <RouterLink
-            v-for="item in brandItems"
-            :key="item.name"
-            class="brand-logo"
-            :to="`/search?q=${encodeURIComponent(item.name.split(' ').pop())}`"
-          >
-            <img v-if="item.logo" :src="asset(item.logo)" :alt="item.name" />
-            <span v-else>{{ item.name }}</span>
-          </RouterLink>
-        </div>
-      </div>
-    </section>
   </div>
 </template>
 
@@ -679,8 +696,9 @@ function setPage(index) {
 .brand-wall {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  max-width: 900px;
-  padding: 22px 0 8px;
+  gap: 8px;
+  max-width: 760px;
+  padding: 18px 0 8px;
   margin: 0 auto;
 }
 
@@ -688,30 +706,50 @@ function setPage(index) {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 56px;
+  aspect-ratio: 1 / 1;
+  padding: 8px;
   font-family: var(--font-heading);
   font-size: 14px;
   font-weight: 900;
   color: #999999;
   letter-spacing: 0.04em;
   text-align: center;
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  transition: border-color 0.18s ease, transform 0.18s ease;
 }
 
 .brand-word img {
-  max-width: 120px;
-  max-height: 38px;
+  max-width: 82%;
+  max-height: 62%;
   object-fit: contain;
+  filter: grayscale(1);
+  opacity: 0.78;
+  transition: filter 0.18s ease, opacity 0.18s ease;
 }
 
 .brand-word:hover {
   color: var(--color-primary);
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
 }
 
-.news-grid {
+.brand-word:hover img {
+  filter: none;
+  opacity: 1;
+}
+
+.news-carousel {
+  position: relative;
+  max-width: 900px;
+  padding: 22px 40px 4px;
+  margin: 0 auto;
+}
+
+.news-track {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
-  padding-top: 22px;
 }
 
 .news-card {
@@ -730,17 +768,16 @@ function setPage(index) {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 120px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
   color: #ffffff;
   background: linear-gradient(135deg, #111111, #e6007e);
 }
 
-.news-thumb-2 {
-  background: linear-gradient(135deg, #e6007e, #7500c0);
-}
-
-.news-thumb-3 {
-  background: linear-gradient(135deg, #111111, #16c8d6);
+.news-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .news-thumb b {
@@ -756,28 +793,71 @@ function setPage(index) {
 }
 
 .news-card h3 {
+  display: -webkit-box;
+  min-height: 54px;
   padding: 12px 12px 4px;
+  overflow: hidden;
   font-size: 13px;
   line-height: 1.5;
   color: #242125;
-}
-
-.news-card p {
-  padding: 0 12px;
-  font-size: 11px;
-  line-height: 1.6;
-  color: #888888;
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
-.news-card time {
-  display: block;
-  padding: 10px 12px 12px;
+.news-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  padding: 8px 12px 12px;
   font-size: 10px;
   color: #aaaaaa;
+}
+
+.news-arrow {
+  position: absolute;
+  top: 46%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 46px;
+  font-size: 28px;
+  line-height: 1;
+  color: #999999;
+  transition: color 0.18s ease;
+}
+
+.news-arrow:hover {
+  color: var(--color-primary);
+}
+
+.news-arrow.prev {
+  left: 0;
+}
+
+.news-arrow.next {
+  right: 0;
+}
+
+.news-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding-top: 12px;
+}
+
+.news-dots button {
+  width: 8px;
+  height: 8px;
+  background: #d5d5d5;
+  border-radius: 50%;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.news-dots button.active {
+  background: #242125;
+  transform: scale(1.15);
 }
 
 .no-smoking {
@@ -987,11 +1067,41 @@ function setPage(index) {
   }
 
   .brand-wall {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 4px;
   }
 
-  .news-grid {
-    grid-template-columns: minmax(0, 1fr);
+  .brand-word {
+    padding: 4px;
+    font-size: 8px;
+    line-height: 1.1;
+    letter-spacing: 0;
+    word-break: break-word;
+  }
+
+  .news-carousel {
+    padding: 18px 24px 4px;
+  }
+
+  .news-track {
+    gap: 10px;
+  }
+
+  .news-card h3 {
+    min-height: 48px;
+    padding: 8px 8px 2px;
+    font-size: 11px;
+  }
+
+  .news-meta {
+    padding: 6px 8px 8px;
+    font-size: 9px;
+  }
+
+  .news-arrow {
+    width: 22px;
+    height: 40px;
+    font-size: 22px;
   }
 
   .no-smoking {

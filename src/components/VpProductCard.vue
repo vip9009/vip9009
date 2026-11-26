@@ -123,7 +123,7 @@ function toggleWishlist() {
               {{ entry.label }}
             </option>
           </select>
-          <button type="button" @click="addToCart">GET</button>
+          <button type="button" :disabled="!option" @click="addToCart">GET</button>
         </div>
         <div v-else class="card-buy">
           <RouterLink class="card-view" :to="route">查看详情</RouterLink>
@@ -351,6 +351,14 @@ function toggleWishlist() {
   color: #ffffff;
   background: var(--color-primary);
   border-color: var(--color-primary);
+}
+
+.card-buy button:disabled,
+.card-buy button:disabled:hover {
+  color: #e7b8cb;
+  background: #fbfbfb;
+  border-color: #f2f2f2;
+  cursor: not-allowed;
 }
 
 .card-view {
