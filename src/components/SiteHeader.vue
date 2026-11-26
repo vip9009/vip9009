@@ -306,6 +306,7 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: space-between;
   height: 76px;
+  padding: 0 16px;
 }
 
 .desktop-nav {

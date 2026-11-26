@@ -1,9 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { RouterLink } from 'vue-router'
-import AppIcon from '@/components/AppIcon.vue'
 import { useCart } from '@/stores/cart'
-import { useWishlist } from '@/stores/wishlist'
 import { site } from '@/data'
 import { asset, decodeEntities, detectBrand, formatPrice, productRoute } from '@/utils'
 
@@ -16,7 +14,6 @@ const props = defineProps({
 })
 
 const cart = useCart()
-const wishlist = useWishlist()
 const option = ref('')
 const added = ref(false)
 let addedTimer = null
@@ -84,15 +81,6 @@ function addToCart() {
   }, 1600)
 }
 
-function toggleWishlist() {
-  wishlist.toggle({
-    sectionId: props.sectionId,
-    index: props.index,
-    title: title.value,
-    price: props.product.price,
-    image: image.value
-  })
-}
 </script>
 
 <template>
@@ -100,24 +88,19 @@ function toggleWishlist() {
     <div class="card-top">
       <img v-if="brandLogo" class="card-brand-logo" :src="asset(brandLogo)" :alt="brand" />
       <span v-else class="card-brand">{{ brand }}</span>
-      <div class="card-badges">
-        <span v-for="badge in badges" :key="badge" class="card-badge">{{ badge }}</span>
+      <div class="card-badges" :class="{ single: badges.length === 1 }">
+        <span
+          v-for="(badge, badgeIndex) in badges"
+          :key="badge"
+          class="card-badge"
+          :style="{ animationDelay: `${badgeIndex * 0.12}s` }"
+        >{{ badge }}</span>
       </div>
     </div>
 
     <RouterLink class="card-image" :to="route">
       <img :src="image" :alt="title" :loading="eager ? 'eager' : 'lazy'" decoding="async" />
     </RouterLink>
-
-    <button
-      class="card-wish"
-      type="button"
-      :class="{ active: wishlist.has(sectionId, index) }"
-      aria-label="收藏"
-      @click="toggleWishlist"
-    >
-      <AppIcon name="heart" :size="16" />
-    </button>
 
     <span v-if="!stock" class="card-sold">无货</span>
     <span v-if="isHot" class="card-hot">HOT</span>
@@ -159,13 +142,6 @@ function toggleWishlist() {
   height: 100%;
   padding: 14px;
   background: #ffffff;
-  border: 1px solid #e5e5e5;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.vp-card:hover {
-  border-color: #cfcfcf;
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
 }
 
 .card-top {
@@ -220,6 +196,43 @@ function toggleWishlist() {
   background: #242125;
 }
 
+.card-badges.single .card-badge {
+  animation: badge-pulse 2.2s ease-in-out infinite;
+}
+
+.card-badges:not(.single) .card-badge {
+  animation: badge-in 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes badge-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.58;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes badge-in {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-badges .card-badge {
+    animation: none;
+  }
+}
+
 .card-image {
   display: flex;
   align-items: center;
@@ -234,39 +247,6 @@ function toggleWishlist() {
   height: 100%;
   object-fit: contain;
   padding: 10px;
-  filter: drop-shadow(0 14px 12px rgba(0, 0, 0, 0.08));
-  transition: transform 0.25s ease;
-}
-
-.vp-card:hover .card-image img {
-  transform: scale(1.035);
-}
-
-.card-wish {
-  position: absolute;
-  top: 40px;
-  right: 12px;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  color: #bbbbbb;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #eeeeee;
-  border-radius: 50%;
-  opacity: 0;
-  transition: opacity 0.18s ease, color 0.18s ease;
-}
-
-.vp-card:hover .card-wish,
-.card-wish.active {
-  opacity: 1;
-}
-
-.card-wish.active {
-  color: var(--color-primary);
 }
 
 .card-sold {

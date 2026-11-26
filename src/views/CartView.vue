@@ -143,6 +143,7 @@ const total = computed(() => cart.subtotal.value + shippingFee.value)
   display: grid;
   grid-template-columns: minmax(0, 1fr) 330px;
   gap: 36px;
+  padding-right: 20px;
 }
 
 .cart-table {
@@ -315,6 +316,7 @@ const total = computed(() => cart.subtotal.value + shippingFee.value)
   .cart-layout {
     grid-template-columns: minmax(0, 1fr);
     gap: 24px;
+    padding-right: 0;
   }
 
   .cart-table thead {
