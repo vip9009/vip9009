@@ -73,6 +73,13 @@
       "price": 128,
       "imageAlt": "SONG崧A38冰果系列17000口一次性电子烟-可调节冰度",
       "localImage": "/images/products/disposables-12-800.webp"
+    },
+    {
+      "title": "测试一下",
+      "price": 19.9,
+      "imageAlt": "测试一下",
+      "localImage": "/images/products/hot-20261126142020656688.webp",
+      "description": "泡泡哥测试一下"
     }
   ],
   "sort": 2
