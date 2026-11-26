@@ -439,9 +439,16 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   height: 40px;
+  overflow: hidden;
   border: 1px solid #e5e5e5;
-  border-radius: 4px;
+  border-radius: 3px;
   background: #f5f5f5;
+  transform: skewX(-8deg);
+}
+
+.header-search input,
+.header-search button {
+  transform: skewX(8deg);
 }
 
 .header-search input {
@@ -631,6 +638,12 @@ onBeforeUnmount(() => {
   height: 40px;
   overflow: hidden;
   border: 1px solid #dddddd;
+  transform: skewX(-8deg);
+}
+
+.drawer-search input,
+.drawer-search button {
+  transform: skewX(8deg);
 }
 
 .drawer-search input {
