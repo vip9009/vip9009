@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
-import { site, productsData } from '@/data'
+import { site } from '@/data'
 import AppIcon from '@/components/AppIcon.vue'
 import { useCart } from '@/stores/cart'
 import { formatPrice } from '@/utils'
@@ -13,6 +13,11 @@ const { count, subtotal } = useCart()
 const keyword = ref('')
 const drawerOpen = ref(false)
 const scrolled = ref(false)
+const searchInput = ref(null)
+
+function focusSearch() {
+  searchInput.value?.focus()
+}
 
 const categories = computed(() =>
   Object.entries(site.categories)
@@ -90,7 +95,7 @@ onBeforeUnmount(() => {
         </button>
 
         <nav class="desktop-nav" aria-label="主导航">
-          <button class="search-icon" type="button" aria-label="搜索" @click="submitSearch">
+          <button class="search-icon" type="button" aria-label="搜索" @click="focusSearch">
             <AppIcon name="search" :size="18" />
           </button>
           <ul>
@@ -144,7 +149,7 @@ onBeforeUnmount(() => {
 
       <div class="wrapper search-row">
         <form class="header-search" role="search" @submit.prevent="submitSearch">
-          <input v-model="keyword" type="search" placeholder="搜索产品 / 品牌 / 口味" aria-label="搜索产品" />
+          <input ref="searchInput" v-model="keyword" type="search" placeholder="搜索产品 / 品牌 / 口味" aria-label="搜索产品" />
           <button type="submit" aria-label="搜索">
             <AppIcon name="search" :size="18" />
           </button>
