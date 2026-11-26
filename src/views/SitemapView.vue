@@ -4,7 +4,22 @@ import { RouterLink } from 'vue-router'
 import { site } from '@/data'
 
 const categories = computed(() =>
-  Object.entries(site.categories).map(([id, item]) => ({ id, title: item.title }))
+  Object.entries(site.categories)
+    .filter(([, item]) => !item.parent && item.section)
+    .sort((a, b) => (a[1].sort ?? 999) - (b[1].sort ?? 999))
+    .map(([id, item]) => ({
+      id,
+      title: item.title,
+      children: (item.children || [])
+        .map((childId) => [childId, site.categories[childId]])
+        .filter(([, child]) => Boolean(child))
+        .sort((a, b) => (a[1].sort ?? 999) - (b[1].sort ?? 999))
+        .map(([childId, child]) => ({
+          id: childId,
+          title: child.title,
+          to: `/category/${id}?sub=${childId}`
+        }))
+    }))
 )
 const infoPages = computed(() =>
   Object.entries(site.infoPages).map(([slug, item]) => ({ slug, title: item.title }))
@@ -33,6 +48,11 @@ const infoPages = computed(() =>
           <ul>
             <li v-for="item in categories" :key="item.id">
               <RouterLink :to="`/category/${item.id}`">{{ item.title }}</RouterLink>
+              <ul v-if="item.children.length" class="sitemap-sub">
+                <li v-for="child in item.children" :key="child.id">
+                  <RouterLink :to="child.to">{{ child.title }}</RouterLink>
+                </li>
+              </ul>
             </li>
           </ul>
         </section>
@@ -71,6 +91,20 @@ const infoPages = computed(() =>
 .content-card li {
   padding: 10px 0;
   border-bottom: 1px dashed #f2f2f2;
+}
+
+.sitemap-sub {
+  margin: 6px 0 0 16px;
+}
+
+.sitemap-sub li {
+  padding: 6px 0;
+  border-bottom: 0;
+}
+
+.sitemap-sub a {
+  font-size: 12px;
+  color: var(--color-muted-foreground);
 }
 
 .content-card li:last-child {

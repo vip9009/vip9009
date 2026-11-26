@@ -50,7 +50,7 @@ vip9009/
 │  │  │  └─ pods.json             # 烟弹
 │  │  └─ site/
 │  │     ├─ general.json          # 品牌、Banner、导航
-│  │     ├─ categories.json       # 分类页配置
+│  │     ├─ categories.json       # 一级/二级分类与导航配置
 │  │     ├─ footer.json           # 页脚栏目
 │  │     ├─ contacts.json         # 微信二维码 / QQ 号
 │  │     └─ info-pages.json       # 帮助页文案
@@ -109,17 +109,21 @@ python tools/product_admin.py
 
 | 功能 | 说明 |
 | --- | --- |
-| 新增 / 修改商品 | 商品名称、参考价、分类、商品描述 |
-| 新增 / 修改分类 | 填分类 ID 和名称，自动创建同名商品分区 |
+| 新增 / 修改商品 | 商品名称、参考价、一级分类、二级分类、商品描述 |
+| 分类 / 导航 | 新增一级分类、二级分类，自动生成顶部导航和下拉菜单 |
+| 商品归类 | 保存商品时可直接选到末级分类，例如「一次性电子烟 / 悦刻一次性电子烟」 |
+| 移动商品 | 改商品的一级 / 二级分类后保存，前台立即归到新分类 |
 | 选择图片 | 自动转成 800px WebP，写入 `public/images/products/` |
-| 排序 | 商品上移 / 下移，保存后前台顺序同步 |
+| 排序 | 商品上移 / 下移；分类用「排序」数字控制导航顺序 |
 | 保存 | 直接写回 `src/data/` 下的 JSON，并自动备份旧文件 |
 | 发布 | 一键提交 `src/data` + `public/images/products` 并 push，GitHub Actions 自动重新部署 |
 
 注意事项：
 
-- 分类 ID 只能用小写字母、数字和短横线，例如 `new-pods`；它会同时作为分区文件名。
-- 删除分类前必须先清空该分类下的商品。
+- 一级分类的 ID 只能用小写字母、数字和短横线，例如 `new-pods`，它会同时作为该分类的商品分区文件名。
+- 二级分类不需要单独的分区文件，商品统一放在上级分类的分区里，通过 `subcategory` 标记归属。
+- 删除一级分类前，先删除它的二级分类；删除二级分类前，先把商品移到其它分类。
+- 顶部导航由 `categories.json` 自动生成：一级分类是菜单，二级分类是下拉项，`排序` 越小越靠前，取消勾选「显示在顶部导航」可隐藏。
 - 工具只提交 `src/data` 和 `public/images/products`，不会提交工具本身的改动。
 - 旧 JSON 会备份到 `tools/.backups/`（已在 `.gitignore` 中忽略）。
 - 检查数据是否完整：
@@ -128,7 +132,7 @@ python tools/product_admin.py
 python tools/product_admin.py --check
 ```
 
-> 新增分类后，如果本地 `npm run dev` 还开着，需要重启一次开发服务器，Vite 才会加载新的分区 JSON。线上构建不受影响。
+> 新增一级分类后，如果本地 `npm run dev` 还开着，需要重启一次开发服务器，Vite 才会加载新的分区 JSON。线上构建不受影响。
 
 ## 修改数据
 
@@ -140,15 +144,16 @@ python tools/product_admin.py --check
 
 ```json
 {
-  "id": "hot",
-  "title": "热门产品",
-  "sort": 1,
+  "id": "disposables",
+  "title": "一次性电子烟",
+  "sort": 2,
   "products": [
     {
       "title": "商品名称",
       "price": 288,
       "imageAlt": "图片描述",
-      "localImage": "/images/products/hot-1-800.webp",
+      "localImage": "/images/products/disposables-1-800.webp",
+      "subcategory": "relx-disposable",
       "description": "可选：商品详情里的介绍文案，支持换行"
     }
   ]
@@ -156,21 +161,60 @@ python tools/product_admin.py --check
 ```
 
 - `src/data/index.js` 用 `import.meta.glob('./sections/*.json')` 自动加载全部分区，按 `sort` 升序排列；新增或删除分区文件不需要改代码。
-- 现有分区：`hot.json`（1）、`disposables.json`（2）、`jimu.json`（3）、`pods.json`（4）。
+- 现有分区：`hot`（1）、`disposables`（2）、`jimu`（3）、`pods`（4）、`pod-system`（5）、`e-liquid`（6）、`gbxl`（7）。后三个目前是空分区，用于以后上架烟杆、烟油和国标商品。
 - `localImage` 填 `public` 下的相对路径，建议使用 800px 宽的 WebP。
-- `description` 可选，留空时商品详情使用默认介绍文案。
+- `subcategory` 是二级分类 ID，对应 `categories.json` 里的子分类；留空表示只归到一级分类。
+- `description` 可选，留空时商品详情使用默认介绍文案：
+  「加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。泡泡哥只做正品，支持扫码验证，不同国家与地区的配送方式由泡泡哥一对一确认。」
 - 商品详情路由为 `/product/:sectionId/:index`，`index` 是商品在分区中的下标（从 0 开始）。
 - 商品卡只展示产品名称与参考价，不再展示库存、人气、折扣和划线原价。
 - HOT / NEW 角标是部分商品图片本身自带的效果，无需额外字段。
 
-### 导航、分类、页脚、联系方式
+### 分类与导航
+
+文件：`src/data/site/categories.json`
+
+导航不再手写在 `general.json` 里，而是从分类结构自动生成：一级分类 = 顶部菜单，二级分类 = 下拉项。
+
+```json
+{
+  "disposables": {
+    "title": "一次性电子烟",
+    "desc": "分类页描述",
+    "section": "disposables",
+    "sort": 1,
+    "nav": true,
+    "children": ["relx-disposable", "snowplus-disposable"]
+  },
+  "relx-disposable": {
+    "title": "悦刻一次性电子烟",
+    "desc": "二级分类描述",
+    "parent": "disposables",
+    "sort": 1
+  },
+  "contact": {
+    "title": "联系客服",
+    "to": "/contact",
+    "nav": true,
+    "sort": 99
+  }
+}
+```
+
+- 一级分类用 `section` 指向商品分区；二级分类用 `parent` 指向一级分类，商品通过 `subcategory` 归到二级。
+- `sort` 控制顺序，`nav: false` 表示不在顶部导航显示（例如「热门产品」）。
+- `to` 用于非商品菜单，例如「联系客服」指向 `/contact`。
+- 二级分类页地址为 `/category/:一级ID?sub=:二级ID`，例如 `/category/disposables?sub=relx-disposable`。
+- 一级分类页显示该分类下全部商品，并带二级分类筛选条；二级分类页只显示对应商品。
+
+### 导航、页脚、联系方式
 
 这些配置在 `src/data/site/` 下：
 
 | 文件 | 内容 |
 | --- | --- |
-| `general.json` | 品牌信息、顶部链接、主导航与下拉菜单 |
-| `categories.json` | 分类页标题、描述及对应商品分区 |
+| `general.json` | 品牌信息、顶部链接（主导航由 `categories.json` 自动生成） |
+| `categories.json` | 一级 / 二级分类、导航顺序、商品分区映射 |
 | `footer.json` | 页脚四组链接（含下单方式） |
 | `contacts.json` | 微信二维码、QQ 号 |
 | `info-pages.json` | 付款方式、配送说明、退换政策等帮助页文案 |
@@ -292,6 +336,7 @@ python .opencode/skills/ui-ux-pro-max/scripts/search.py "mobile menu touch targe
 | --- | --- |
 | `/` | 首页 |
 | `/category/:id` | 商品分类（`hot`、`disposables`、`jimu`、`pods` 等） |
+| `/category/:id?sub=:subId` | 二级分类（例如 `/category/disposables?sub=relx-disposable`） |
 | `/product/:section/:index` | 商品详情 |
 | `/search?q=关键词` | 产品搜索 |
 | `/contact` | 联系我们 |

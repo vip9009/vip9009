@@ -7,11 +7,26 @@ import { filterByBrand } from '@/utils/categories'
 
 const route = useRoute()
 
-const category = computed(() => site.categories[route.params.id] || null)
+function bySort(a, b) {
+  return (a[1].sort ?? 999) - (b[1].sort ?? 999)
+}
+
+const categoryId = computed(() => String(route.params.id || ''))
+const category = computed(() => site.categories[categoryId.value] || null)
+const isChild = computed(() => Boolean(category.value?.parent))
+const parentId = computed(() => category.value?.parent || categoryId.value)
+const parentCategory = computed(() => site.categories[parentId.value] || category.value)
+const sub = computed(() => String(route.query.sub || '').trim())
+const subCategory = computed(() => {
+  const id = sub.value
+  const item = id ? site.categories[id] : null
+  return item ? { id, ...item } : null
+})
 const brand = computed(() => String(route.query.brand || '').trim())
 
 const sourceSection = computed(() => {
-  const sectionId = category.value?.section
+  const owner = isChild.value ? parentCategory.value : category.value
+  const sectionId = owner?.section
   if (!sectionId) return null
   return productsData.sections.find((section) => section.id === sectionId) || null
 })
@@ -19,7 +34,17 @@ const sourceSection = computed(() => {
 const items = computed(() => {
   if (!sourceSection.value) return []
   const section = sourceSection.value
-  return filterByBrand(section.products, brand.value).map((product, index) => ({
+  let products = section.products
+
+  if (isChild.value) {
+    products = products.filter((product) => product.subcategory === categoryId.value)
+  } else if (subCategory.value) {
+    products = products.filter((product) => product.subcategory === subCategory.value.id)
+  } else if (brand.value) {
+    products = filterByBrand(products, brand.value)
+  }
+
+  return products.map((product) => ({
     product,
     index: section.products.indexOf(product),
     sectionId: section.id
@@ -28,14 +53,65 @@ const items = computed(() => {
 
 const title = computed(() => {
   if (!category.value) return '商品分类'
-  return brand.value ? `${brand.value}${category.value.title}` : category.value.title
+  if (isChild.value) return category.value.title
+  if (subCategory.value) return subCategory.value.title
+  if (brand.value) return `${brand.value}${category.value.title}`
+  return category.value.title
 })
 
-const chips = computed(() =>
+const description = computed(() => {
+  if (!category.value) return ''
+  return category.value.desc || parentCategory.value?.desc || ''
+})
+
+const topEntries = computed(() =>
   Object.entries(site.categories)
-    .filter(([id]) => id !== 'hot')
-    .map(([id, item]) => ({ id, title: item.title, section: item.section }))
+    .filter(([id, item]) => !item.parent && id !== 'hot' && item.section)
+    .sort(bySort)
 )
+
+const childChips = computed(() => {
+  const owner = parentCategory.value
+  if (!owner?.children?.length) return []
+  const list = owner.children
+    .map((childId) => [childId, site.categories[childId]])
+    .filter(([, child]) => Boolean(child))
+    .sort(bySort)
+    .map(([childId, child]) => ({
+      id: childId,
+      title: child.title,
+      to: `/category/${parentId.value}?sub=${childId}`
+    }))
+  return [{ id: '', title: '全部', to: `/category/${parentId.value}` }, ...list]
+})
+
+const topChips = computed(() =>
+  topEntries.value.map(([id, item]) => ({ id, title: item.title, to: `/category/${id}` }))
+)
+
+const chips = computed(() => (childChips.value.length ? childChips.value : topChips.value))
+
+const activeSub = computed(() => (isChild.value ? categoryId.value : subCategory.value?.id || ''))
+
+function chipActive(chip) {
+  if (childChips.value.length) {
+    return activeSub.value ? chip.id === activeSub.value : chip.id === ''
+  }
+  return chip.id === categoryId.value
+}
+
+const crumbParent = computed(() => {
+  if (isChild.value) return parentCategory.value
+  if (subCategory.value) return category.value
+  return null
+})
+
+const crumbParentId = computed(() => (isChild.value ? parentId.value : categoryId.value))
+const crumbCurrent = computed(() => {
+  if (isChild.value) return category.value
+  if (subCategory.value) return subCategory.value
+  return category.value
+})
 
 watchEffect(() => {
   document.title = `${title.value} - 泡泡哥雾化`
@@ -48,8 +124,12 @@ watchEffect(() => {
       <nav class="breadcrumb" aria-label="面包屑">
         <RouterLink to="/">首页</RouterLink>
         <span class="sep">/</span>
-        <span>{{ category ? category.title : '商品分类' }}</span>
-        <template v-if="brand">
+        <template v-if="crumbParent">
+          <RouterLink :to="`/category/${crumbParentId}`">{{ crumbParent.title }}</RouterLink>
+          <span class="sep">/</span>
+        </template>
+        <span>{{ crumbCurrent ? crumbCurrent.title : '商品分类' }}</span>
+        <template v-if="brand && !isChild && !subCategory">
           <span class="sep">/</span>
           <span>{{ brand }}</span>
         </template>
@@ -59,7 +139,7 @@ watchEffect(() => {
         <div class="page-head">
           <div>
             <h1 class="page-title">{{ title }}</h1>
-            <p class="page-subtitle">{{ category.desc }} · 共 {{ items.length }} 件商品</p>
+            <p class="page-subtitle">{{ description }} · 共 {{ items.length }} 件商品</p>
           </div>
         </div>
 
@@ -74,7 +154,7 @@ watchEffect(() => {
         </div>
 
         <div v-else class="empty-state">
-          <h3>{{ brand || category.title }}商品正在整理中</h3>
+          <h3>{{ title }}商品正在整理中</h3>
           <p>
             该分类暂未上架可展示的商品。添加客服即可获取最新款式、口味与报价，我们会第一时间为你确认价格。
           </p>
@@ -87,10 +167,10 @@ watchEffect(() => {
         <div class="category-chips">
           <RouterLink
             v-for="chip in chips"
-            :key="chip.id"
+            :key="chip.to"
             class="chip"
-            :class="{ active: chip.id === route.params.id && !brand }"
-            :to="`/category/${chip.id}`"
+            :class="{ active: chipActive(chip) }"
+            :to="chip.to"
           >
             {{ chip.title }}
           </RouterLink>
@@ -127,30 +207,6 @@ watchEffect(() => {
   font-weight: 600;
   color: var(--color-primary-strong) !important;
   user-select: all;
-}
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  height: 32px;
-  padding: 0 14px;
-  font-size: 12px;
-  color: #666;
-  background: #fff;
-  border: 1px solid #f0f0f0;
-  border-radius: 20px;
-  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-}
-
-.chip:hover {
-  color: var(--accent);
-  border-color: rgba(252, 60, 45, 0.35);
-}
-
-.chip.active {
-  color: #fff;
-  background: var(--accent);
-  border-color: var(--accent);
 }
 
 .chip {

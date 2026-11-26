@@ -7,7 +7,9 @@ import AppIcon from '@/components/AppIcon.vue'
 import { asset } from '@/utils'
 
 function moreLinkFor(sectionId) {
-  const entry = Object.entries(site.categories).find(([, category]) => category.section === sectionId)
+  const entry = Object.entries(site.categories).find(
+    ([, category]) => !category.parent && category.section === sectionId
+  )
   return entry ? `/category/${entry[0]}` : '/category/hot'
 }
 
@@ -34,7 +36,7 @@ const categoryIcons = {
 
 const categoryCards = computed(() =>
   Object.entries(site.categories)
-    .filter(([id]) => id !== 'hot')
+    .filter(([id, category]) => id !== 'hot' && !category.parent && category.section)
     .map(([id, category]) => {
       const section = productsData.sections.find((item) => item.id === category.section)
       return {

@@ -6,80 +6,93 @@
       "title": "冰熊超新星30000口（ZGAR Hypernova 30000）一次性电子烟 &#8211; 双网芯、LCD屏、双功率模式",
       "price": 160,
       "imageAlt": "冰熊超新星30000口（ZGAR Hypernova 30000）一次性电子烟 &#8211; 双网芯、LCD屏、双功率模式",
-      "localImage": "/images/products/disposables-1-800.webp"
+      "localImage": "/images/products/disposables-1-800.webp",
+      "subcategory": "icebear-disposable"
     },
     {
       "title": "冰熊炫彩 ZGAR Fiesta 25000口一次性电子烟 &#8211; 20ml大容量，超大炫彩屏，双网芯",
       "price": 160,
       "imageAlt": "冰熊炫彩 ZGAR Fiesta 25000口一次性电子烟 &#8211; 20ml大容量，超大炫彩屏，双网芯",
-      "localImage": "/images/products/disposables-2-800.webp"
+      "localImage": "/images/products/disposables-2-800.webp",
+      "subcategory": "icebear-disposable"
     },
     {
       "title": "Bubblemon炫彩一代35000一次性电子烟-两个隐藏口味-炫彩涂鸦大屏显示电量/油量",
       "price": 350,
       "imageAlt": "Bubblemon炫彩一代35000一次性电子烟-两个隐藏口味-炫彩涂鸦大屏显示电量/油量",
-      "localImage": "/images/products/disposables-3-800.webp"
+      "localImage": "/images/products/disposables-3-800.webp",
+      "subcategory": "other-disposable"
     },
     {
       "title": "Bubblemon炫彩二代30000口可换弹电子烟主机+烟弹套装-三种模式可调-智能LED显示屏",
       "price": 350,
       "imageAlt": "Bubblemon炫彩二代30000口可换弹电子烟主机+烟弹套装-三种模式可调-智能LED显示屏",
-      "localImage": "/images/products/disposables-4-800.webp"
+      "localImage": "/images/products/disposables-4-800.webp",
+      "subcategory": "other-disposable"
     },
     {
       "title": "Bubblemon炫彩三代30000口换弹电子烟-满天星炫彩屏幕-两种模式可调",
       "price": 328,
       "imageAlt": "Bubblemon炫彩三代30000口换弹电子烟-满天星炫彩屏幕-两种模式可调",
-      "localImage": "/images/products/disposables-5-800.webp"
+      "localImage": "/images/products/disposables-5-800.webp",
+      "subcategory": "other-disposable"
     },
     {
       "title": "悦刻大板砖二代 RELX Pocket Pro 20000口一次性电子烟-20种口味可选",
       "price": 150,
       "imageAlt": "悦刻大板砖二代 RELX Pocket Pro 20000口一次性电子烟-20种口味可选",
-      "localImage": "/images/products/disposables-6-800.webp"
+      "localImage": "/images/products/disposables-6-800.webp",
+      "subcategory": "relx-disposable"
     },
     {
       "title": "崧A66 16000口一次性电子烟-两种口味随意切换",
       "price": 160,
       "imageAlt": "崧A66 16000口一次性电子烟-两种口味随意切换",
-      "localImage": "/images/products/disposables-7-800.webp"
+      "localImage": "/images/products/disposables-7-800.webp",
+      "subcategory": "other-disposable"
     },
     {
       "title": "悦刻RELX ACE 30000口一次性电子烟-液晶显示屏-三种功率模式-超薄机身",
       "price": 200,
       "imageAlt": "悦刻RELX ACE 30000口一次性电子烟-液晶显示屏-三种功率模式-超薄机身",
-      "localImage": "/images/products/disposables-8-800.webp"
+      "localImage": "/images/products/disposables-8-800.webp",
+      "subcategory": "relx-disposable"
     },
     {
       "title": "新冰爆 Jollyice 12000 口一次性电子烟-icemax品牌全新升级，口感不变",
       "price": 135,
       "imageAlt": "新冰爆 Jollyice 12000 口一次性电子烟-icemax品牌全新升级，口感不变",
-      "localImage": "/images/products/disposables-9-800.webp"
+      "localImage": "/images/products/disposables-9-800.webp",
+      "subcategory": "other-disposable"
     },
     {
       "title": "韩版冰神ELFBAR ICE KING 25000口一次性电子烟，五档冰度调节，液晶屏显示冰度/电量/功率",
       "price": 350,
       "imageAlt": "韩版冰神ELFBAR ICE KING 25000口一次性电子烟，五档冰度调节，液晶屏显示冰度/电量/功率",
-      "localImage": "/images/products/disposables-10-800.webp"
+      "localImage": "/images/products/disposables-10-800.webp",
+      "subcategory": "other-disposable"
     },
     {
       "title": "冰熊 Zgar Supernova 20000口一次性电子烟，可调吸阻/功率，显示屏显示火力/电量",
       "price": 168,
       "imageAlt": "冰熊 Zgar Supernova 20000口一次性电子烟，可调吸阻/功率，显示屏显示火力/电量",
-      "localImage": "/images/products/disposables-11-800.webp"
+      "localImage": "/images/products/disposables-11-800.webp",
+      "subcategory": "icebear-disposable"
     },
     {
       "title": "SONG崧A38冰果系列17000口一次性电子烟-可调节冰度",
       "price": 128,
       "imageAlt": "SONG崧A38冰果系列17000口一次性电子烟-可调节冰度",
-      "localImage": "/images/products/disposables-12-800.webp"
+      "localImage": "/images/products/disposables-12-800.webp",
+      "subcategory": "other-disposable"
     },
     {
       "title": "测试一下",
       "price": 19.9,
       "imageAlt": "测试一下",
       "localImage": "/images/products/hot-20261126142020656688.webp",
-      "description": "泡泡哥测试一下"
+      "description": "泡泡哥测试一下",
+      "subcategory": "other-disposable"
     }
   ],
   "sort": 2

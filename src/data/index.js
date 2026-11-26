@@ -12,6 +12,32 @@ function normalizeModule(mod) {
   return mod?.default ?? mod
 }
 
+function bySort(a, b) {
+  return (a[1].sort ?? 999) - (b[1].sort ?? 999)
+}
+
+function buildNav() {
+  return Object.entries(categories)
+    .filter(([, category]) => !category.parent && category.nav !== false)
+    .sort(bySort)
+    .map(([id, category]) => {
+      const children = (category.children || [])
+        .map((childId) => [childId, categories[childId]])
+        .filter(([, child]) => Boolean(child))
+        .sort(bySort)
+        .map(([childId, child]) => ({
+          label: child.title,
+          to: child.to || `/category/${id}?sub=${childId}`
+        }))
+
+      return {
+        label: category.title,
+        to: category.to || `/category/${id}`,
+        ...(children.length ? { children } : {})
+      }
+    })
+}
+
 export const sections = Object.values(sectionModules)
   .map(normalizeModule)
   .filter(Boolean)
@@ -24,6 +50,7 @@ export const productsData = {
 export const site = {
   ...general,
   categories,
+  nav: buildNav(),
   footerWidgets: footer.widgets,
   contacts,
   infoPages

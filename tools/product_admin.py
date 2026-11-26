@@ -4,7 +4,8 @@
 
 不依赖线上后台，直接编辑项目里的 JSON 和图片：
 - 商品新增 / 修改 / 删除 / 排序
-- 分类新增 / 修改 / 删除
+- 一级分类、二级分类新增 / 修改 / 删除
+- 商品可指定到具体二级分类（末级分类）
 - 图片自动压缩成 800px WebP
 - 一键保存，一键 git commit + push，GitHub Actions 自动部署
 
@@ -44,6 +45,9 @@ IMAGES_DIR = ROOT / "public" / "images" / "products"
 BACKUP_DIR = ROOT / "tools" / ".backups"
 CATEGORY_ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 
+TOP_LEVEL = "（一级分类）"
+NO_SUB = "（不指定）"
+
 
 # ---------------------------------------------------------------------------
 # JSON / 数据层
@@ -80,7 +84,45 @@ def load_sections() -> dict:
 
 
 def sorted_sections(sections: dict):
-    return sorted(sections.values(), key=lambda item: (item.get("sort", 999), item.get("id", "")))
+    return sorted(
+        sections.values(),
+        key=lambda item: (item.get("sort", 999), item.get("id", "")),
+    )
+
+
+def category_tops(categories: dict):
+    return sorted(
+        [(cid, cat) for cid, cat in categories.items() if not cat.get("parent")],
+        key=lambda item: (item[1].get("sort", 999), item[0]),
+    )
+
+
+def children_of(categories: dict, category_id: str):
+    category = categories.get(category_id) or {}
+    children = []
+    for child_id in category.get("children", []):
+        child = categories.get(child_id)
+        if child:
+            children.append((child_id, child))
+    return sorted(children, key=lambda item: (item[1].get("sort", 999), item[0]))
+
+
+def category_full_title(categories: dict, category_id: str) -> str:
+    category = categories.get(category_id)
+    if not category:
+        return ""
+    parent_id = category.get("parent")
+    if parent_id and parent_id in categories:
+        return f"{categories[parent_id].get('title', parent_id)} / {category.get('title', category_id)}"
+    return category.get("title", category_id)
+
+
+def section_for_category(categories: dict, category_id: str):
+    category = categories.get(category_id) or {}
+    if category.get("parent"):
+        parent = categories.get(category["parent"]) or {}
+        return parent.get("section")
+    return category.get("section")
 
 
 def compact_price(value):
@@ -127,6 +169,21 @@ def check_data() -> int:
     categories = load_json(CATEGORIES_FILE)
     product_count = 0
 
+    for category_id, category in categories.items():
+        if not category.get("title"):
+            errors.append(f"分类 {category_id}: 缺少名称")
+        parent_id = category.get("parent")
+        if parent_id:
+            parent = categories.get(parent_id)
+            if not parent:
+                errors.append(f"分类 {category_id}: 上级分类 {parent_id} 不存在")
+            elif category_id not in parent.get("children", []):
+                errors.append(f"分类 {category_id}: 没有挂到上级 {parent_id} 的下拉列表中")
+        elif not category.get("to"):
+            section_id = category.get("section")
+            if section_id and section_id not in sections:
+                errors.append(f"分类 {category_id}: 关联分区 {section_id} 不存在")
+
     for section_id, section in sections.items():
         if not section.get("title"):
             errors.append(f"{section_id}: 缺少分区标题")
@@ -145,11 +202,15 @@ def check_data() -> int:
             path = image_path(local_image)
             if not path or not path.exists():
                 errors.append(f"{section_id}[{index}]: 图片不存在：{local_image}")
-
-    for category_id, category in categories.items():
-        section_id = category.get("section")
-        if section_id and section_id not in sections:
-            errors.append(f"分类 {category_id}: 关联分区 {section_id} 不存在")
+            subcategory = product.get("subcategory")
+            if subcategory:
+                child = categories.get(subcategory)
+                if not child:
+                    errors.append(f"{section_id}[{index}]: 二级分类 {subcategory} 不存在")
+                elif child.get("parent") != section_id:
+                    errors.append(
+                        f"{section_id}[{index}]: 二级分类 {subcategory} 不属于该一级分类"
+                    )
 
     print(f"分区：{len(sections)}")
     print(f"商品：{product_count}")
@@ -171,19 +232,25 @@ class ProductAdmin(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("泡泡哥雾化 · 商品管理工具")
-        self.geometry("1220x820")
-        self.minsize(1040, 700)
+        self.geometry("1260x860")
+        self.minsize(1080, 740)
 
         self.sections = load_sections()
         self.categories = load_json(CATEGORIES_FILE)
 
         self.row_map = {}
-        self.label_to_category = {}
+        self.product_top_labels = {}
+        self.product_sub_labels = {}
+        self.filter_map = {}
+        self.category_parent_labels = {}
+
         self.current_section = None
         self.current_index = None
         self.pending_image = None
         self._preview_photo = None
+
         self.category_mode = "edit"
+        self.editing_category = None
 
         self._build_style()
         self._build_header()
@@ -271,14 +338,14 @@ class ProductAdmin(tk.Tk):
         toolbar.pack(fill="x", pady=(0, 10))
         ttk.Label(toolbar, text="分类筛选").pack(side="left")
         self.filter_var = tk.StringVar(value="全部分类")
-        self.filter_combo = ttk.Combobox(toolbar, textvariable=self.filter_var, state="readonly", width=20)
+        self.filter_combo = ttk.Combobox(toolbar, textvariable=self.filter_var, state="readonly", width=30)
         self.filter_combo.pack(side="left", padx=(6, 18))
-        self.filter_combo.bind("<<ComboboxSelected>>", lambda _event: self.refresh_product_tree())
+        self.filter_combo.bind("<<ComboboxSelected>>", lambda _event: self._refresh_product_tree())
 
         ttk.Label(toolbar, text="搜索").pack(side="left")
         self.search_var = tk.StringVar()
-        self.search_var.trace_add("write", lambda *_args: self.refresh_product_tree())
-        ttk.Entry(toolbar, textvariable=self.search_var, width=28).pack(side="left", padx=6)
+        self.search_var.trace_add("write", lambda *_args: self._refresh_product_tree())
+        ttk.Entry(toolbar, textvariable=self.search_var, width=26).pack(side="left", padx=6)
 
         ttk.Button(toolbar, text="新增商品", style="Accent.TButton", command=self.new_product).pack(side="right")
 
@@ -300,10 +367,10 @@ class ProductAdmin(tk.Tk):
         )
         self.product_tree.heading("title", text="商品名称")
         self.product_tree.heading("price", text="价格")
-        self.product_tree.heading("category", text="分类")
-        self.product_tree.column("title", width=360, anchor="w")
-        self.product_tree.column("price", width=90, anchor="center")
-        self.product_tree.column("category", width=140, anchor="center")
+        self.product_tree.heading("category", text="一级 / 二级分类")
+        self.product_tree.column("title", width=320, anchor="w")
+        self.product_tree.column("price", width=80, anchor="center")
+        self.product_tree.column("category", width=230, anchor="w")
         scroll = ttk.Scrollbar(tree_frame, orient="vertical", command=self.product_tree.yview)
         self.product_tree.configure(yscrollcommand=scroll.set)
         self.product_tree.grid(row=0, column=0, sticky="nsew")
@@ -324,29 +391,33 @@ class ProductAdmin(tk.Tk):
         self.title_var = tk.StringVar()
         ttk.Entry(right, textvariable=self.title_var).grid(row=0, column=1, columnspan=2, sticky="ew", pady=4)
 
-        ttk.Label(right, text="分类").grid(row=1, column=0, sticky="w", pady=4)
-        self.product_category_var = tk.StringVar()
-        self.product_category_combo = ttk.Combobox(
-            right, textvariable=self.product_category_var, state="readonly"
-        )
-        self.product_category_combo.grid(row=1, column=1, columnspan=2, sticky="ew", pady=4)
+        ttk.Label(right, text="一级分类").grid(row=1, column=0, sticky="w", pady=4)
+        self.product_top_var = tk.StringVar()
+        self.top_combo = ttk.Combobox(right, textvariable=self.product_top_var, state="readonly")
+        self.top_combo.grid(row=1, column=1, columnspan=2, sticky="ew", pady=4)
+        self.top_combo.bind("<<ComboboxSelected>>", lambda _event: self._refresh_sub_options(preferred=NO_SUB))
 
-        ttk.Label(right, text="价格").grid(row=2, column=0, sticky="w", pady=4)
+        ttk.Label(right, text="二级分类").grid(row=2, column=0, sticky="w", pady=4)
+        self.product_sub_var = tk.StringVar()
+        self.sub_combo = ttk.Combobox(right, textvariable=self.product_sub_var, state="readonly")
+        self.sub_combo.grid(row=2, column=1, columnspan=2, sticky="ew", pady=4)
+
+        ttk.Label(right, text="价格").grid(row=3, column=0, sticky="w", pady=4)
         self.price_var = tk.StringVar()
-        ttk.Entry(right, textvariable=self.price_var, width=18).grid(row=2, column=1, sticky="w", pady=4)
-        ttk.Label(right, text="元").grid(row=2, column=2, sticky="w")
+        ttk.Entry(right, textvariable=self.price_var, width=18).grid(row=3, column=1, sticky="w", pady=4)
+        ttk.Label(right, text="元").grid(row=3, column=2, sticky="w")
 
-        ttk.Label(right, text="图片").grid(row=3, column=0, sticky="w", pady=4)
+        ttk.Label(right, text="图片").grid(row=4, column=0, sticky="w", pady=4)
         self.image_var = tk.StringVar()
         ttk.Entry(right, textvariable=self.image_var, state="readonly").grid(
-            row=3, column=1, sticky="ew", pady=4
+            row=4, column=1, sticky="ew", pady=4
         )
         ttk.Button(right, text="选择图片", command=self.choose_image).grid(
-            row=3, column=2, sticky="w", padx=(6, 0)
+            row=4, column=2, sticky="w", padx=(6, 0)
         )
 
         preview_box = tk.Frame(right, height=210, bg="#F7FFFB", relief="solid", borderwidth=1)
-        preview_box.grid(row=4, column=0, columnspan=3, pady=(6, 10), sticky="ew")
+        preview_box.grid(row=5, column=0, columnspan=3, pady=(6, 10), sticky="ew")
         preview_box.grid_propagate(False)
         self.preview_label = tk.Label(
             preview_box,
@@ -357,21 +428,21 @@ class ProductAdmin(tk.Tk):
         self.preview_label.pack(fill="both", expand=True)
 
         ttk.Label(right, text="商品描述\n（显示在详情页）", justify="left").grid(
-            row=5, column=0, sticky="nw", pady=4
+            row=6, column=0, sticky="nw", pady=4
         )
         self.description_text = tk.Text(
             right,
-            height=9,
+            height=7,
             wrap="word",
             relief="solid",
             borderwidth=1,
             font=("Microsoft YaHei UI", 10),
         )
-        self.description_text.grid(row=5, column=1, columnspan=2, sticky="nsew", pady=4)
-        right.rowconfigure(5, weight=1)
+        self.description_text.grid(row=6, column=1, columnspan=2, sticky="nsew", pady=4)
+        right.rowconfigure(6, weight=1)
 
         buttons = ttk.Frame(right)
-        buttons.grid(row=6, column=0, columnspan=3, sticky="ew", pady=(12, 0))
+        buttons.grid(row=7, column=0, columnspan=3, sticky="ew", pady=(12, 0))
         ttk.Button(buttons, text="保存商品", style="Accent.TButton", command=self.save_product).pack(
             side="left"
         )
@@ -381,7 +452,13 @@ class ProductAdmin(tk.Tk):
 
     def _build_categories_tab(self):
         tab = ttk.Frame(self.notebook, padding=10)
-        self.notebook.add(tab, text="分类管理")
+        self.notebook.add(tab, text="分类 / 导航")
+
+        ttk.Label(
+            tab,
+            text="一级分类 = 顶部导航菜单；二级分类 = 下拉菜单项。导航按“排序”自动生成，不用手改代码。",
+            foreground="#475569",
+        ).pack(anchor="w", pady=(0, 8))
 
         paned = ttk.PanedWindow(tab, orient=tk.HORIZONTAL)
         paned.pack(fill="both", expand=True)
@@ -395,18 +472,20 @@ class ProductAdmin(tk.Tk):
         tree_frame.pack(fill="both", expand=True)
         self.category_tree = ttk.Treeview(
             tree_frame,
-            columns=("id", "title", "section", "count"),
-            show="headings",
+            columns=("id", "count", "nav", "level"),
+            show="tree headings",
             selectmode="browse",
         )
+        self.category_tree.heading("#0", text="分类名称")
         self.category_tree.heading("id", text="分类 ID")
-        self.category_tree.heading("title", text="名称")
-        self.category_tree.heading("section", text="关联分区")
         self.category_tree.heading("count", text="商品数")
+        self.category_tree.heading("nav", text="导航")
+        self.category_tree.heading("level", text="层级")
+        self.category_tree.column("#0", width=220, anchor="w")
         self.category_tree.column("id", width=130, anchor="w")
-        self.category_tree.column("title", width=170, anchor="w")
-        self.category_tree.column("section", width=130, anchor="center")
-        self.category_tree.column("count", width=80, anchor="center")
+        self.category_tree.column("count", width=70, anchor="center")
+        self.category_tree.column("nav", width=60, anchor="center")
+        self.category_tree.column("level", width=60, anchor="center")
         scroll = ttk.Scrollbar(tree_frame, orient="vertical", command=self.category_tree.yview)
         self.category_tree.configure(yscrollcommand=scroll.set)
         self.category_tree.grid(row=0, column=0, sticky="nsew")
@@ -417,10 +496,11 @@ class ProductAdmin(tk.Tk):
 
         actions = ttk.Frame(left)
         actions.pack(fill="x", pady=(10, 0))
-        ttk.Button(actions, text="新增分类", style="Accent.TButton", command=self.new_category).pack(
+        ttk.Button(actions, text="新增一级分类", style="Accent.TButton", command=self.new_top_category).pack(
             side="left"
         )
-        ttk.Button(actions, text="删除分类", command=self.delete_category).pack(side="left", padx=8)
+        ttk.Button(actions, text="新增二级分类", command=self.new_child_category).pack(side="left", padx=8)
+        ttk.Button(actions, text="删除分类", command=self.delete_category).pack(side="left")
 
         right.columnconfigure(1, weight=1)
 
@@ -428,7 +508,7 @@ class ProductAdmin(tk.Tk):
         self.category_id_var = tk.StringVar()
         self.category_id_entry = ttk.Entry(right, textvariable=self.category_id_var)
         self.category_id_entry.grid(row=0, column=1, sticky="ew", pady=4)
-        ttk.Label(right, text="英文小写，例如 new-pods", foreground="#777").grid(
+        ttk.Label(right, text="英文小写，例如 relx-disposable", foreground="#777").grid(
             row=1, column=1, sticky="w"
         )
 
@@ -441,7 +521,7 @@ class ProductAdmin(tk.Tk):
         ttk.Label(right, text="分类描述").grid(row=3, column=0, sticky="nw", pady=4)
         self.category_desc_text = tk.Text(
             right,
-            height=6,
+            height=5,
             wrap="word",
             relief="solid",
             borderwidth=1,
@@ -450,82 +530,174 @@ class ProductAdmin(tk.Tk):
         self.category_desc_text.grid(row=3, column=1, sticky="nsew", pady=4)
         right.rowconfigure(3, weight=1)
 
-        ttk.Label(right, text="关联商品分区").grid(row=4, column=0, sticky="w", pady=4)
-        self.category_section_var = tk.StringVar()
-        self.category_section_combo = ttk.Combobox(
-            right, textvariable=self.category_section_var, state="readonly"
+        ttk.Label(right, text="上级分类").grid(row=4, column=0, sticky="w", pady=4)
+        self.category_parent_var = tk.StringVar()
+        self.category_parent_combo = ttk.Combobox(
+            right, textvariable=self.category_parent_var, state="readonly"
         )
-        self.category_section_combo.grid(row=4, column=1, sticky="ew", pady=4)
+        self.category_parent_combo.grid(row=4, column=1, sticky="ew", pady=4)
+
+        ttk.Label(right, text="排序").grid(row=5, column=0, sticky="w", pady=4)
+        self.category_sort_var = tk.StringVar(value="10")
+        ttk.Spinbox(right, from_=1, to=999, textvariable=self.category_sort_var, width=8).grid(
+            row=5, column=1, sticky="w", pady=4
+        )
+
+        self.category_nav_var = tk.BooleanVar(value=True)
+        self.category_nav_check = ttk.Checkbutton(
+            right, text="显示在顶部导航", variable=self.category_nav_var
+        )
+        self.category_nav_check.grid(row=6, column=1, sticky="w", pady=4)
+
+        ttk.Label(right, text="自定义链接").grid(row=7, column=0, sticky="w", pady=4)
+        self.category_link_var = tk.StringVar()
+        ttk.Entry(right, textvariable=self.category_link_var).grid(
+            row=7, column=1, sticky="ew", pady=4
+        )
+        ttk.Label(
+            right,
+            text="一般留空。联系客服这类非商品菜单可填 /contact。",
+            foreground="#777",
+        ).grid(row=8, column=1, sticky="w")
+
+        ttk.Label(
+            right,
+            text="二级分类的商品放在上级分类里；保存商品时选择一级 + 二级即可。",
+            foreground="#475569",
+            wraplength=320,
+            justify="left",
+        ).grid(row=9, column=0, columnspan=2, sticky="w", pady=(8, 0))
 
         buttons = ttk.Frame(right)
-        buttons.grid(row=5, column=0, columnspan=2, sticky="ew", pady=(14, 0))
+        buttons.grid(row=10, column=0, columnspan=2, sticky="ew", pady=(14, 0))
         ttk.Button(buttons, text="保存分类", style="Accent.TButton", command=self.save_category).pack(
             side="left"
         )
-        ttk.Button(buttons, text="清空表单", command=self.new_category).pack(side="left", padx=8)
+        ttk.Button(buttons, text="新增一级", command=self.new_top_category).pack(side="left", padx=8)
+
+    # -- 分类辅助 ---------------------------------------------------------
+
+    def _top_choices(self, with_section_only=True):
+        choices = []
+        used_labels = set()
+        for category_id, category in category_tops(self.categories):
+            if with_section_only and not category.get("section"):
+                continue
+            label = category.get("title") or category_id
+            if label in used_labels:
+                label = f"{label}（{category_id}）"
+            used_labels.add(label)
+            choices.append((label, category_id))
+        return choices
+
+    def _top_label_for(self, category_id):
+        for label, cid in self._top_choices(with_section_only=False):
+            if cid == category_id:
+                return label
+        return ""
+
+    def _top_for_section(self, section_id):
+        candidates = [
+            (cid, category)
+            for cid, category in category_tops(self.categories)
+            if category.get("section") == section_id
+        ]
+        if not candidates:
+            return None, None
+        for cid, category in candidates:
+            if cid == section_id:
+                return cid, category
+        return candidates[0]
+
+    def _product_category_text(self, section_id, product):
+        top_id, top = self._top_for_section(section_id)
+        title = top.get("title", section_id) if top else section_id
+        subcategory = self.categories.get(product.get("subcategory") or "")
+        if subcategory:
+            return f"{title} / {subcategory.get('title', '')}"
+        return title
+
+    def _assignments_for_child(self, child_id):
+        child = self.categories.get(child_id) or {}
+        parent_id = child.get("parent")
+        parent = self.categories.get(parent_id) or {}
+        section_id = parent.get("section")
+        section = self.sections.get(section_id) or {}
+        return [
+            item
+            for item in section.get("products", [])
+            if item.get("subcategory") == child_id
+        ]
 
     # -- 数据刷新 ---------------------------------------------------------
 
-    def _category_labels(self):
-        labels = []
-        self.label_to_category = {}
-        for category_id, category in self.categories.items():
-            section_id = category.get("section")
-            if not section_id or section_id not in self.sections:
-                continue
-            label = str(category.get("title") or category_id)
-            if label in self.label_to_category:
-                label = f"{label}（{category_id}）"
-            labels.append(label)
-            self.label_to_category[label] = category_id
-        return labels
-
-    def _category_for_section(self, section_id):
-        for category_id, category in self.categories.items():
-            if category.get("section") == section_id:
-                return category_id, category.get("title", section_id)
-        return None, self.sections.get(section_id, {}).get("title", section_id)
-
-    def _filter_section_id(self):
-        category_id = self.label_to_category.get(self.filter_var.get())
-        if not category_id:
-            return None
-        return self.categories.get(category_id, {}).get("section")
-
     def _refresh_all(self):
-        self._refresh_category_options()
-        self._refresh_product_category_combo()
+        self._refresh_filter_options()
+        self._refresh_product_top_options()
         self._refresh_product_tree()
         self._refresh_category_tree()
 
-    def _refresh_category_options(self):
-        values = ["全部分类"] + self._category_labels()
+    def _refresh_filter_options(self):
+        options = ["全部分类"]
+        mapping = {"全部分类": (None, None)}
+        for label, top_id in self._top_choices():
+            section_id = self.categories.get(top_id, {}).get("section")
+            options.append(label)
+            mapping[label] = (section_id, None)
+            for child_id, child in children_of(self.categories, top_id):
+                child_label = f"{label} / {child.get('title', child_id)}"
+                options.append(child_label)
+                mapping[child_label] = (section_id, child_id)
+        self.filter_map = mapping
         current = self.filter_var.get()
-        self.filter_combo["values"] = values
-        if current not in values:
+        self.filter_combo["values"] = options
+        if current not in mapping:
             self.filter_var.set("全部分类")
 
-    def _refresh_product_category_combo(self):
-        values = self._category_labels()
-        current = self.product_category_var.get()
-        self.product_category_combo["values"] = values
-        if current not in values:
-            self.product_category_var.set(values[0] if values else "")
+    def _refresh_product_top_options(self):
+        choices = self._top_choices()
+        labels = [label for label, _cid in choices]
+        self.product_top_labels = {label: cid for label, cid in choices}
+        current = self.product_top_var.get()
+        self.top_combo["values"] = labels
+        if current not in labels:
+            self.product_top_var.set(labels[0] if labels else "")
+        self._refresh_sub_options()
+
+    def _refresh_sub_options(self, preferred=None):
+        top_id = self.product_top_labels.get(self.product_top_var.get())
+        values = [NO_SUB]
+        mapping = {NO_SUB: None}
+        for child_id, child in children_of(self.categories, top_id) if top_id else []:
+            label = child.get("title", child_id)
+            if label in mapping:
+                label = f"{label}（{child_id}）"
+            values.append(label)
+            mapping[label] = child_id
+
+        self.product_sub_labels = mapping
+        self.sub_combo["values"] = values
+        self.sub_combo.configure(state="readonly" if len(values) > 1 else "disabled")
+        current = preferred if preferred is not None else self.product_sub_var.get()
+        if current not in mapping:
+            current = NO_SUB
+        self.product_sub_var.set(current)
 
     def _refresh_product_tree(self):
         selected = self.product_tree.selection()
         selected_id = selected[0] if selected else None
         self.product_tree.delete(*self.product_tree.get_children())
         self.row_map = {}
-        filter_section = self._filter_section_id()
+        filter_section, filter_sub = self.filter_map.get(self.filter_var.get(), (None, None))
         search = self.search_var.get().strip().lower()
 
         for section in sorted_sections(self.sections):
             section_id = section.get("id")
             if filter_section and section_id != filter_section:
                 continue
-            category_id, category_title = self._category_for_section(section_id)
             for index, product in enumerate(section.get("products", [])):
+                if filter_sub and product.get("subcategory") != filter_sub:
+                    continue
                 title = str(product.get("title", ""))
                 if search and search not in title.lower():
                     continue
@@ -534,7 +706,11 @@ class ProductAdmin(tk.Tk):
                     "",
                     "end",
                     iid=iid,
-                    values=(title, f"￥{product.get('price', '')}", category_title),
+                    values=(
+                        title,
+                        f"￥{product.get('price', '')}",
+                        self._product_category_text(section_id, product),
+                    ),
                 )
                 self.row_map[iid] = (section_id, index)
 
@@ -546,18 +722,30 @@ class ProductAdmin(tk.Tk):
         selected = self.category_tree.selection()
         selected_id = selected[0] if selected else None
         self.category_tree.delete(*self.category_tree.get_children())
-        for category_id, category in self.categories.items():
-            section_id = category.get("section") or "（无）"
-            count = 0
-            if section_id in self.sections:
-                count = len(self.sections[section_id].get("products", []))
+
+        for category_id, category in category_tops(self.categories):
+            section_id = category.get("section")
+            count = len(self.sections.get(section_id, {}).get("products", [])) if section_id else 0
+            nav_text = "显示" if category.get("nav", True) else "隐藏"
             self.category_tree.insert(
                 "",
                 "end",
                 iid=category_id,
-                values=(category_id, category.get("title", ""), section_id, count),
+                text=category.get("title", category_id),
+                values=(category_id, count, nav_text, "一级"),
+                open=True,
             )
-        if selected_id and selected_id in self.category_tree.get_children():
+            for child_id, child in children_of(self.categories, category_id):
+                child_count = len(self._assignments_for_child(child_id))
+                self.category_tree.insert(
+                    category_id,
+                    "end",
+                    iid=child_id,
+                    text=child.get("title", child_id),
+                    values=(child_id, child_count, "-", "二级"),
+                )
+
+        if selected_id and self.category_tree.exists(selected_id):
             self.category_tree.selection_set(selected_id)
             self.category_tree.see(selected_id)
 
@@ -596,13 +784,21 @@ class ProductAdmin(tk.Tk):
         self.price_var.set("")
         self.image_var.set("")
         self.description_text.delete("1.0", "end")
-        values = self._category_labels()
-        if not values:
-            self.product_category_var.set("")
-            messagebox.showwarning("没有可用分类", "请先在分类管理中创建带商品分区的分类。")
+
+        filter_section, filter_sub = self.filter_map.get(self.filter_var.get(), (None, None))
+        top_id, _top = self._top_for_section(filter_section) if filter_section else (None, None)
+        if top_id:
+            self.product_top_var.set(self._top_label_for(top_id))
+            self._refresh_sub_options(preferred=NO_SUB)
+            if filter_sub:
+                for label, cid in self.product_sub_labels.items():
+                    if cid == filter_sub:
+                        self.product_sub_var.set(label)
+                        break
         else:
-            current = self.filter_var.get()
-            self.product_category_var.set(current if current in values else values[0])
+            self.product_top_var.set("")
+            self._refresh_sub_options(preferred=NO_SUB)
+
         self._clear_preview()
         self.status_var.set("新建商品：填写信息后点击“保存商品”")
 
@@ -629,13 +825,18 @@ class ProductAdmin(tk.Tk):
         self.description_text.delete("1.0", "end")
         self.description_text.insert("1.0", product.get("description", ""))
 
-        category_id, category_title = self._category_for_section(section_id)
-        label = None
-        for candidate, candidate_id in self.label_to_category.items():
-            if candidate_id == category_id:
-                label = candidate
-                break
-        self.product_category_var.set(label or category_title)
+        top_id, _top = self._top_for_section(section_id)
+        if top_id:
+            self.product_top_var.set(self._top_label_for(top_id))
+            self._refresh_sub_options(preferred=NO_SUB)
+            subcategory = product.get("subcategory")
+            for label, cid in self.product_sub_labels.items():
+                if cid == subcategory:
+                    self.product_sub_var.set(label)
+                    break
+        else:
+            self.product_top_var.set("")
+            self._refresh_sub_options(preferred=NO_SUB)
 
         self._show_preview(product.get("localImage", ""))
         self.status_var.set(f"正在编辑：{product.get('title', '')}")
@@ -668,14 +869,15 @@ class ProductAdmin(tk.Tk):
             messagebox.showwarning("价格不正确", "请填写大于 0 的商品价格。")
             return False
 
-        category_id = self.label_to_category.get(self.product_category_var.get())
-        if not category_id:
-            messagebox.showwarning("缺少分类", "请选择一个已关联商品分区的分类。")
+        top_id = self.product_top_labels.get(self.product_top_var.get())
+        if not top_id:
+            messagebox.showwarning("缺少分类", "请选择一级分类。")
             return False
-        section_id = self.categories.get(category_id, {}).get("section")
+        section_id = self.categories.get(top_id, {}).get("section")
         if not section_id or section_id not in self.sections:
-            messagebox.showwarning("分类未关联分区", "该分类没有可用商品分区，请先在分类管理中处理。")
+            messagebox.showwarning("分类未关联分区", "该一级分类没有可用商品分区，请先在分类管理中处理。")
             return False
+        sub_id = self.product_sub_labels.get(self.product_sub_var.get())
 
         existing = None
         if self.current_section and self.current_index is not None:
@@ -703,6 +905,11 @@ class ProductAdmin(tk.Tk):
                 "localImage": local_image,
             }
         )
+        if sub_id:
+            product["subcategory"] = sub_id
+        else:
+            product.pop("subcategory", None)
+
         description = self.description_text.get("1.0", "end").strip()
         if description:
             product["description"] = description
@@ -768,16 +975,70 @@ class ProductAdmin(tk.Tk):
 
     # -- 分类操作 ---------------------------------------------------------
 
-    def new_category(self):
-        self.category_mode = "new"
+    def _refresh_parent_options(self, exclude=None):
+        values = [TOP_LEVEL]
+        mapping = {TOP_LEVEL: None}
+        used = set()
+        for label, category_id in self._top_choices(with_section_only=True):
+            if category_id == exclude:
+                continue
+            if label in used:
+                label = f"{label}（{category_id}）"
+            used.add(label)
+            values.append(label)
+            mapping[label] = category_id
+        self.category_parent_labels = mapping
+        self.category_parent_combo["values"] = values
+
+    def new_top_category(self):
+        self.category_mode = "new-top"
+        self.editing_category = None
         self.category_tree.selection_remove(self.category_tree.selection())
         self.category_id_var.set("")
         self.category_name_var.set("")
         self.category_desc_text.delete("1.0", "end")
+        self.category_link_var.set("")
         self.category_id_entry.configure(state="normal")
-        self.category_section_combo.configure(values=["（自动创建同名分区）"], state="disabled")
-        self.category_section_var.set("（自动创建同名分区）")
-        self.status_var.set("新建分类：ID 会自动创建同名商品分区")
+        self._refresh_parent_options()
+        self.category_parent_combo.configure(state="readonly")
+        self.category_parent_var.set(TOP_LEVEL)
+        max_sort = max((cat.get("sort", 0) for cat in self.categories.values()), default=0)
+        self.category_sort_var.set(str(max_sort + 1))
+        self.category_nav_var.set(True)
+        self.category_nav_check.configure(state="normal")
+        self.status_var.set("新增一级分类：保存后会自动出现在顶部导航")
+
+    def new_child_category(self):
+        selection = self.category_tree.selection()
+        parent_id = None
+        if selection:
+            selected_id = selection[0]
+            selected = self.categories.get(selected_id) or {}
+            parent_id = selected.get("parent") or selected_id
+        if not parent_id:
+            parent_id = next(
+                (cid for cid, cat in category_tops(self.categories) if cat.get("section")),
+                None,
+            )
+        if not parent_id:
+            messagebox.showwarning("没有一级分类", "请先创建一级分类。")
+            return
+
+        self.category_mode = "new-child"
+        self.editing_category = None
+        self.category_tree.selection_remove(self.category_tree.selection())
+        self.category_id_var.set("")
+        self.category_name_var.set("")
+        self.category_desc_text.delete("1.0", "end")
+        self.category_link_var.set("")
+        self.category_id_entry.configure(state="normal")
+        self._refresh_parent_options(exclude=None)
+        self.category_parent_combo.configure(state="readonly")
+        self.category_parent_var.set(self._top_label_for(parent_id))
+        self.category_sort_var.set(str(len(children_of(self.categories, parent_id)) + 1))
+        self.category_nav_var.set(True)
+        self.category_nav_check.configure(state="disabled")
+        self.status_var.set("新增二级分类：商品可归到这个末级分类")
 
     def load_category(self, _event=None):
         selection = self.category_tree.selection()
@@ -787,105 +1048,218 @@ class ProductAdmin(tk.Tk):
         category = self.categories.get(category_id)
         if not category:
             return
+
         self.category_mode = "edit"
+        self.editing_category = category_id
         self.category_id_var.set(category_id)
         self.category_id_entry.configure(state="disabled")
         self.category_name_var.set(category.get("title", ""))
         self.category_desc_text.delete("1.0", "end")
         self.category_desc_text.insert("1.0", category.get("desc", ""))
-        values = [section.get("id") for section in sorted_sections(self.sections)] + ["（无）"]
-        self.category_section_combo.configure(values=values, state="readonly")
-        self.category_section_var.set(category.get("section") or "（无）")
+        self.category_link_var.set(category.get("to", ""))
+        self.category_sort_var.set(str(category.get("sort", 10)))
+        self.category_nav_var.set(bool(category.get("nav", True)))
+        self.category_nav_check.configure(state="normal" if not category.get("parent") else "disabled")
+
+        parent_id = category.get("parent")
+        self._refresh_parent_options(exclude=None)
+        self.category_parent_combo.configure(state="readonly")
+        self.category_parent_var.set(self._top_label_for(parent_id) if parent_id else TOP_LEVEL)
         self.status_var.set(f"正在编辑分类：{category.get('title', '')}")
 
+    def _sort_children(self):
+        for category_id, category in self.categories.items():
+            if category.get("parent"):
+                continue
+            children = [cid for cid in category.get("children", []) if cid in self.categories]
+            children.sort(key=lambda cid: (self.categories[cid].get("sort", 999), cid))
+            if children:
+                category["children"] = children
+            else:
+                category.pop("children", None)
+
     def save_category(self):
-        category_id = self.category_id_var.get().strip()
         name = self.category_name_var.get().strip()
-        desc = self.category_desc_text.get("1.0", "end").strip()
         if not name:
             messagebox.showwarning("缺少名称", "请填写分类名称。")
             return
+        desc = self.category_desc_text.get("1.0", "end").strip()
+        try:
+            sort = int(self.category_sort_var.get().strip())
+        except (TypeError, ValueError):
+            sort = 999
+        link = self.category_link_var.get().strip()
+        parent_id = self.category_parent_labels.get(self.category_parent_var.get())
 
-        if self.category_mode == "new":
+        if self.category_mode in ("new-top", "new-child"):
+            category_id = self.category_id_var.get().strip()
             if not CATEGORY_ID_RE.match(category_id):
                 messagebox.showwarning("ID 不正确", "分类 ID 只能使用小写字母、数字和短横线，例如 new-pods。")
                 return
             if category_id in self.categories:
                 messagebox.showwarning("ID 重复", "该分类 ID 已存在。")
                 return
-            if category_id in self.sections:
+            if self.category_mode == "new-top" and category_id in self.sections:
                 messagebox.showwarning("分区重复", "该商品分区已存在，请换一个 ID。")
                 return
-            max_sort = max((section.get("sort", 0) for section in self.sections.values()), default=0)
-            self.sections[category_id] = {
-                "id": category_id,
-                "title": name,
-                "sort": max_sort + 1,
-                "products": [],
-            }
-            self.categories[category_id] = {
-                "title": name,
-                "desc": desc,
-                "section": category_id,
-            }
-            self.category_mode = "edit"
-            self.category_id_entry.configure(state="disabled")
-            section_values = [section.get("id") for section in sorted_sections(self.sections)] + ["（无）"]
-            self.category_section_combo.configure(values=section_values, state="readonly")
-            self.category_section_var.set(category_id)
+
+            if self.category_mode == "new-child":
+                if not parent_id:
+                    messagebox.showwarning("缺少上级", "请选择上级一级分类。")
+                    return
+                if not (self.categories.get(parent_id) or {}).get("section"):
+                    messagebox.showwarning("上级没有分区", "该一级分类没有商品分区，不能添加二级分类。")
+                    return
+                self.categories[category_id] = {
+                    "title": name,
+                    "desc": desc,
+                    "parent": parent_id,
+                    "sort": sort,
+                }
+                self.categories[parent_id].setdefault("children", []).append(category_id)
+            else:
+                section = category_id
+                if section not in self.sections:
+                    self.sections[section] = {
+                        "id": section,
+                        "title": name,
+                        "sort": sort,
+                        "products": [],
+                    }
+                category = {
+                    "title": name,
+                    "desc": desc,
+                    "section": section,
+                    "sort": sort,
+                    "nav": bool(self.category_nav_var.get()),
+                    "children": [],
+                }
+                if link:
+                    category["to"] = link
+                self.categories[category_id] = category
         else:
+            category_id = self.editing_category
             category = self.categories.get(category_id)
             if not category:
                 return
-            section_id = self.category_section_var.get()
-            section_id = None if section_id in ("", "（无）") else section_id
-            if section_id and section_id not in self.sections:
-                messagebox.showwarning("分区不存在", "请选择一个存在的商品分区。")
+            is_child = bool(category.get("parent"))
+
+            if not is_child and parent_id:
+                messagebox.showwarning("不能修改层级", "一级分类不能直接改为二级分类，请新建二级分类后再移动商品。")
                 return
+            if is_child and not parent_id:
+                messagebox.showwarning("缺少上级", "二级分类必须选择上级一级分类。")
+                return
+            if is_child and parent_id != category.get("parent"):
+                if not (self.categories.get(parent_id) or {}).get("section"):
+                    messagebox.showwarning("上级没有分区", "该一级分类没有商品分区，不能作为上级。")
+                    return
+                assigned = self._assignments_for_child(category_id)
+                if assigned:
+                    messagebox.showwarning(
+                        "不能改上级",
+                        f"该二级分类下还有 {len(assigned)} 个商品，请先把商品移到其它分类。",
+                    )
+                    return
+                old_parent = self.categories.get(category.get("parent")) or {}
+                old_parent["children"] = [
+                    cid for cid in old_parent.get("children", []) if cid != category_id
+                ]
+                self.categories[parent_id].setdefault("children", []).append(category_id)
+                category["parent"] = parent_id
+
             category["title"] = name
             category["desc"] = desc
-            category["section"] = section_id
-            if section_id:
-                self.sections[section_id]["title"] = name
+            category["sort"] = sort
+            if is_child:
+                category["nav"] = True
+            else:
+                category["nav"] = bool(self.category_nav_var.get())
+                if link:
+                    category["to"] = link
+                else:
+                    category.pop("to", None)
+                section_id = category.get("section")
+                if section_id and section_id in self.sections:
+                    self.sections[section_id]["title"] = name
+                elif not category.get("to"):
+                    section_id = category_id
+                    category["section"] = section_id
+                    self.sections[section_id] = {
+                        "id": section_id,
+                        "title": name,
+                        "sort": sort,
+                        "products": [],
+                    }
 
+        self._sort_children()
         self.save_all()
         self._refresh_all()
-        if category_id in self.category_tree.get_children():
+        if category_id in self.categories and self.category_tree.exists(category_id):
             self.category_tree.selection_set(category_id)
             self.category_tree.see(category_id)
-        self._refresh_product_category_combo()
+        self.category_mode = "edit"
+        self.editing_category = category_id
+        self.category_id_entry.configure(state="disabled")
         self.status_var.set(f"已保存分类：{name}")
 
     def delete_category(self):
         selection = self.category_tree.selection()
-        if not selection:
-            return
-        category_id = selection[0]
-        if category_id == "hot":
-            messagebox.showwarning("不能删除", "“热门产品”是首页核心分类，不能删除。")
-            return
-        category = self.categories.get(category_id)
+        category_id = selection[0] if selection else self.editing_category
+        category = self.categories.get(category_id) if category_id else None
         if not category:
+            messagebox.showinfo("未选择分类", "请先在左侧选择一个分类。")
             return
-        section_id = category.get("section")
-        products = self.sections.get(section_id, {}).get("products", []) if section_id else []
-        if products:
-            messagebox.showwarning(
-                "分类下还有商品",
-                f"该分类还有 {len(products)} 个商品，请先删除或移动商品。",
-            )
-            return
-        if not messagebox.askyesno("删除分类", f"确定删除分类“{category.get('title', '')}”吗？"):
-            return
-        self.categories.pop(category_id)
-        still_used = any(item.get("section") == section_id for item in self.categories.values())
-        if section_id and not still_used and section_id in self.sections:
-            self.sections.pop(section_id)
-            path = SECTIONS_DIR / f"{section_id}.json"
-            if path.exists():
-                path.unlink()
+
+        parent_id = category.get("parent")
+        if parent_id:
+            assigned = self._assignments_for_child(category_id)
+            if assigned:
+                messagebox.showwarning(
+                    "分类下还有商品",
+                    f"该二级分类还有 {len(assigned)} 个商品，请先移到其它分类。",
+                )
+                return
+            if not messagebox.askyesno("删除分类", f"确定删除二级分类“{category.get('title', '')}”吗？"):
+                return
+            parent = self.categories.get(parent_id) or {}
+            parent["children"] = [cid for cid in parent.get("children", []) if cid != category_id]
+            self.categories.pop(category_id, None)
+        else:
+            if category_id == "hot":
+                messagebox.showwarning("不能删除", "“热门产品”是首页核心分类，不能删除。")
+                return
+            children = children_of(self.categories, category_id)
+            if children:
+                messagebox.showwarning(
+                    "还有二级分类",
+                    "该一级分类下还有二级分类，请先删除或调整这些二级分类。",
+                )
+                return
+            section_id = category.get("section")
+            products = self.sections.get(section_id, {}).get("products", []) if section_id else []
+            if products:
+                messagebox.showwarning(
+                    "分类下还有商品",
+                    f"该分类还有 {len(products)} 个商品，请先删除或移动商品。",
+                )
+                return
+            if not messagebox.askyesno("删除分类", f"确定删除一级分类“{category.get('title', '')}”吗？"):
+                return
+            self.categories.pop(category_id, None)
+            if section_id:
+                still_used = any(
+                    item.get("section") == section_id for item in self.categories.values()
+                )
+                if not still_used and section_id in self.sections:
+                    self.sections.pop(section_id, None)
+                    path = SECTIONS_DIR / f"{section_id}.json"
+                    if path.exists():
+                        path.unlink()
+
+        self._sort_children()
         self.save_all()
-        self.new_category()
+        self.new_top_category()
         self._refresh_all()
         self.status_var.set("分类已删除")
 
@@ -900,9 +1274,8 @@ class ProductAdmin(tk.Tk):
         title = self.title_var.get().strip()
         price = self.price_var.get().strip()
         description = self.description_text.get("1.0", "end").strip()
-        category_label = self.product_category_var.get().strip()
         image = self.image_var.get().strip()
-        if not any((title, price, description, category_label, image)):
+        if not any((title, price, description, image)):
             return False
         if not self.current_section or self.current_index is None:
             return True
@@ -911,18 +1284,16 @@ class ProductAdmin(tk.Tk):
         if self.current_index >= len(products):
             return True
         product = products[self.current_index]
-
-        category_id, _title = self._category_for_section(self.current_section)
-        current_label = next(
-            (label for label, cid in self.label_to_category.items() if cid == category_id),
-            "",
-        )
+        top_id = self.product_top_labels.get(self.product_top_var.get())
+        sub_id = self.product_sub_labels.get(self.product_sub_var.get())
+        existing_top_id, _top = self._top_for_section(self.current_section)
         return (
             title != str(product.get("title", ""))
             or price != str(product.get("price", ""))
             or description != str(product.get("description", ""))
-            or category_label != current_label
             or image != str(product.get("localImage", ""))
+            or top_id != existing_top_id
+            or sub_id != (product.get("subcategory") or None)
         )
 
     def publish(self):

@@ -19,15 +19,24 @@ function prefetchImage(path) {
   img.src = asset(path)
 }
 
-export function prefetchCategoryImages(categoryId, brand = '') {
+export function prefetchCategoryImages(categoryId, brand = '', sub = '') {
   if (!canPrefetchImages()) return
   const category = site.categories[categoryId]
-  if (!category?.section) return
-  const section = productsData.sections.find((item) => item.id === category.section)
+  const owner = category?.parent ? site.categories[category.parent] : category
+  if (!owner?.section) return
+  const section = productsData.sections.find((item) => item.id === owner.section)
   if (!section) return
-  filterByBrand(section.products, brand)
-    .slice(0, 4)
-    .forEach((product) => prefetchImage(product.localImage))
+
+  let products = section.products
+  if (sub) {
+    products = products.filter((product) => product.subcategory === sub)
+  } else if (category?.parent) {
+    products = products.filter((product) => product.subcategory === categoryId)
+  } else if (brand) {
+    products = filterByBrand(products, brand)
+  }
+
+  products.slice(0, 4).forEach((product) => prefetchImage(product.localImage))
 }
 
 export function prefetchProductImage(sectionId, index) {
@@ -42,7 +51,11 @@ export function prefetchPathImages(path) {
   const params = new URLSearchParams(query)
 
   if (pathname.startsWith('/category/')) {
-    prefetchCategoryImages(pathname.split('/')[2], params.get('brand') || '')
+    prefetchCategoryImages(
+      pathname.split('/')[2],
+      params.get('brand') || '',
+      params.get('sub') || ''
+    )
   } else if (pathname.startsWith('/product/')) {
     const parts = pathname.split('/')
     prefetchProductImage(parts[2], parts[3])
