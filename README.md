@@ -50,10 +50,14 @@ vip9009/
 │  ├─ data/
 │  │  ├─ index.js                 # 自动聚合 sections/*.json
 │  │  ├─ sections/                # 每个分类一个分区 JSON，可自由新增
-│  │  │  ├─ hot.json              # 热门产品
-│  │  │  ├─ disposables.json      # 一次性电子烟
-│  │  │  ├─ jimu.json             # 积木电子烟
-│  │  │  └─ pods.json             # 烟弹
+│  │  │  ├─ hot.json              # 优惠活动 / 热门
+│  │  │  ├─ disposables.json      # 一次性系列
+│  │  │  ├─ pods.json             # 换弹系列
+│  │  │  ├─ jimu.json             # 积木系列
+│  │  │  ├─ gbxl.json             # 国标系列
+│  │  │  ├─ shisha.json           # 水烟系列
+│  │  │  ├─ wanghong.json         # 网红系列
+│  │  │  └─ combo.json            # 组合专区
 │  │  └─ site/
 │  │     ├─ general.json          # 品牌、Banner、导航
 │  │     ├─ categories.json       # 一级/二级分类与导航配置
