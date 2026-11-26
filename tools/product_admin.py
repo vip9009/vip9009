@@ -47,6 +47,7 @@ CATEGORY_ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 
 TOP_LEVEL = "（一级分类）"
 NO_SUB = "（不指定）"
+IMAGE_HINT = "未选择图片\n任意文件夹的图片都可以\n保存时自动转成 800px WebP"
 
 
 # ---------------------------------------------------------------------------
@@ -248,6 +249,7 @@ class ProductAdmin(tk.Tk):
         self.current_index = None
         self.pending_image = None
         self._preview_photo = None
+        self._last_image_dir = None
 
         self.category_mode = "edit"
         self.editing_category = None
@@ -421,9 +423,10 @@ class ProductAdmin(tk.Tk):
         preview_box.grid_propagate(False)
         self.preview_label = tk.Label(
             preview_box,
-            text="未选择图片",
+            text=IMAGE_HINT,
             bg="#F7FFFB",
             fg="#9AA0A6",
+            justify="center",
         )
         self.preview_label.pack(fill="both", expand=True)
 
@@ -753,7 +756,7 @@ class ProductAdmin(tk.Tk):
 
     def _clear_preview(self):
         self._preview_photo = None
-        self.preview_label.configure(image="", text="未选择图片")
+        self.preview_label.configure(image="", text=IMAGE_HINT)
 
     def _show_preview(self, path_value):
         self._preview_photo = None
@@ -842,8 +845,13 @@ class ProductAdmin(tk.Tk):
         self.status_var.set(f"正在编辑：{product.get('title', '')}")
 
     def choose_image(self):
+        initial = self._last_image_dir
+        if not initial:
+            pictures = Path.home() / "Pictures"
+            initial = str(pictures if pictures.exists() else ROOT)
         path = filedialog.askopenfilename(
-            title="选择商品图片",
+            title="选择商品图片（保存时自动压缩到 public/images/products）",
+            initialdir=initial,
             filetypes=[
                 ("图片文件", "*.jpg *.jpeg *.png *.webp *.bmp"),
                 ("所有文件", "*.*"),
@@ -851,10 +859,11 @@ class ProductAdmin(tk.Tk):
         )
         if not path:
             return
+        self._last_image_dir = str(Path(path).parent)
         self.pending_image = path
         self.image_var.set(path)
         self._show_preview(path)
-        self.status_var.set("已选择新图片，保存时会自动压缩为 800px WebP")
+        self.status_var.set("已选择新图片，保存时会自动压缩并复制到 public/images/products")
 
     def save_product(self):
         title = self.title_var.get().strip()

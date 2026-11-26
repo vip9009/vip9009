@@ -247,11 +247,17 @@ python tools/product_admin.py --check
 | `public/images/paopao-qr.png` | 泡泡哥微信二维码 |
 | `public/favicon.png` | 网站 favicon（泡泡云头像） |
 
-### 替换图片
+### 图片怎么放
 
-商品图已统一压缩为 **800px 宽的 WebP**，总体积从约 6.6MB 降到约 1.5MB。
+用工具时**不需要提前把图片放进项目**：
 
-替换时：
+1. 在商品页点「选择图片」，从电脑任意文件夹选图（桌面、下载、U 盘都可以）。
+2. 点「保存商品」，工具会自动压缩成 800px WebP，并复制到 `public/images/products/`。
+3. 文件名自动生成，例如 `disposables-20261126143000123456.webp`，不需要手动改名。
+
+原图建议单独放在一个文件夹，例如 `桌面\泡泡哥商品原图\`，不要一起提交到 Git，避免仓库变大。
+
+手动替换时：
 
 1. 将图片压缩为 800px 宽左右的 WebP，放入 `public/images/products/`；
 2. 更新对应 JSON 的 `localImage`；
