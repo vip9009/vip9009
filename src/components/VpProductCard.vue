@@ -18,6 +18,8 @@ const props = defineProps({
 const cart = useCart()
 const wishlist = useWishlist()
 const option = ref('')
+const added = ref(false)
+let addedTimer = null
 
 const title = computed(() => decodeEntities(props.product.title))
 const brand = computed(() => detectBrand(props.product))
@@ -55,6 +57,11 @@ const activePrice = computed(() => {
   const match = options.value.find((entry) => entry.label === option.value)
   return match ? match.price : props.product.price
 })
+const getImage = computed(() => {
+  if (added.value) return asset('/images/ui/get-success.webp')
+  if (!options.value.length || option.value) return asset('/images/ui/get-active.webp')
+  return asset('/images/ui/get-default.webp')
+})
 
 function addToCart() {
   if (!stock.value) return
@@ -70,6 +77,11 @@ function addToCart() {
     image: image.value,
     option: option.value
   })
+  added.value = true
+  clearTimeout(addedTimer)
+  addedTimer = setTimeout(() => {
+    added.value = false
+  }, 1600)
 }
 
 function toggleWishlist() {
@@ -118,16 +130,20 @@ function toggleWishlist() {
       <template v-if="stock">
         <div v-if="options.length" class="card-buy">
           <select v-model="option" aria-label="选择口味">
-            <option value="">选择口味</option>
+            <option value="">SELECT</option>
             <option v-for="entry in options" :key="entry.label" :value="entry.label">
               {{ entry.label }}
             </option>
           </select>
-          <button type="button" :disabled="!option" @click="addToCart">GET</button>
+          <button class="get-btn" type="button" :disabled="!option" @click="addToCart">
+            <img :src="getImage" alt="GET" />
+          </button>
         </div>
         <div v-else class="card-buy">
           <RouterLink class="card-view" :to="route">查看详情</RouterLink>
-          <button type="button" @click="addToCart">GET</button>
+          <button class="get-btn" type="button" @click="addToCart">
+            <img :src="getImage" alt="GET" />
+          </button>
         </div>
       </template>
       <button v-else class="card-disabled" type="button" disabled>无货</button>
@@ -315,8 +331,8 @@ function toggleWishlist() {
 }
 
 .card-buy {
-  display: grid;
-  grid-template-columns: 1fr 74px;
+  display: flex;
+  flex-direction: column;
   gap: 6px;
   margin-top: auto;
 }
@@ -332,11 +348,30 @@ function toggleWishlist() {
   border-radius: 2px;
 }
 
-.card-buy button,
+.get-btn {
+  width: 100%;
+  height: 36px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+
+.get-btn img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+.get-btn:disabled {
+  cursor: not-allowed;
+}
+
 .card-view {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   height: 34px;
   font-size: 11px;
   font-weight: 700;
@@ -346,27 +381,10 @@ function toggleWishlist() {
   transition: background 0.18s ease, color 0.18s ease;
 }
 
-.card-buy button:hover,
 .card-view:hover {
   color: #ffffff;
   background: var(--color-primary);
   border-color: var(--color-primary);
-}
-
-.card-buy button:disabled,
-.card-buy button:disabled:hover {
-  color: #e7b8cb;
-  background: #fbfbfb;
-  border-color: #f2f2f2;
-  cursor: not-allowed;
-}
-
-.card-view {
-  grid-column: 1;
-}
-
-.card-buy button:only-child {
-  grid-column: 1 / -1;
 }
 
 .card-disabled {

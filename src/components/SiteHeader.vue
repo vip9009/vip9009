@@ -16,7 +16,11 @@ const scrolled = ref(false)
 const searchInput = ref(null)
 
 function focusSearch() {
-  searchInput.value?.focus()
+  if (route.path === '/' && searchInput.value) {
+    searchInput.value.focus()
+    return
+  }
+  router.push('/search')
 }
 
 const categories = computed(() =>
@@ -25,6 +29,32 @@ const categories = computed(() =>
     .sort((a, b) => (a[1].sort ?? 999) - (b[1].sort ?? 999))
     .map(([id, item]) => ({ id, title: item.title }))
 )
+
+const drawerOrder = ['disposables', 'jimu', 'pods', 'gbxl', 'recommend', 'combo', 'wanghong', 'shisha']
+const drawerCategories = computed(() =>
+  drawerOrder
+    .map((id) => site.categories[id] && { id, title: site.categories[id].title })
+    .filter(Boolean)
+    .map((item) => ({
+      ...item,
+      label: ['combo', 'wanghong', 'recommend'].includes(item.id)
+        ? `${item.title} 🔥`
+        : item.title
+    }))
+)
+
+const drawerGroups = ref({ electronic: true })
+
+function toggleDrawerGroup(name) {
+  drawerGroups.value[name] = !drawerGroups.value[name]
+}
+
+function submitDrawerSearch() {
+  const value = keyword.value.trim()
+  if (!value) return
+  router.push({ path: '/search', query: { q: value } })
+  drawerOpen.value = false
+}
 
 const brands = computed(() => site.brands || [])
 
@@ -124,6 +154,11 @@ onBeforeUnmount(() => {
                     </RouterLink>
                   </div>
                 </div>
+                <div class="mega-links">
+                  <RouterLink v-if="site.categories.recommend" to="/category/recommend">店长推荐 🔥</RouterLink>
+                  <RouterLink to="/info/news">新闻资讯</RouterLink>
+                  <RouterLink to="/activity">优惠活动 🔥</RouterLink>
+                </div>
                 <RouterLink class="mega-all" to="/category/hot">查看全部商品 →</RouterLink>
               </div>
             </li>
@@ -147,9 +182,9 @@ onBeforeUnmount(() => {
         </RouterLink>
       </div>
 
-      <div class="wrapper search-row">
+      <div v-if="route.path === '/'" class="wrapper search-row">
         <form class="header-search" role="search" @submit.prevent="submitSearch">
-          <input ref="searchInput" v-model="keyword" type="search" placeholder="搜索产品 / 品牌 / 口味" aria-label="搜索产品" />
+          <input ref="searchInput" v-model="keyword" type="search" placeholder="搜索..." aria-label="搜索产品" />
           <button type="submit" aria-label="搜索">
             <AppIcon name="search" :size="18" />
           </button>
@@ -162,34 +197,52 @@ onBeforeUnmount(() => {
         <div v-if="drawerOpen" class="drawer-mask" @click="drawerOpen = false" />
       </Transition>
       <aside class="drawer" :class="{ open: drawerOpen }" role="dialog" aria-modal="true" aria-label="移动端菜单">
-        <div class="drawer-head">
-          <RouterLink class="logo" to="/" @click="drawerOpen = false">
-            <span class="logo-cn">泡泡哥<span class="logo-dot" /></span>
-          </RouterLink>
-          <button type="button" aria-label="关闭菜单" @click="drawerOpen = false">
-            <AppIcon name="close" :size="22" />
+        <div class="drawer-top">
+          <form class="drawer-search" @submit.prevent="submitDrawerSearch">
+            <input v-model="keyword" type="search" placeholder="搜索..." aria-label="搜索" />
+            <button type="submit" aria-label="搜索">
+              <AppIcon name="search" :size="18" />
+            </button>
+          </form>
+          <button class="drawer-close" type="button" aria-label="关闭菜单" @click="drawerOpen = false">
+            <AppIcon name="close" :size="20" />
           </button>
         </div>
+
         <div class="drawer-body">
-          <RouterLink v-for="item in navItems" :key="item.label" class="drawer-link" :to="item.to">
-            {{ item.label }}
-          </RouterLink>
+          <RouterLink class="drawer-link" to="/" @click="drawerOpen = false">首页</RouterLink>
+
           <div class="drawer-group">
-            <b>系列</b>
-            <RouterLink v-for="category in categories" :key="category.id" :to="`/category/${category.id}`">
-              {{ category.title }}
-            </RouterLink>
+            <button class="drawer-group-toggle" type="button" @click="toggleDrawerGroup('electronic')">
+              <span>电子雾化</span>
+              <AppIcon :name="drawerGroups.electronic ? 'chevron-down' : 'chevron-right'" :size="14" />
+            </button>
+            <div v-if="drawerGroups.electronic" class="drawer-sub">
+              <RouterLink to="/info/news" @click="drawerOpen = false">新闻资讯</RouterLink>
+              <RouterLink to="/activity" @click="drawerOpen = false">优惠活动 🔥</RouterLink>
+              <b class="drawer-sub-title">电子雾化系列</b>
+              <RouterLink
+                v-for="item in drawerCategories"
+                :key="item.id"
+                :to="`/category/${item.id}`"
+                @click="drawerOpen = false"
+              >
+                {{ item.label }}
+              </RouterLink>
+              <b class="drawer-sub-title">品牌分类</b>
+              <RouterLink
+                v-for="brand in brands"
+                :key="brand"
+                :to="`/search?q=${encodeURIComponent(brand.split(' ').pop())}`"
+                @click="drawerOpen = false"
+              >
+                {{ brand }}
+              </RouterLink>
+            </div>
           </div>
-          <div class="drawer-group">
-            <b>品牌</b>
-            <RouterLink
-              v-for="brand in brands"
-              :key="brand"
-              :to="`/search?q=${encodeURIComponent(brand.split(' ').pop())}`"
-            >
-              {{ brand }}
-            </RouterLink>
-          </div>
+
+          <RouterLink class="drawer-link" to="/info/about" @click="drawerOpen = false">关于我们</RouterLink>
+          <RouterLink class="drawer-link" to="/order-query" @click="drawerOpen = false">我的订单</RouterLink>
         </div>
       </aside>
     </Teleport>
@@ -380,9 +433,9 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   height: 40px;
-  border: 1px solid #dddddd;
+  border: 1px solid #e5e5e5;
   border-radius: 4px;
-  background: #fafafa;
+  background: #f5f5f5;
 }
 
 .header-search input {
@@ -474,6 +527,25 @@ onBeforeUnmount(() => {
   border-top: 1px solid #eeeeee;
 }
 
+.mega-links {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  padding-top: 10px;
+  margin-top: 4px;
+  font-size: 12px;
+  border-top: 1px solid #eeeeee;
+}
+
+.mega-links a {
+  color: #666666;
+}
+
+.mega-links a:hover {
+  color: var(--color-primary);
+}
+
 .mobile-menu-btn,
 .mobile-cart {
   display: none;
@@ -535,7 +607,89 @@ onBeforeUnmount(() => {
 }
 
 .drawer-body {
-  padding: 16px;
+  padding: 0 16px 16px;
+}
+
+.drawer-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.drawer-search {
+  display: flex;
+  flex: 1;
+  height: 40px;
+  overflow: hidden;
+  border: 1px solid #dddddd;
+}
+
+.drawer-search input {
+  flex: 1;
+  min-width: 0;
+  padding: 0 10px;
+  font-size: 13px;
+  border: 0;
+  outline: none;
+}
+
+.drawer-search button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  color: #242125;
+  background: #ffffff;
+  border-left: 1px solid #dddddd;
+}
+
+.drawer-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  color: #242125;
+  background: #f5f5f5;
+}
+
+.drawer-group {
+  margin: 0;
+}
+
+.drawer-group-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 0;
+  font-size: 15px;
+  color: #242125;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.drawer-sub {
+  display: flex;
+  flex-direction: column;
+  padding: 2px 0 10px 12px;
+}
+
+.drawer-sub a {
+  padding: 9px 0;
+  font-size: 13px;
+  color: #555555;
+}
+
+.drawer-sub-title {
+  display: block;
+  margin: 12px 0 2px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #999999;
 }
 
 .drawer-link {

@@ -1,0 +1,361 @@
+{
+  "id": "recommend",
+  "title": "店长推荐",
+  "sort": 3,
+  "products": [
+    {
+      "title": "LAMI SPEED 徕米小火箭 5500 Puffs",
+      "price": 75,
+      "imageAlt": "LAMI SPEED 徕米小火箭 5500 Puffs",
+      "localImage": "/images/products/vp-18085.webp",
+      "description": "LAMI SPEED 徕米小火箭 5500 Puffs。组合专区现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 18085,
+      "specs": {
+        "口数": "5500 口",
+        "类型": "组合专区",
+        "品牌": "LAMI",
+        "口味": "16 种"
+      },
+      "brand": "LAMI",
+      "badges": [
+        "4赠",
+        "买4增1",
+        "呼吸灯",
+        "极致顺滑"
+      ],
+      "options": [
+        "荔枝冰",
+        "椰子冰",
+        "可乐",
+        "青柠",
+        "番石榴",
+        "西柚百香果",
+        "龙井茶",
+        "老冰棍",
+        "蜜瓜",
+        "宝矿力",
+        "海盐柠檬",
+        "普洱茶",
+        "西瓜冰",
+        "绿豆",
+        "青提",
+        "桃子"
+      ],
+      "recommend": true
+    },
+    {
+      "title": "Zgar 冰熊6S Pod 3ml*1",
+      "price": 36,
+      "imageAlt": "Zgar 冰熊6S Pod 3ml*1",
+      "localImage": "/images/products/vp-16529.webp",
+      "description": "Zgar 冰熊6S Pod 3ml*1。组合专区现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 16529,
+      "specs": {
+        "类型": "组合专区",
+        "品牌": "ZGAR",
+        "口味": "31 种"
+      },
+      "brand": "ZGAR",
+      "badges": [
+        "HOT",
+        "30盒增杆",
+        "适配悦刻弹"
+      ],
+      "hot": true,
+      "options": [
+        "柑橘百香果",
+        "铁观音",
+        "柠檬可乐",
+        "轻轻蜜桃乌龙",
+        "清香桂花",
+        "清爽芭乐葡",
+        "草莓冰淇淋",
+        "茉莉绿茶",
+        "牛油果哈密瓜",
+        "柚c冰茶",
+        "西瓜冰",
+        "锡兰柠檬红茶",
+        "提子冰",
+        "杨枝甘露",
+        "手打柠檬冰",
+        "0糖黑葡萄",
+        "杨桃冰",
+        "荔枝",
+        "绿豆冰",
+        "柠檬薄荷",
+        "菠萝椰子",
+        "经典烟草",
+        "薄荷微凉",
+        "芒果西柚",
+        "经典雪碧",
+        "一抹绿",
+        "冻柠檬茶",
+        "水果茶",
+        "柚子茉莉茶",
+        "荔枝冷萃茶",
+        "茉莉桃子茶"
+      ],
+      "recommend": true
+    },
+    {
+      "title": "ZGAR Hypernova 超新星 30000 Puffs",
+      "price": 136,
+      "imageAlt": "ZGAR Hypernova 超新星 30000 Puffs",
+      "localImage": "/images/products/vp-41791.webp",
+      "description": "ZGAR Hypernova 超新星 30000 Puffs。一次性系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 41791,
+      "specs": {
+        "口数": "30000 口",
+        "类型": "一次性系列",
+        "品牌": "ZGAR",
+        "口味": "18 种"
+      },
+      "brand": "ZGAR",
+      "badges": [
+        "HOT"
+      ],
+      "hot": true,
+      "stock": false,
+      "options": [
+        "伯牙绝弦",
+        "苹果",
+        "荔枝",
+        "菠萝",
+        "矿泉水",
+        "芭乐",
+        "树莓西瓜",
+        "草莓芒果",
+        "龙井",
+        "薄荷",
+        "青提",
+        "青柠",
+        "芒果",
+        "桃子",
+        "绿豆",
+        "西瓜",
+        "椰子",
+        "拿铁"
+      ],
+      "recommend": true
+    },
+    {
+      "title": "ZGAR SORNA 50000 Puffs",
+      "price": 158,
+      "imageAlt": "ZGAR SORNA 50000 Puffs",
+      "localImage": "/images/products/vp-35589.webp",
+      "description": "ZGAR SORNA 50000 Puffs。一次性系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 35589,
+      "specs": {
+        "口数": "50000 口",
+        "类型": "一次性系列",
+        "品牌": "ZGAR",
+        "口味": "12 种"
+      },
+      "brand": "ZGAR",
+      "badges": [
+        "HOT"
+      ],
+      "hot": true,
+      "options": [
+        "冰爽葡萄",
+        "覆盆子西瓜",
+        "混合浆果",
+        "柠檬青柠",
+        "西瓜冰",
+        "苹果双麦",
+        "草莓芒果",
+        "芒果冰",
+        "冰川薄荷",
+        "蜜桃芒果西瓜",
+        "草莓奇异果",
+        "冰爽蜜桃"
+      ],
+      "recommend": true
+    },
+    {
+      "title": "MOTI CERAMIC 魔笛 15000 Puffs",
+      "price": 118,
+      "imageAlt": "MOTI CERAMIC 魔笛 15000 Puffs",
+      "localImage": "/images/products/vp-18653.webp",
+      "description": "MOTI CERAMIC 魔笛 15000 Puffs。一次性系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 18653,
+      "specs": {
+        "口数": "15000 口",
+        "类型": "一次性系列",
+        "品牌": "MOTI",
+        "口味": "9 种"
+      },
+      "brand": "MOTI",
+      "badges": [
+        "HOT"
+      ],
+      "hot": true,
+      "stock": false,
+      "options": [
+        "冰爽蓝莓",
+        "绿豆",
+        "青提",
+        "柠檬茶",
+        "菠萝橙子",
+        "清凉薄荷",
+        "可乐",
+        "冰棒",
+        "龙井"
+      ],
+      "recommend": true
+    },
+    {
+      "title": "Malone Bar 马龙克罗心 35000 Puffs",
+      "price": 238,
+      "imageAlt": "Malone Bar 马龙克罗心 35000 Puffs",
+      "localImage": "/images/products/vp-14636.webp",
+      "description": "Malone Bar 马龙克罗心 35000 Puffs。一次性系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 14636,
+      "specs": {
+        "口数": "35000 口",
+        "类型": "一次性系列",
+        "品牌": "WE VAPE",
+        "口味": "10 种"
+      },
+      "brand": "WE VAPE",
+      "badges": [
+        "HOT",
+        "Korea",
+        "NIC1-2%",
+        "模式切换"
+      ],
+      "hot": true,
+      "options": [
+        "薄荷-1%",
+        "草莓-1%",
+        "西瓜-1%",
+        "宝矿力-1%",
+        "桃子-1%",
+        "青提-1%",
+        "可乐-1%",
+        "茉莉冰-1%",
+        "菠萝-1%",
+        "乌龙茶-1%"
+      ],
+      "recommend": true
+    },
+    {
+      "title": "GOWIF CHILL 高维18000 Puffs",
+      "price": 118,
+      "imageAlt": "GOWIF CHILL 高维18000 Puffs",
+      "localImage": "/images/products/vp-6144.webp",
+      "description": "GOWIF CHILL 高维18000 Puffs。一次性系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 6144,
+      "specs": {
+        "口数": "18000 口",
+        "类型": "一次性系列",
+        "品牌": "BEARFBAR",
+        "口味": "21 种"
+      },
+      "brand": "BEARFBAR",
+      "badges": [
+        "HOT"
+      ],
+      "hot": true,
+      "options": [
+        "桃茶",
+        "百香果",
+        "薄荷",
+        "菠萝",
+        "伯牙",
+        "蓝莓",
+        "荔枝",
+        "龙井",
+        "芦荟甘泉",
+        "绿豆",
+        "青柠",
+        "青提",
+        "酸苹果",
+        "西瓜",
+        "香芋",
+        "杨梅",
+        "鳄梨哈密",
+        "草莓",
+        "100号",
+        "酸梅芭乐",
+        "柠檬养乐多"
+      ],
+      "recommend": true
+    },
+    {
+      "title": "RELX MagicGo 悦刻 4000 Puffs",
+      "price": 98,
+      "imageAlt": "RELX MagicGo 悦刻 4000 Puffs",
+      "localImage": "/images/products/vp-940.webp",
+      "description": "RELX MagicGo 悦刻 4000 Puffs。一次性系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 940,
+      "specs": {
+        "口数": "4000 口",
+        "类型": "一次性系列",
+        "品牌": "RELX",
+        "口味": "25 种"
+      },
+      "brand": "RELX",
+      "badges": [
+        "HOT",
+        "上新口味",
+        "免充电",
+        "强击喉"
+      ],
+      "hot": true,
+      "options": [
+        "椰子水",
+        "薄荷",
+        "西瓜",
+        "荔枝",
+        "三重芒果",
+        "混合莓果",
+        "巨峰葡萄",
+        "南极茉莉",
+        "酸梅番石榴",
+        "矿泉水",
+        "冰豆浆",
+        "酸梅绿茶",
+        "宝矿力",
+        "芭乐",
+        "青芒果",
+        "蓝莓",
+        "百香果柚子",
+        "莓果",
+        "百香果",
+        "桃子乌龙",
+        "铁观音",
+        "番石榴",
+        "老冰棍",
+        "冰柠薄荷",
+        "芒果"
+      ],
+      "recommend": true
+    },
+    {
+      "title": "ZGAR 冰熊 PRO-X",
+      "price": 158,
+      "imageAlt": "ZGAR 冰熊 PRO-X",
+      "localImage": "/images/products/vp-5051.webp",
+      "description": "ZGAR 冰熊 PRO-X。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 5051,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "ZGAR",
+        "口味": "4 种"
+      },
+      "brand": "ZGAR",
+      "badges": [
+        "烟杆",
+        "适配悦刻弹"
+      ],
+      "options": [
+        "深空紫",
+        "天穹灰",
+        "星环银",
+        "玫瑰金"
+      ],
+      "recommend": true
+    }
+  ]
+}

@@ -49,7 +49,7 @@ const tiles = computed(() => {
     .filter(Boolean)
   return [
     ...fromCategories,
-    { title: '优惠活动', to: '/category/hot', image: '', lottie: '/animations/rocket.json' }
+    { title: '优惠活动', to: '/activity', image: '', lottie: '/animations/rocket.json' }
   ]
 })
 

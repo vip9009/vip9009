@@ -25,7 +25,7 @@ export function productRoute(sectionId, index) {
 export function formatPrice(value) {
   const number = Number(value)
   if (!Number.isFinite(number)) return `¥${value ?? ''}`
-  return `¥${number % 1 === 0 ? number.toFixed(0) : number.toFixed(2)}`
+  return `¥${number.toFixed(2)}`
 }
 
 export function detectBrand(product) {

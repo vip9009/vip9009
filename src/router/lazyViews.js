@@ -9,6 +9,7 @@ const lazyViews = {
   checkout: () => import('@/views/CheckoutView.vue'),
   orderQuery: () => import('@/views/OrderQueryView.vue'),
   wishlist: () => import('@/views/WishlistView.vue'),
+  activity: () => import('@/views/ActivityView.vue'),
   notFound: () => import('@/views/NotFoundView.vue')
 }
 
@@ -29,7 +30,7 @@ export function preloadView(name) {
  * Chunks are a few KB each, so this removes the blank delay on first navigation.
  */
 export function preloadPrimaryViews() {
-  ;['category', 'product', 'contact', 'search', 'info', 'cart', 'checkout', 'orderQuery', 'wishlist'].forEach(preloadView)
+  ;['category', 'product', 'contact', 'search', 'info', 'cart', 'checkout', 'orderQuery', 'wishlist', 'activity'].forEach(preloadView)
 }
 
 export default lazyViews

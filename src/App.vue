@@ -53,6 +53,7 @@ function preloadForPath(path) {
   else if (pathname === '/checkout') preloadView('checkout')
   else if (pathname === '/order-query') preloadView('orderQuery')
   else if (pathname === '/wishlist') preloadView('wishlist')
+  else if (pathname === '/activity') preloadView('activity')
   else if (pathname.startsWith('/info/')) preloadView('info')
   else if (pathname === '/sitemap') preloadView('sitemap')
 
