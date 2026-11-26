@@ -196,7 +196,14 @@ function setPage(index) {
     </section>
 
     <div class="no-smoking">
-      <LottieBox src="/animations/no-smoking.json" fit="cover" :speed="0.5" label="NO SMOKING 动画" />
+      <div class="no-smoking-title">
+        <span class="ns-arrow left" />
+        <b>NO SMOKING</b>
+        <span class="ns-arrow right" />
+      </div>
+      <div class="no-smoking-icon">
+        <LottieBox src="/animations/no-smoking.json" fit="contain" :speed="0.5" label="NO SMOKING 动画" />
+      </div>
     </div>
 
     <section class="brand-strip">
@@ -587,13 +594,41 @@ function setPage(index) {
 }
 
 .tag-bar {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 64px;
+  max-width: 1050px;
   height: 34px;
+  margin: 0 auto;
+  overflow: hidden;
   background: #111111;
-  clip-path: polygon(2% 0, 98% 0, 100% 50%, 98% 100%, 2% 100%, 0 50%);
+}
+
+.tag-bar::before,
+.tag-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 44px;
+  background: repeating-linear-gradient(115deg, #111111 0 7px, #ffffff 7px 14px);
+}
+
+.tag-bar::before {
+  left: 0;
+  clip-path: polygon(0 0, 100% 0, 65% 100%, 0 100%);
+}
+
+.tag-bar::after {
+  right: 0;
+  clip-path: polygon(35% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.tag-bar button {
+  position: relative;
+  z-index: 1;
 }
 
 .tag-bar button {
@@ -746,16 +781,24 @@ function setPage(index) {
 }
 
 .no-smoking {
-  width: 100%;
-  max-width: 1050px;
-  height: 300px;
-  padding: 0;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 46px 20px 26px;
 }
 
-.no-smoking .lottie-box {
+.no-smoking-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
   width: 100%;
-  height: 100%;
+}
+
+.no-smoking-icon {
+  width: 170px;
+  height: 170px;
 }
 
 .no-smoking b {
@@ -952,7 +995,20 @@ function setPage(index) {
   }
 
   .no-smoking {
-    height: 150px;
+    padding: 30px 16px 18px;
+  }
+
+  .no-smoking-title {
+    gap: 12px;
+  }
+
+  .no-smoking-icon {
+    width: 140px;
+    height: 140px;
+  }
+
+  .no-smoking b {
+    font-size: 30px;
   }
 
   .ns-arrow {
