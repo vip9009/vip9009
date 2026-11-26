@@ -6,14 +6,15 @@ import ProductSection from '@/components/ProductSection.vue'
 import AppIcon from '@/components/AppIcon.vue'
 import { asset } from '@/utils'
 
-const moreLinks = {
-  hot: '/category/hot',
-  disposables: '/category/disposables',
-  jimu: '/category/jimu',
-  pods: '/category/pods'
+function moreLinkFor(sectionId) {
+  const entry = Object.entries(site.categories).find(([, category]) => category.section === sectionId)
+  return entry ? `/category/${entry[0]}` : '/category/hot'
 }
 
 const heroProducts = productsData.sections[0]?.products.slice(0, 4) || []
+const visibleSections = computed(() =>
+  productsData.sections.filter((section) => section.products && section.products.length)
+)
 
 const trustItems = [
   { icon: 'shield', title: '正品保障', text: '支持官方扫码验证' },
@@ -166,10 +167,10 @@ const categoryCards = computed(() =>
     </section>
 
     <ProductSection
-      v-for="section in productsData.sections"
+      v-for="section in visibleSections"
       :key="section.id"
       :section="section"
-      :more-to="moreLinks[section.id] || '/category/hot'"
+      :more-to="moreLinkFor(section.id)"
     />
 
     <section class="final-cta-section">

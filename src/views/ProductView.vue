@@ -26,6 +26,12 @@ const related = computed(() => {
     .slice(0, 4)
 })
 
+const productDescription = computed(
+  () =>
+    product.value?.description?.trim() ||
+    '加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。泡泡哥只做正品，支持扫码验证，不同国家与地区的配送方式由泡泡哥一对一确认。'
+)
+
 const features = [
   { icon: 'shield', title: '正品保证', text: '品牌正品，支持扫码验证' },
   { icon: 'globe', title: '全球包邮', text: '海外直邮，覆盖多个国家' },
@@ -67,10 +73,7 @@ watchEffect(() => {
               <span class="price-note">最终价格以泡泡哥确认为准</span>
             </div>
 
-            <p class="lead">
-              加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。泡泡哥只做正品，支持扫码验证，
-              不同国家与地区的配送方式由泡泡哥一对一确认。
-            </p>
+            <p class="lead">{{ productDescription }}</p>
 
             <ul class="features">
               <li v-for="feature in features" :key="feature.title">
@@ -344,6 +347,7 @@ watchEffect(() => {
   color: var(--color-muted-foreground);
   background: var(--color-muted);
   border-radius: 14px;
+  white-space: pre-line;
 }
 
 .features {

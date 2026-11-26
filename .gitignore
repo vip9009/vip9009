@@ -3,3 +3,8 @@ dist
 .DS_Store
 *.local
 .vite
+
+# 本地商品管理工具
+tools/.backups/
+__pycache__/
+*.pyc

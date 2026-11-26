@@ -42,8 +42,8 @@ vip9009/
 │  ├─ assets/styles/main.css      # 全局基础样式与响应式
 │  ├─ components/                 # 页头、页脚、商品卡、客服悬浮窗
 │  ├─ data/
-│  │  ├─ index.js                 # 聚合数据并对外导出
-│  │  ├─ sections/
+│  │  ├─ index.js                 # 自动聚合 sections/*.json
+│  │  ├─ sections/                # 每个分类一个分区 JSON，可自由新增
 │  │  │  ├─ hot.json              # 热门产品
 │  │  │  ├─ disposables.json      # 一次性电子烟
 │  │  │  ├─ jimu.json             # 积木电子烟
@@ -62,6 +62,10 @@ vip9009/
 │  ├─ App.vue                     # 页面骨架、切换进度条
 │  └─ main.js
 ├─ index.html
+├─ tools/                          # 本地商品管理工具（不参与打包）
+│  ├─ product_admin.py             # Tkinter 管理界面
+│  ├─ requirements.txt             # Pillow
+│  └─ 启动商品管理工具.bat         # Windows 双击启动
 ├─ vite.config.js                 # base: './'，支持仓库子路径部署
 └─ package.json
 ```
@@ -84,6 +88,48 @@ npm run build
 npm run preview
 ```
 
+## 本地商品管理工具（推荐）
+
+不想手改 JSON 的话，用项目自带的本地工具即可完成日常维护，**不需要线上后台、不需要数据库、不需要服务器**。
+
+双击运行：
+
+```text
+tools\启动商品管理工具.bat
+```
+
+或命令行运行：
+
+```bash
+python -m pip install -r tools/requirements.txt
+python tools/product_admin.py
+```
+
+工具能做什么：
+
+| 功能 | 说明 |
+| --- | --- |
+| 新增 / 修改商品 | 商品名称、参考价、分类、商品描述 |
+| 新增 / 修改分类 | 填分类 ID 和名称，自动创建同名商品分区 |
+| 选择图片 | 自动转成 800px WebP，写入 `public/images/products/` |
+| 排序 | 商品上移 / 下移，保存后前台顺序同步 |
+| 保存 | 直接写回 `src/data/` 下的 JSON，并自动备份旧文件 |
+| 发布 | 一键提交 `src/data` + `public/images/products` 并 push，GitHub Actions 自动重新部署 |
+
+注意事项：
+
+- 分类 ID 只能用小写字母、数字和短横线，例如 `new-pods`；它会同时作为分区文件名。
+- 删除分类前必须先清空该分类下的商品。
+- 工具只提交 `src/data` 和 `public/images/products`，不会提交工具本身的改动。
+- 旧 JSON 会备份到 `tools/.backups/`（已在 `.gitignore` 中忽略）。
+- 检查数据是否完整：
+
+```bash
+python tools/product_admin.py --check
+```
+
+> 新增分类后，如果本地 `npm run dev` 还开着，需要重启一次开发服务器，Vite 才会加载新的分区 JSON。线上构建不受影响。
+
 ## 修改数据
 
 数据已按业务拆分为多个 JSON 文件，修改时只需要动对应文件，不需要改组件代码。
@@ -96,19 +142,23 @@ npm run preview
 {
   "id": "hot",
   "title": "热门产品",
+  "sort": 1,
   "products": [
     {
       "title": "商品名称",
       "price": 288,
       "imageAlt": "图片描述",
-      "localImage": "/images/products/hot-1-800.webp"
+      "localImage": "/images/products/hot-1-800.webp",
+      "description": "可选：商品详情里的介绍文案，支持换行"
     }
   ]
 }
 ```
 
-- 四个分区：`hot.json`、`disposables.json`、`jimu.json`、`pods.json`。
+- `src/data/index.js` 用 `import.meta.glob('./sections/*.json')` 自动加载全部分区，按 `sort` 升序排列；新增或删除分区文件不需要改代码。
+- 现有分区：`hot.json`（1）、`disposables.json`（2）、`jimu.json`（3）、`pods.json`（4）。
 - `localImage` 填 `public` 下的相对路径，建议使用 800px 宽的 WebP。
+- `description` 可选，留空时商品详情使用默认介绍文案。
 - 商品详情路由为 `/product/:sectionId/:index`，`index` 是商品在分区中的下标（从 0 开始）。
 - 商品卡只展示产品名称与参考价，不再展示库存、人气、折扣和划线原价。
 - HOT / NEW 角标是部分商品图片本身自带的效果，无需额外字段。
