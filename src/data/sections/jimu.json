@@ -1,0 +1,54 @@
+{
+  "id": "jimu",
+  "title": "积木电子烟",
+  "products": [
+    {
+      "title": "悦刻积木18000透明烟弹 | 12ml双网芯 15W/25W 适配悦刻积木主机",
+      "price": 150,
+      "imageAlt": "悦刻积木18000透明烟弹 | 12ml双网芯 15W/25W 适配悦刻积木主机",
+      "localImage": "/images/products/jimu-1-800.webp"
+    },
+    {
+      "title": "悦刻积木透明烟弹 RELX Creator Pod &#8211; 10ML大容量设计，适配悦刻积木主机",
+      "price": 150,
+      "imageAlt": "悦刻积木透明烟弹 RELX Creator Pod &#8211; 10ML大容量设计，适配悦刻积木主机",
+      "localImage": "/images/products/jimu-2-800.webp"
+    },
+    {
+      "title": "悦刻积木烟弹35000口-适配悦刻积木一代二代主机-可调功率",
+      "price": 220,
+      "imageAlt": "悦刻积木烟弹35000口-适配悦刻积木一代二代主机-可调功率",
+      "localImage": "/images/products/jimu-3-800.webp"
+    },
+    {
+      "title": "悦刻积木三代空烟弹5ml可注油-可适配1/2代主机且支持功率调节",
+      "price": 138,
+      "imageAlt": "悦刻积木三代空烟弹5ml可注油-可适配1/2代主机且支持功率调节",
+      "localImage": "/images/products/jimu-4-800.webp"
+    },
+    {
+      "title": "爱奇迹积木ELFBAR JoinOne Icy Kit 20000口，三档功率调节/冰度调节",
+      "price": 380,
+      "imageAlt": "爱奇迹积木ELFBAR JoinOne Icy Kit 20000口，三档功率调节/冰度调节",
+      "localImage": "/images/products/jimu-5-800.webp"
+    },
+    {
+      "title": "悦刻积木二代 RELX Creator 22000口套装，12-22W功率调节",
+      "price": 318,
+      "imageAlt": "悦刻积木二代 RELX Creator 22000口套装，12-22W功率调节",
+      "localImage": "/images/products/jimu-6-800.webp"
+    },
+    {
+      "title": "冰熊积木 ZGAR PROJECT-D 15000磁吸换弹/可调功率",
+      "price": 238,
+      "imageAlt": "冰熊积木 ZGAR PROJECT-D 15000磁吸换弹/可调功率",
+      "localImage": "/images/products/jimu-7-800.webp"
+    },
+    {
+      "title": "雪加积木 Snowplus Swift 15000口主机+烟弹套装-两档功率调节",
+      "price": 150,
+      "imageAlt": "雪加积木 Snowplus Swift 15000口主机+烟弹套装-两档功率调节",
+      "localImage": "/images/products/jimu-8-800.webp"
+    }
+  ]
+}

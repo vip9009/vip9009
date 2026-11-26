@@ -1,0 +1,30 @@
+{
+  "id": "pods",
+  "title": "烟弹",
+  "products": [
+    {
+      "title": "ZGAR冰熊 6.0 PLUS烟弹3.5ml超大容量，悦刻4/5/6/7代杆通用",
+      "price": 48,
+      "imageAlt": "ZGAR冰熊 6.0 PLUS烟弹3.5ml超大容量，悦刻4/5/6/7代杆通用",
+      "localImage": "/images/products/pods-1-800.webp"
+    },
+    {
+      "title": "Zgar冰熊6.0s烟弹-3.0ml单颗装-悦刻4/5/6/7代杆通用",
+      "price": 48,
+      "imageAlt": "Zgar冰熊6.0s烟弹-3.0ml单颗装-悦刻4/5/6/7代杆通用",
+      "localImage": "/images/products/pods-2-800.webp"
+    },
+    {
+      "title": "雪加UFO烟弹-5.0ML大容量-适配悦刻4/5/6代烟杆",
+      "price": 68,
+      "imageAlt": "雪加UFO烟弹-5.0ML大容量-适配悦刻4/5/6代烟杆",
+      "localImage": "/images/products/pods-3-800.webp"
+    },
+    {
+      "title": "悦刻Ultra烟弹每盒三颗装-极凉口感，适配悦刻4-7代烟杆",
+      "price": 135,
+      "imageAlt": "悦刻Ultra烟弹每盒三颗装-极凉口感，适配悦刻4-7代烟杆",
+      "localImage": "/images/products/pods-4-800.webp"
+    }
+  ]
+}

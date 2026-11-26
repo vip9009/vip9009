@@ -1,0 +1,54 @@
+{
+  "id": "hot",
+  "title": "热门产品",
+  "products": [
+    {
+      "title": "悦刻积木一代RELX Creator 18000口套装-口味齐全",
+      "price": 288,
+      "imageAlt": "悦刻积木一代RELX Creator 18000口套装-口味齐全",
+      "localImage": "/images/products/hot-1-800.webp"
+    },
+    {
+      "title": "悦刻积木二代 RELX Creator 22000口套装，12-22W功率调节",
+      "price": 318,
+      "imageAlt": "悦刻积木二代 RELX Creator 22000口套装，12-22W功率调节",
+      "localImage": "/images/products/hot-2-800.webp"
+    },
+    {
+      "title": "悦刻RELX MagicGo GA 4000口一次性电子烟-口味齐全",
+      "price": 120,
+      "imageAlt": "悦刻RELX MagicGo GA 4000口一次性电子烟-口味齐全",
+      "localImage": "/images/products/hot-3-800.webp"
+    },
+    {
+      "title": "雪加鸭嘴兽Snowplus Dash 4000口一次性电子烟，口味齐全",
+      "price": 98,
+      "imageAlt": "雪加鸭嘴兽Snowplus Dash 4000口一次性电子烟，口味齐全",
+      "localImage": "/images/products/hot-4-800.webp"
+    },
+    {
+      "title": "雪加大板砖 SnowPlus Hammer 10000口一次性电子烟-16ml大容量",
+      "price": 135,
+      "imageAlt": "雪加大板砖 SnowPlus Hammer 10000口一次性电子烟-16ml大容量",
+      "localImage": "/images/products/hot-5-800.webp"
+    },
+    {
+      "title": "ICEMAX冰爆12000口一次性电子烟-屏幕显示/13w大功率",
+      "price": 135,
+      "imageAlt": "ICEMAX冰爆12000口一次性电子烟-屏幕显示/13w大功率",
+      "localImage": "/images/products/hot-6-800.webp"
+    },
+    {
+      "title": "SONG崧A29娱乐系列16000口一次性电子烟，TFT屏幕电量/火力/动画",
+      "price": 135,
+      "imageAlt": "SONG崧A29娱乐系列16000口一次性电子烟，TFT屏幕电量/火力/动画",
+      "localImage": "/images/products/hot-7-800.webp"
+    },
+    {
+      "title": "YOOZ柚子UNI独角兽10000口一次性电子烟-液晶显示屏油电显示",
+      "price": 130,
+      "imageAlt": "YOOZ柚子UNI独角兽10000口一次性电子烟-液晶显示屏油电显示",
+      "localImage": "/images/products/hot-8-800.webp"
+    }
+  ]
+}

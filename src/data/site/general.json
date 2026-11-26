@@ -1,0 +1,150 @@
+{
+  "topLinks": [
+    {
+      "label": "网站地图",
+      "to": "/sitemap"
+    }
+  ],
+  "nav": [
+    {
+      "label": "一次性电子烟",
+      "to": "/category/disposables",
+      "children": [
+        {
+          "label": "悦刻一次性电子烟",
+          "to": "/category/disposables?brand=悦刻"
+        },
+        {
+          "label": "雪加一次性电子烟",
+          "to": "/category/disposables?brand=雪加"
+        },
+        {
+          "label": "冰熊一次性电子烟",
+          "to": "/category/disposables?brand=冰熊"
+        },
+        {
+          "label": "柚子一次性电子烟",
+          "to": "/category/disposables?brand=柚子"
+        },
+        {
+          "label": "特色一次性电子烟",
+          "to": "/category/disposables"
+        }
+      ]
+    },
+    {
+      "label": "烟弹",
+      "to": "/category/pods",
+      "children": [
+        {
+          "label": "悦刻烟弹",
+          "to": "/category/pods?brand=悦刻",
+          "children": [
+            {
+              "label": "悦刻六代外贸弹",
+              "to": "/category/pods?brand=悦刻"
+            }
+          ]
+        },
+        {
+          "label": "冰熊烟弹",
+          "to": "/category/pods?brand=冰熊",
+          "children": [
+            {
+              "label": "冰熊6.0烟弹",
+              "to": "/category/pods?brand=冰熊"
+            },
+            {
+              "label": "美版冰熊烟弹",
+              "to": "/category/pods?brand=冰熊"
+            }
+          ]
+        },
+        {
+          "label": "通配烟弹",
+          "to": "/category/pods"
+        },
+        {
+          "label": "特色烟弹",
+          "to": "/category/pods"
+        }
+      ]
+    },
+    {
+      "label": "烟杆",
+      "to": "/category/pod-system",
+      "children": [
+        {
+          "label": "悦刻烟杆",
+          "to": "/category/pod-system?brand=悦刻"
+        },
+        {
+          "label": "冰熊烟杆",
+          "to": "/category/pod-system?brand=冰熊"
+        },
+        {
+          "label": "特色烟杆",
+          "to": "/category/pod-system"
+        }
+      ]
+    },
+    {
+      "label": "烟油",
+      "to": "/category/e-liquid",
+      "children": [
+        {
+          "label": "悦刻烟油",
+          "to": "/category/e-liquid?brand=悦刻"
+        },
+        {
+          "label": "特色烟油",
+          "to": "/category/e-liquid"
+        }
+      ]
+    },
+    {
+      "label": "积木电子烟",
+      "to": "/category/jimu",
+      "children": [
+        {
+          "label": "悦刻积木",
+          "to": "/category/jimu?brand=悦刻"
+        },
+        {
+          "label": "雪加积木",
+          "to": "/category/jimu?brand=雪加"
+        },
+        {
+          "label": "其他积木",
+          "to": "/category/jimu"
+        },
+        {
+          "label": "冰熊积木",
+          "to": "/category/jimu?brand=冰熊"
+        }
+      ]
+    },
+    {
+      "label": "国标系列",
+      "to": "/category/gbxl",
+      "children": [
+        {
+          "label": "国标一次性",
+          "to": "/category/gbxl"
+        },
+        {
+          "label": "国标烟弹",
+          "to": "/category/gbxl"
+        },
+        {
+          "label": "国标烟杆",
+          "to": "/category/gbxl"
+        }
+      ]
+    },
+    {
+      "label": "联系我们",
+      "to": "/contact"
+    }
+  ]
+}

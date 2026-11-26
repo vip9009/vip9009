@@ -1,0 +1,13 @@
+{
+  "wechat": {
+    "name": "泡泡哥",
+    "avatar": "/images/paopao-face.jpg",
+    "image": "/images/paopao-qr.png",
+    "label": "泡泡哥微信",
+    "tagline": "加我，帮你选雾化"
+  },
+  "qq": {
+    "label": "泡泡哥 QQ",
+    "number": "1220820788"
+  }
+}

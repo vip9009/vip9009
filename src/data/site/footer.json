@@ -1,0 +1,71 @@
+{
+  "widgets": [
+    {
+      "title": "购物说明",
+      "links": [
+        {
+          "label": "付款方式",
+          "to": "/info/payment"
+        },
+        {
+          "label": "配送说明",
+          "to": "/info/delivery"
+        },
+        {
+          "label": "退换政策",
+          "to": "/info/returns"
+        }
+      ]
+    },
+    {
+      "title": "客户支持",
+      "links": [
+        {
+          "label": "关于我们",
+          "to": "/info/about"
+        },
+        {
+          "label": "联系我们",
+          "to": "/contact"
+        },
+        {
+          "label": "隐私政策",
+          "to": "/info/privacy"
+        },
+        {
+          "label": "真假验证",
+          "to": "/info/verification"
+        }
+      ]
+    },
+    {
+      "title": "产品列表",
+      "links": [
+        {
+          "label": "悦刻电子烟",
+          "to": "/category/disposables?brand=悦刻"
+        },
+        {
+          "label": "雪加电子烟",
+          "to": "/category/disposables?brand=雪加"
+        },
+        {
+          "label": "冰熊电子烟",
+          "to": "/category/disposables?brand=冰熊"
+        }
+      ]
+    },
+    {
+      "title": "下单方式",
+      "links": [
+        {
+          "label": "加泡泡哥微信",
+          "to": "/contact"
+        },
+        {
+          "label": "QQ：1220820788"
+        }
+      ]
+    }
+  ]
+}

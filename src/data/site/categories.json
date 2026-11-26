@@ -1,0 +1,37 @@
+{
+  "hot": {
+    "title": "热门产品",
+    "section": "hot",
+    "desc": "近期热门的电子烟与套装，口味齐全，现货直发。"
+  },
+  "disposables": {
+    "title": "一次性电子烟",
+    "section": "disposables",
+    "desc": "悦刻、雪加、冰熊、柚子等品牌一次性电子烟，正品保障。"
+  },
+  "pods": {
+    "title": "烟弹",
+    "section": "pods",
+    "desc": "适配主流烟杆的替换烟弹，多口味可选。"
+  },
+  "jimu": {
+    "title": "积木电子烟",
+    "section": "jimu",
+    "desc": "悦刻积木、雪加积木、冰熊积木等可玩性更高的换弹套装。"
+  },
+  "pod-system": {
+    "title": "烟杆",
+    "section": null,
+    "desc": "烟杆与主机设备持续上新中，请联系客服获取最新款式与报价。"
+  },
+  "e-liquid": {
+    "title": "烟油",
+    "section": null,
+    "desc": "烟油品类持续上新中，请联系客服获取最新口味与报价。"
+  },
+  "gbxl": {
+    "title": "国标系列",
+    "section": null,
+    "desc": "国标系列商品整理中，请联系客服获取最新款式与报价。"
+  }
+}
