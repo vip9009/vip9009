@@ -42,7 +42,7 @@ import AppIcon from '@/components/AppIcon.vue'
           Copyright &copy; 2026 <RouterLink to="/">泡泡哥雾化</RouterLink>
         </div>
         <div class="footer-bottom-right">
-          <span>正品保障 · 全球直邮</span>
+          <span>真人选品 · 扫码验真</span>
           <RouterLink to="/sitemap">网站地图</RouterLink>
           <RouterLink to="/contact">联系我们</RouterLink>
         </div>
@@ -53,7 +53,7 @@ import AppIcon from '@/components/AppIcon.vue'
 
 <style scoped>
 .footer {
-  color: #d1fae5;
+  color: #e7efe9;
   background: var(--color-foreground);
 }
 
@@ -92,7 +92,7 @@ import AppIcon from '@/components/AppIcon.vue'
   margin-bottom: 20px;
   font-size: 13px;
   line-height: 1.8;
-  color: #a7f3d0;
+  color: #cbe3d6;
 }
 
 .footer-cta {
@@ -126,7 +126,7 @@ import AppIcon from '@/components/AppIcon.vue'
 .footer-qq {
   padding: 6px 10px;
   font-size: 11px;
-  color: #a7f3d0;
+  color: #cbe3d6;
   border: 1px solid rgba(167, 243, 208, 0.32);
   border-radius: 999px;
   transition: color 0.2s ease, border-color 0.2s ease;
@@ -144,7 +144,7 @@ import AppIcon from '@/components/AppIcon.vue'
 
 .footer-static-link {
   font-size: 13px;
-  color: #d1fae5;
+  color: #e7efe9;
   user-select: all;
 }
 
@@ -163,7 +163,7 @@ import AppIcon from '@/components/AppIcon.vue'
 
 .footer-widget a {
   font-size: 13px;
-  color: #a7f3d0;
+  color: #cbe3d6;
   transition: color 0.18s ease;
 }
 
@@ -182,7 +182,7 @@ import AppIcon from '@/components/AppIcon.vue'
   gap: 20px;
   min-height: 68px;
   font-size: 12px;
-  color: #a7f3d0;
+  color: #cbe3d6;
 }
 
 .footer-bottom a {

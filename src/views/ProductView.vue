@@ -34,8 +34,8 @@ const productDescription = computed(
 
 const features = [
   { icon: 'shield', title: '正品保证', text: '品牌正品，支持扫码验证' },
-  { icon: 'globe', title: '全球包邮', text: '海外直邮，覆盖多个国家' },
-  { icon: 'truck', title: '现货速发', text: '确认后尽快安排发出' },
+  { icon: 'globe', title: '多国可发', text: '运费与时效微信确认' },
+  { icon: 'truck', title: '物流可查', text: '发出后给单号' },
   { icon: 'scan', title: '支持扫码验证', text: '收到货后可扫码核对真伪' }
 ]
 
@@ -86,7 +86,7 @@ watchEffect(() => {
             </ul>
 
             <div class="actions">
-              <RouterLink class="btn btn-primary" to="/contact">加泡泡哥微信 / QQ 下单</RouterLink>
+              <RouterLink class="btn btn-primary" to="/contact">加微信，问这款</RouterLink>
             </div>
 
             <p class="quick-contact">泡泡哥 QQ：{{ site.contacts.qq.number }}</p>
@@ -290,7 +290,7 @@ watchEffect(() => {
 }
 
 .detail-media {
-  background: #f7fffb;
+  background: #f7f3ea;
   border: 1px solid var(--color-border);
   border-radius: 20px;
 }

@@ -118,7 +118,7 @@ onBeforeUnmount(() => {
           <RouterLink v-for="link in site.topLinks" :key="link.label" :to="link.to">
             {{ link.label }}
           </RouterLink>
-          <span class="top-tagline">正品保障 · 全球直邮</span>
+          <span class="top-tagline">真人选品 · 扫码验真</span>
         </div>
 
         <div class="top-actions">
@@ -889,7 +889,7 @@ onBeforeUnmount(() => {
 
 .header-top-inner {
   height: 48px;
-  color: #d1fae5;
+  color: #e7efe9;
 }
 
 .top-links {
@@ -900,7 +900,7 @@ onBeforeUnmount(() => {
 
 .top-links a {
   padding: 0;
-  color: #d1fae5;
+  color: #e7efe9;
   font-size: 13px;
 }
 
@@ -911,7 +911,7 @@ onBeforeUnmount(() => {
 .top-tagline {
   font-size: 12px;
   letter-spacing: 0.06em;
-  color: #a7f3d0;
+  color: #cbe3d6;
 }
 
 .top-search {
@@ -1217,7 +1217,7 @@ onBeforeUnmount(() => {
   }
 
   .top-links a {
-    color: #d1fae5;
+    color: #e7efe9;
     font-size: 14px;
   }
 

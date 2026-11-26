@@ -19,10 +19,10 @@ const visibleSections = computed(() =>
 )
 
 const trustItems = [
-  { icon: 'shield', title: '正品保障', text: '支持官方扫码验证' },
-  { icon: 'globe', title: '全球包邮', text: '海外直邮多个国家' },
-  { icon: 'truck', title: '现货速发', text: '确认后尽快发出' },
-  { icon: 'scan', title: '扫码验证', text: '收到货后可核对' }
+  { icon: 'user', title: '真人选品', text: '按口味帮你配' },
+  { icon: 'scan', title: '扫码验真', text: '收到货先验再抽' },
+  { icon: 'truck', title: '物流可查', text: '发出后给单号' },
+  { icon: 'shield', title: '一对一售后', text: '不合适帮你调' }
 ]
 
 const categoryIcons = {
@@ -57,19 +57,19 @@ const categoryCards = computed(() =>
       <div class="hero-shape hero-shape-b" aria-hidden="true" />
       <div class="wrapper hero-grid">
         <div class="hero-copy">
-          <span class="eyebrow"><i /> 泡泡哥雾化 · 海外电子烟直邮</span>
-          <h1>正品电子烟<br /><em>直邮到家</em></h1>
+          <span class="eyebrow"><i /> PAOPAO SELECT · 真人选品</span>
+          <h1>别盲买。<br /><em>把口味告诉我</em></h1>
           <p class="hero-lede">
-            悦刻、雪加、冰熊、柚子等品牌现货。按分类查看产品与价格，选好后加泡泡哥微信或 QQ，
-            由泡泡哥确认口味、价格与物流。
+            悦刻、雪加、冰熊、柚子现货。按你的口感、预算和目的地，泡泡哥帮你配一套抽得住的选择，
+            确认价格与物流后再发。
           </p>
 
           <div class="hero-actions">
             <RouterLink class="btn btn-primary" to="/contact">
-              加泡泡哥咨询
+              让泡泡哥帮我选
               <AppIcon name="arrow-right" :size="18" />
             </RouterLink>
-            <RouterLink class="btn btn-ghost" to="/category/hot">浏览全部产品</RouterLink>
+            <RouterLink class="btn btn-ghost" to="/category/hot">先看现货</RouterLink>
           </div>
 
           <ul class="hero-trust">
@@ -85,7 +85,7 @@ const categoryCards = computed(() =>
 
         <div class="hero-visual">
           <div class="hero-panel" aria-hidden="true" />
-          <div class="hero-collage">
+          <div class="hero-collage" v-if="heroProducts.length">
             <div
               v-for="(product, index) in heroProducts"
               :key="product.title"
@@ -95,17 +95,24 @@ const categoryCards = computed(() =>
               <img :src="asset(product.localImage)" alt="" />
             </div>
           </div>
+          <div v-else class="hero-empty">
+            <img :src="asset('/images/paopao-face.jpg')" alt="泡泡哥" width="64" height="64" />
+            <div>
+              <b>本周现货更新中</b>
+              <p>加泡泡哥微信，先看最新到货和口味。</p>
+            </div>
+          </div>
           <div class="floating-badge floating-badge-top">
-            <AppIcon name="shield" :size="18" />
-            正品保障
+            <AppIcon name="user" :size="18" />
+            真人选品
           </div>
           <div class="floating-badge floating-badge-bottom">
-            <AppIcon name="truck" :size="18" />
-            现货速发
+            <AppIcon name="scan" :size="18" />
+            扫码验真
           </div>
           <div class="hero-sticker" aria-hidden="true">
-            <b>100%</b>
-            <span>正品直供</span>
+            <b>1v1</b>
+            <span>帮你选</span>
           </div>
         </div>
       </div>
@@ -123,14 +130,14 @@ const categoryCards = computed(() =>
           />
           <div class="seller-copy">
             <span class="section-eyebrow">MEET PAOPAO</span>
-            <h2>我是泡泡哥，所有货由我亲自选</h2>
+            <h2>我不是平台，我是泡泡哥</h2>
             <p>
-              站内商品由我亲自选品、验货、发货。网站只做分类与价格展示，
-              选好后加我微信或 QQ，我帮你确认口味、价格和物流。
+              每一批货我自己验，每一个新口味我自己试。你不需要研究参数，把常抽的口感和预算告诉我；
+              不合适，我帮你换方案。
             </p>
           </div>
           <RouterLink class="btn btn-primary seller-btn" to="/contact">
-            加泡泡哥微信
+            加微信，发我口味
             <AppIcon name="arrow-right" :size="17" />
           </RouterLink>
         </div>
@@ -141,10 +148,10 @@ const categoryCards = computed(() =>
       <div class="wrapper">
         <div class="section-head">
           <div>
-            <span class="section-eyebrow">PRODUCT CATEGORIES</span>
-            <h2>按分类找产品</h2>
+            <span class="section-eyebrow">SHOP BY CATEGORY</span>
+            <h2>先选品类，再选口味</h2>
           </div>
-          <p>全品类电子烟目录，价格透明。展示价格为参考价，最终以泡泡哥微信 / QQ 确认为准。</p>
+          <p>不知道一次性、换弹、积木怎么选？直接问泡泡哥，30 秒讲明白。页面价为参考价，最终以微信确认为准。</p>
         </div>
 
         <div class="category-grid">
@@ -179,16 +186,19 @@ const categoryCards = computed(() =>
       <div class="wrapper">
         <div class="final-cta">
           <div class="final-cta-copy">
-            <span class="section-eyebrow section-eyebrow-light">READY TO ORDER?</span>
-            <h2>选好产品？<br />加泡泡哥微信或 QQ 下单</h2>
-            <p>把产品名称或截图发给泡泡哥，确认口味、价格与物流后即可下单。只做正品，支持扫码验证。</p>
+            <span class="section-eyebrow section-eyebrow-light">ONE MESSAGE AWAY</span>
+            <h2>不用自己研究参数。<br />把口味和预算发我。</h2>
+            <p>
+              泡泡哥按你的口感、预算和目的地配一套方案，确认价格与物流后再发。
+              选品和答疑不收服务费。
+            </p>
           </div>
           <div class="final-cta-actions">
             <RouterLink class="btn btn-primary" to="/contact">
-              加泡泡哥微信 / QQ
+              加微信，发我口味
               <AppIcon name="arrow-right" :size="18" />
             </RouterLink>
-            <RouterLink class="btn btn-cta-light" to="/category/hot">浏览热门产品</RouterLink>
+            <RouterLink class="btn btn-cta-light" to="/category/hot">先看现货</RouterLink>
           </div>
           <div class="final-cta-shape" aria-hidden="true" />
         </div>
@@ -203,9 +213,8 @@ const categoryCards = computed(() =>
   padding: 28px 0 72px;
   overflow: hidden;
   background:
-    radial-gradient(circle at 12% 18%, rgba(16, 185, 129, 0.16) 0, transparent 34%),
-    radial-gradient(circle at 88% 12%, rgba(234, 88, 12, 0.1) 0, transparent 28%),
-    var(--color-background);
+    radial-gradient(circle at 88% 10%, rgba(232, 93, 4, 0.08) 0, transparent 30%),
+    linear-gradient(180deg, #fbf8f1 0%, var(--color-background) 100%);
 }
 
 .hero-grid {
@@ -241,9 +250,9 @@ const categoryCards = computed(() =>
 .eyebrow i {
   width: 8px;
   height: 8px;
-  background: var(--color-primary);
+  background: var(--color-accent);
   border-radius: 50%;
-  box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.12);
+  box-shadow: 0 0 0 4px rgba(232, 93, 4, 0.14);
 }
 
 .hero h1 {
@@ -270,7 +279,7 @@ const categoryCards = computed(() =>
   left: -6px;
   z-index: -1;
   height: 18px;
-  background: rgba(16, 185, 129, 0.22);
+  background: rgba(232, 93, 4, 0.16);
   border-radius: 4px;
   transform: rotate(-1deg);
 }
@@ -351,7 +360,7 @@ const categoryCards = computed(() =>
   background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   border-radius: 32px;
   transform: rotate(-4deg);
-  box-shadow: 0 30px 70px rgba(5, 150, 105, 0.24);
+  box-shadow: 0 30px 70px rgba(11, 61, 46, 0.24);
 }
 
 .hero-panel::after {
@@ -394,6 +403,42 @@ const categoryCards = computed(() =>
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.hero-empty {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: min(100%, 380px);
+  padding: 24px;
+  background: var(--color-card);
+  border-radius: 22px;
+  box-shadow: var(--shadow-card);
+  transform: rotate(2deg);
+}
+
+.hero-empty img {
+  flex: 0 0 64px;
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.hero-empty b {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--font-heading);
+  font-size: 16px;
+  color: var(--color-foreground);
+}
+
+.hero-empty p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--color-muted-foreground);
 }
 
 .collage-item-2 {
@@ -488,7 +533,7 @@ const categoryCards = computed(() =>
   right: -100px;
   width: 360px;
   height: 360px;
-  background: rgba(5, 150, 105, 0.08);
+  background: rgba(11, 61, 46, 0.05);
 }
 
 .hero-shape-b {
@@ -496,7 +541,7 @@ const categoryCards = computed(() =>
   left: -80px;
   width: 300px;
   height: 300px;
-  background: rgba(234, 88, 12, 0.06);
+  background: rgba(232, 93, 4, 0.05);
 }
 
 .seller-section {
@@ -568,7 +613,7 @@ const categoryCards = computed(() =>
 }
 
 .section-eyebrow-light {
-  color: #a7f3d0;
+  color: #cbe3d6;
 }
 
 .section-head h2 {
@@ -614,8 +659,8 @@ const categoryCards = computed(() =>
   justify-content: center;
   width: 48px;
   height: 48px;
-  color: var(--color-primary);
-  background: var(--color-muted);
+  color: #ffffff;
+  background: var(--color-primary);
   border-radius: 14px;
 }
 
@@ -668,9 +713,9 @@ const categoryCards = computed(() =>
   padding: 48px;
   overflow: hidden;
   color: #ffffff;
-  background: linear-gradient(135deg, var(--color-foreground), #0b7a5f);
+  background: linear-gradient(135deg, var(--color-primary-strong), var(--color-secondary));
   border-radius: 28px;
-  box-shadow: 0 30px 70px rgba(6, 78, 59, 0.24);
+  box-shadow: 0 30px 70px rgba(11, 61, 46, 0.24);
 }
 
 .final-cta-copy {
@@ -688,7 +733,7 @@ const categoryCards = computed(() =>
 .final-cta p {
   font-size: 14px;
   line-height: 1.8;
-  color: #a7f3d0;
+  color: #cbe3d6;
 }
 
 .final-cta-actions {
@@ -763,11 +808,13 @@ const categoryCards = computed(() =>
   }
 
   .hero-actions {
+    flex-direction: column;
     margin-bottom: 24px;
   }
 
   .hero-actions .btn {
-    flex: 1;
+    flex: none;
+    width: 100%;
     min-height: 50px;
     padding: 0 16px;
   }
@@ -891,11 +938,13 @@ const categoryCards = computed(() =>
   }
 
   .final-cta-actions {
+    flex-direction: column;
     width: 100%;
   }
 
   .final-cta-actions .btn {
-    flex: 1;
+    flex: none;
+    width: 100%;
   }
 }
 </style>

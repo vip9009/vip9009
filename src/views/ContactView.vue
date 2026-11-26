@@ -6,8 +6,8 @@ import { asset } from '@/utils'
 
 const features = [
   { icon: 'shield', title: '正品保证', text: '支持官方防伪扫码验证' },
-  { icon: 'globe', title: '全球包邮', text: '海外直邮，覆盖多个国家' },
-  { icon: 'truck', title: '现货速发', text: '确认后尽快安排发出' },
+  { icon: 'globe', title: '多国可发', text: '运费与时效微信确认' },
+  { icon: 'truck', title: '物流可查', text: '发出后给单号' },
   { icon: 'scan', title: '扫码验证', text: '收到货后可核对真伪' }
 ]
 </script>
@@ -292,7 +292,7 @@ const features = [
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.14em;
-  color: #a7f3d0;
+  color: #cbe3d6;
 }
 
 .seller-copy h2 {
@@ -305,7 +305,7 @@ const features = [
   max-width: 680px;
   font-size: 14px;
   line-height: 1.9;
-  color: #d1fae5;
+  color: #e7efe9;
 }
 
 .contact-grid {

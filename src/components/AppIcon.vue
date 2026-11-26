@@ -81,6 +81,18 @@ defineProps({
       <rect x="3" y="14" width="7" height="7" rx="1" />
       <rect x="14" y="14" width="7" height="7" rx="1" />
     </template>
+    <template v-else-if="name === 'user'">
+      <circle cx="12" cy="8" r="3.4" />
+      <path d="M5.5 20c.6-3.4 3.2-5.6 6.5-5.6s5.9 2.2 6.5 5.6" />
+    </template>
+    <template v-else-if="name === 'chat'">
+      <path d="M21 11.5a8.4 8.4 0 0 1-8.4 8.4H7l-4 3v-5.6A8.4 8.4 0 0 1 11.4 3h1.2A8.4 8.4 0 0 1 21 11.4Z" />
+      <path d="M8 10h8M8 13.5h5" />
+    </template>
+    <template v-else-if="name === 'copy'">
+      <rect x="9" y="9" width="11" height="11" rx="2" />
+      <path d="M15 5H6a2 2 0 0 0-2 2v9" />
+    </template>
     <template v-else-if="name === 'external'">
       <path d="M14 4h6v6M20 4l-8 8" />
       <path d="M20 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5" />

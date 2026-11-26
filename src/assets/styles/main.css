@@ -21,23 +21,23 @@
 }
 
 :root {
-  --color-primary: #059669;
-  --color-primary-strong: #047857;
-  --color-on-primary: #000000;
-  --color-secondary: #10b981;
-  --color-on-secondary: #0f172a;
-  --color-accent: #ea580c;
-  --color-on-accent: #000000;
-  --color-background: #ecfdf5;
-  --color-foreground: #064e3b;
+  --color-primary: #0b3d2e;
+  --color-primary-strong: #072a20;
+  --color-on-primary: #ffffff;
+  --color-secondary: #1f6f54;
+  --color-on-secondary: #ffffff;
+  --color-accent: #e85d04;
+  --color-on-accent: #111111;
+  --color-background: #f7f3ea;
+  --color-foreground: #10231b;
   --color-card: #ffffff;
-  --color-card-foreground: #064e3b;
-  --color-muted: #e8f1f3;
-  --color-muted-foreground: #475569;
-  --color-border: #a7f3d0;
-  --color-destructive: #dc2626;
+  --color-card-foreground: #10231b;
+  --color-muted: #efe9dd;
+  --color-muted-foreground: #5c665f;
+  --color-border: #dcd5c6;
+  --color-destructive: #b91c1c;
   --color-on-destructive: #ffffff;
-  --color-ring: #059669;
+  --color-ring: #0b3d2e;
 
   --font-heading: "Rubik", "PingFang SC", "Microsoft YaHei", "Source Han Sans SC", "Noto Sans CJK SC", sans-serif;
   --font-body: "Nunito Sans", "PingFang SC", "Microsoft YaHei", "Source Han Sans SC", "Noto Sans CJK SC", sans-serif;
@@ -45,8 +45,8 @@
   --radius-sm: 10px;
   --radius-md: 16px;
   --radius-lg: 24px;
-  --shadow-card: 0 18px 40px rgba(6, 78, 59, 0.08);
-  --shadow-hover: 0 26px 60px rgba(6, 78, 59, 0.16);
+  --shadow-card: 0 18px 40px rgba(11, 61, 46, 0.08);
+  --shadow-hover: 0 26px 60px rgba(11, 61, 46, 0.16);
   --section-gap: 56px;
   --wrapper: 1240px;
 
@@ -146,7 +146,7 @@ button {
 
 .header-top :focus-visible,
 .footer :focus-visible {
-  outline-color: #a7f3d0;
+  outline-color: #cbe3d6;
 }
 
 #app,
@@ -176,8 +176,8 @@ button {
 /* Shared grids */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
 }
 
 .content-card {
@@ -324,7 +324,7 @@ button {
 
 /* Image placeholder shown until a product image paints */
 .img-placeholder {
-  background: linear-gradient(90deg, #f7fffb 25%, #d9f7ea 37%, #f7fffb 63%);
+  background: linear-gradient(90deg, #f7f3ea 25%, #e9e1d2 37%, #f7f3ea 63%);
   background-size: 400% 100%;
   animation: img-shimmer 1.4s ease infinite;
 }
@@ -407,8 +407,8 @@ button {
 
 @media (max-width: 1200px) {
   .product-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
   }
 }
 
@@ -419,9 +419,15 @@ button {
   }
 }
 
+@media (max-width: 960px) {
+  .site-content {
+    padding-bottom: 88px;
+  }
+}
+
 @media (max-width: 768px) {
   .site-content {
-    padding: 116px 16px 0;
+    padding: 116px 16px 88px;
   }
 
   .home-row {
