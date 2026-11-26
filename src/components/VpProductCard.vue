@@ -23,8 +23,9 @@ const brand = computed(() => detectBrand(props.product))
 const route = computed(() => productRoute(props.sectionId, props.index))
 const image = computed(() => asset(props.product.localImage))
 const badges = computed(() => {
-  const list = Array.isArray(props.product.badges) ? props.product.badges : []
-  return list.slice(0, 2)
+  const list = Array.isArray(props.product.badges) ? [...props.product.badges] : []
+  if (props.product.recommend && !list.includes('店长推荐')) list.push('店长推荐')
+  return list.slice(0, 4)
 })
 const isHot = computed(
   () => props.product.hot === true || badges.value.some((badge) => String(badge).toUpperCase() === 'HOT')

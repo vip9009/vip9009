@@ -1,0 +1,1561 @@
+{
+  "id": "wanghong",
+  "title": "网红系列",
+  "sort": 8,
+  "products": [
+    {
+      "title": "RELX BLADE 悦刻 50000 Puffs",
+      "price": 188,
+      "imageAlt": "RELX BLADE 悦刻 50000 Puffs",
+      "localImage": "/images/products/vp-46435.webp",
+      "description": "RELX BLADE 悦刻 50000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 46435,
+      "specs": {
+        "口数": "50000 口",
+        "类型": "网红系列",
+        "品牌": "RELX",
+        "口味": "10 种"
+      },
+      "brand": "RELX",
+      "badges": [
+        "HOT",
+        "上新口味",
+        "Korea",
+        "模式切换"
+      ],
+      "hot": true,
+      "options": [
+        "青苹果",
+        "青提",
+        "桃子冰",
+        "薄荷",
+        "西瓜",
+        "香橙酸奶",
+        "芒果",
+        "海盐柠檬",
+        "香芋冰",
+        "奇异果百香石榴"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "VAPRIVÉE 香水包 50000 Puffs",
+      "price": 238,
+      "imageAlt": "VAPRIVÉE 香水包 50000 Puffs",
+      "localImage": "/images/products/vp-34926.webp",
+      "description": "VAPRIVÉE 香水包 50000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 34926,
+      "specs": {
+        "口数": "50000 口",
+        "类型": "网红系列",
+        "品牌": "VAPRIVÉE",
+        "口味": "7 种"
+      },
+      "brand": "VAPRIVÉE",
+      "badges": [
+        "HOT",
+        "模式切换"
+      ],
+      "hot": true,
+      "options": [
+        "双芒果",
+        "樱桃苹果",
+        "白桃覆盆子",
+        "山竹红毛丹龙眼",
+        "可乐",
+        "迈阿密薄荷",
+        "西瓜"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "HAMCAL HOOKA 胡卡 50000 Puffs",
+      "price": 288,
+      "imageAlt": "HAMCAL HOOKA 胡卡 50000 Puffs",
+      "localImage": "/images/products/vp-31565.webp",
+      "description": "HAMCAL HOOKA 胡卡 50000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 31565,
+      "specs": {
+        "口数": "50000 口",
+        "类型": "网红系列",
+        "品牌": "HAMCAL",
+        "口味": "9 种"
+      },
+      "brand": "HAMCAL",
+      "badges": [
+        "HOT",
+        "模式切换",
+        "自定义"
+      ],
+      "hot": true,
+      "options": [
+        "墨西哥芒果",
+        "双苹果",
+        "蓝莓冰",
+        "桃子芒果西瓜",
+        "黑加仑冰",
+        "奇异果百香果番石榴",
+        "柠檬薄荷",
+        "混合水果",
+        "草莓奇异果"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "OLIT HookaLit MEGA 奥利特 灯光战车 200000 Puffs",
+      "price": 438,
+      "imageAlt": "OLIT HookaLit MEGA 奥利特 灯光战车 200000 Puffs",
+      "localImage": "/images/products/vp-30955.webp",
+      "description": "OLIT HookaLit MEGA 奥利特 灯光战车 200000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 30955,
+      "specs": {
+        "口数": "200000 口",
+        "类型": "网红系列",
+        "品牌": "OLIT",
+        "口味": "2 种"
+      },
+      "brand": "OLIT",
+      "badges": [
+        "HOT",
+        "模式切换"
+      ],
+      "hot": true,
+      "stock": false,
+      "options": [
+        "冰爽薄荷",
+        "口香糖薄荷"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Cigaronne Black Dragon 卡比龙 1200*5 Puffs",
+      "price": 158,
+      "imageAlt": "Cigaronne Black Dragon 卡比龙 1200*5 Puffs",
+      "localImage": "/images/products/vp-30797.webp",
+      "description": "Cigaronne Black Dragon 卡比龙 1200*5 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 30797,
+      "specs": {
+        "类型": "网红系列",
+        "品牌": "Cigaronne",
+        "口味": "13 种"
+      },
+      "brand": "Cigaronne",
+      "badges": [
+        "NIC1-2%"
+      ],
+      "options": [
+        "5支盒装-甜瓜",
+        "5支盒装-草莓",
+        "5支盒装-可乐",
+        "5支盒装-椰子",
+        "5支盒装-莓果",
+        "5支盒装-绿豆",
+        "5支盒装-荔枝",
+        "5支盒装-葡萄",
+        "5支盒装-矿泉水",
+        "5支盒装-苹果",
+        "5支盒装-菠萝",
+        "5支盒装-西瓜",
+        "5支盒装-薄荷"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "BLOOW Bubble 泡泡布洛瓦 65000 Puffs",
+      "price": 258,
+      "imageAlt": "BLOOW Bubble 泡泡布洛瓦 65000 Puffs",
+      "localImage": "/images/products/vp-30541.webp",
+      "description": "BLOOW Bubble 泡泡布洛瓦 65000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 30541,
+      "specs": {
+        "口数": "65000 口",
+        "类型": "网红系列",
+        "品牌": "BLOOW",
+        "口味": "4 种"
+      },
+      "brand": "BLOOW",
+      "badges": [
+        "HOT"
+      ],
+      "hot": true,
+      "stock": false,
+      "options": [
+        "西瓜",
+        "夏威夷",
+        "芬达",
+        "龙梅"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "RELX PowerCase 16000 Puffs",
+      "price": 138,
+      "imageAlt": "RELX PowerCase 16000 Puffs",
+      "localImage": "/images/products/vp-30182.webp",
+      "description": "RELX PowerCase 16000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 30182,
+      "specs": {
+        "口数": "16000 口",
+        "类型": "网红系列",
+        "品牌": "RELX",
+        "口味": "22 种"
+      },
+      "priceMax": 198,
+      "brand": "RELX",
+      "badges": [
+        "HOT",
+        "上新口味",
+        "5盒增主机",
+        "模式切换"
+      ],
+      "hot": true,
+      "options": [
+        "主机:黑色 橙色 蓝色 绿色 蓝银",
+        "烟弹-零度薄荷",
+        "烟弹-青提铁观音",
+        "烟弹-宝矿力",
+        "烟弹-极凉青提",
+        "烟弹-脆苹果",
+        "烟弹-冰雪草莓",
+        "烟弹-零度可乐",
+        "烟弹-矿泉水",
+        "烟弹-三重芒果",
+        "烟弹-铁观音",
+        "烟弹-百香果",
+        "烟弹-西柚百香果",
+        "烟弹-海盐柠檬",
+        "烟弹-荔枝",
+        "烟弹-粉红芭乐",
+        "烟弹-蜜桃",
+        "烟弹-茉莉花茶",
+        "烟弹-西瓜冰",
+        "烟弹-绿豆冰",
+        "烟弹-飓风葡萄",
+        "烟弹-老冰棍"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Snowplus Hammer Ultra 雪茄大板砖(新) 20000 Puffs",
+      "price": 118,
+      "imageAlt": "Snowplus Hammer Ultra 雪茄大板砖(新) 20000 Puffs",
+      "localImage": "/images/products/vp-29470.webp",
+      "description": "Snowplus Hammer Ultra 雪茄大板砖(新) 20000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 29470,
+      "specs": {
+        "口数": "20000 口",
+        "类型": "网红系列",
+        "品牌": "SnowPlus",
+        "口味": "11 种"
+      },
+      "brand": "SnowPlus",
+      "badges": [
+        "HOT",
+        "NIC1-2%"
+      ],
+      "hot": true,
+      "options": [
+        "西瓜冰",
+        "椰子水",
+        "桃子冰",
+        "可乐冰",
+        "柠檬菠萝",
+        "青柠檬",
+        "极地薄荷",
+        "茉莉龙井",
+        "杨枝甘露",
+        "青提冰",
+        "百香果西柚"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Snowplus DASHX 鸭嘴(新) 4000 Puffs",
+      "price": 90,
+      "imageAlt": "Snowplus DASHX 鸭嘴(新) 4000 Puffs",
+      "localImage": "/images/products/vp-29446.webp",
+      "description": "Snowplus DASHX 鸭嘴(新) 4000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 29446,
+      "specs": {
+        "口数": "4000 口",
+        "类型": "网红系列",
+        "品牌": "SnowPlus",
+        "口味": "25 种"
+      },
+      "brand": "SnowPlus",
+      "badges": [
+        "HOT",
+        "上新口味",
+        "NIC1-2%",
+        "极致顺滑"
+      ],
+      "hot": true,
+      "options": [
+        "冰西瓜",
+        "海盐气泡",
+        "奇异果百香果",
+        "锡兰柠檬茶",
+        "青提",
+        "西柚百香果",
+        "冰荔枝",
+        "冰柠青檬",
+        "马蹄爽",
+        "洛神花茶",
+        "矿泉水",
+        "高山白桃",
+        "茉莉龙井茶",
+        "黑龙冰",
+        "花香乌龙",
+        "蜂蜜柚子茶",
+        "大红袍",
+        "迈阿密薄荷",
+        "椰子水",
+        "冰可乐",
+        "黄瓜柠檬水",
+        "热带水果",
+        "雪梨花开",
+        "绿豆雪糕",
+        "伯爵红茶"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Float X 花福 10000 Puffs",
+      "price": 99,
+      "imageAlt": "Float X 花福 10000 Puffs",
+      "localImage": "/images/products/vp-27196.webp",
+      "description": "Float X 花福 10000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 27196,
+      "specs": {
+        "口数": "10000 口",
+        "类型": "网红系列",
+        "品牌": "Float X",
+        "口味": "3 种"
+      },
+      "brand": "Float X",
+      "badges": [
+        "HOT",
+        "强击喉",
+        "极致顺滑"
+      ],
+      "hot": true,
+      "stock": false,
+      "options": [
+        "可乐",
+        "薄荷",
+        "矿泉水"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "ELFBAR DUKE 25000 Puffs",
+      "price": 270,
+      "imageAlt": "ELFBAR DUKE 25000 Puffs",
+      "localImage": "/images/products/vp-26146.webp",
+      "description": "ELFBAR DUKE 25000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 26146,
+      "specs": {
+        "口数": "25000 口",
+        "类型": "网红系列",
+        "品牌": "ELFBAR",
+        "口味": "31 种"
+      },
+      "priceMax": 315,
+      "brand": "ELFBAR",
+      "badges": [
+        "HOT",
+        "Korea",
+        "NIC1-2%"
+      ],
+      "hot": true,
+      "options": [
+        "饿版-西瓜",
+        "饿版-薄荷",
+        "饿版-葡萄石榴",
+        "饿版-菠萝桃子",
+        "饿版-酸黑莓",
+        "饿版-樱桃柠檬",
+        "饿版-酸葡萄",
+        "饿版-柠檬青柠",
+        "饿版-浆果",
+        "饿版-草莓猕猴桃",
+        "饿版-蓝莓树莓",
+        "饿版-西西里橙子",
+        "饿版-樱桃爆汁",
+        "饿版-蔓越莓菠萝",
+        "韩版-西柚饮料",
+        "韩版-柚子冰",
+        "韩版-柠檬青柠",
+        "韩版-西瓜冰",
+        "韩版-葡萄樱桃",
+        "韩版-阳光玫瑰",
+        "韩版-桃子冰",
+        "韩版-菠萝冰",
+        "韩版-茉莉花绿茶",
+        "韩版-扎夫兰玫瑰",
+        "韩版-黄桃酸奶",
+        "韩版-苹果冰",
+        "韩版-草莓猕猴桃",
+        "韩版-迈阿密薄荷",
+        "韩版-可乐冰",
+        "韩版-蓝莓树莓冰",
+        "韩版-矿泉水"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "ELFBAR Ice King 联名版 行李箱  25000 Puffs",
+      "price": 278,
+      "imageAlt": "ELFBAR Ice King 联名版 行李箱  25000 Puffs",
+      "localImage": "/images/products/vp-25953.webp",
+      "description": "ELFBAR Ice King 联名版 行李箱  25000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 25953,
+      "specs": {
+        "口数": "25000 口",
+        "类型": "网红系列",
+        "品牌": "ELFBAR",
+        "口味": "1 种"
+      },
+      "brand": "ELFBAR",
+      "badges": [
+        "HOT",
+        "凉度调节"
+      ],
+      "hot": true,
+      "options": [
+        "苏打"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "PUFFMI FLORA 香水包 25000 Puffs",
+      "price": 188,
+      "imageAlt": "PUFFMI FLORA 香水包 25000 Puffs",
+      "localImage": "/images/products/vp-25636.webp",
+      "description": "PUFFMI FLORA 香水包 25000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 25636,
+      "specs": {
+        "口数": "25000 口",
+        "类型": "网红系列",
+        "品牌": "PUFFMI",
+        "口味": "7 种"
+      },
+      "brand": "PUFFMI",
+      "badges": [
+        "HOT",
+        "Korea",
+        "NIC1-2%"
+      ],
+      "hot": true,
+      "options": [
+        "韩版25K-菠萝",
+        "韩版25K-绿豆",
+        "韩版25K-柠檬",
+        "韩版25K-黑加仑冰",
+        "韩版25K-宝矿力",
+        "韩版25K-猕猴桃",
+        "韩版25K-香蕉"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "AL FAKHER Ultra 太空梦 25000 Puffs",
+      "price": 268,
+      "imageAlt": "AL FAKHER Ultra 太空梦 25000 Puffs",
+      "localImage": "/images/products/vp-25262.webp",
+      "description": "AL FAKHER Ultra 太空梦 25000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 25262,
+      "specs": {
+        "口数": "25000 口",
+        "类型": "网红系列",
+        "品牌": "AL FAKHER",
+        "口味": "21 种"
+      },
+      "brand": "AL FAKHER",
+      "badges": [
+        "HOT",
+        "呼吸灯",
+        "模式切换"
+      ],
+      "hot": true,
+      "options": [
+        "蓝莓覆盆子-蓝色",
+        "留兰香薄荷-浅绿色",
+        "柠檬薄荷-浅绿色",
+        "蓝莓柠檬水-土豪金色",
+        "蓝拉兹爆破-蓝紫色",
+        "浆果蓝-紫色",
+        "融合爆珠-浅紫色",
+        "芒果菠萝-金色",
+        "葡萄薄荷-浅紫色",
+        "冰蓝莓-紫色",
+        "太空梦想-银灰色",
+        "混合莓果-紫色",
+        "柠檬青柠樱桃气泡",
+        "蓝莓薄荷",
+        "葡萄莓果-紫色",
+        "西瓜樱桃",
+        "西瓜菠萝-黄色",
+        "西瓜奇异果-浅绿色",
+        "蓝莓酸覆盆子-粉红色",
+        "胡巴泡泡糖-粉色",
+        "樱桃冰-粉色"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "LAMI Turbo 徕米冰爆 10000 Puffs",
+      "price": 105,
+      "imageAlt": "LAMI Turbo 徕米冰爆 10000 Puffs",
+      "localImage": "/images/products/vp-24747.webp",
+      "description": "LAMI Turbo 徕米冰爆 10000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 24747,
+      "specs": {
+        "口数": "10000 口",
+        "类型": "网红系列",
+        "品牌": "LAMI",
+        "口味": "20 种"
+      },
+      "brand": "LAMI",
+      "badges": [
+        "HOT",
+        "模式切换"
+      ],
+      "hot": true,
+      "options": [
+        "水蜜桃",
+        "菠萝冰",
+        "青苹果",
+        "青柑普洱茶",
+        "海盐荔枝",
+        "极凉西瓜",
+        "鸡尾酒薄荷",
+        "极凉芒果",
+        "西柚百香果",
+        "冰山薄荷",
+        "绿豆冰棒",
+        "椰子水",
+        "青提茉莉茶",
+        "奇异果草莓",
+        "手打柠檬茶",
+        "山竹番石榴",
+        "茉莉龙井",
+        "冰爽青柠",
+        "海盐柠檬",
+        "巨峰葡萄"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "VOZOL NEON 微纵 45000 Puffs",
+      "price": 338,
+      "imageAlt": "VOZOL NEON 微纵 45000 Puffs",
+      "localImage": "/images/products/vp-21583.webp",
+      "description": "VOZOL NEON 微纵 45000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 21583,
+      "specs": {
+        "口数": "45000 口",
+        "类型": "网红系列",
+        "品牌": "VOZOL",
+        "口味": "1 种"
+      },
+      "brand": "VOZOL",
+      "badges": [
+        "HOT",
+        "呼吸灯",
+        "模式切换",
+        "自定义"
+      ],
+      "hot": true,
+      "stock": false,
+      "options": [
+        "草莓玛格丽特"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "VOZOL STAR 微纵 40000 Puffs",
+      "price": 318,
+      "imageAlt": "VOZOL STAR 微纵 40000 Puffs",
+      "localImage": "/images/products/vp-21551.webp",
+      "description": "VOZOL STAR 微纵 40000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 21551,
+      "specs": {
+        "口数": "40000 口",
+        "类型": "网红系列",
+        "品牌": "VOZOL",
+        "口味": "7 种"
+      },
+      "brand": "VOZOL",
+      "badges": [
+        "HOT",
+        "呼吸灯",
+        "强击喉",
+        "模式切换"
+      ],
+      "hot": true,
+      "stock": false,
+      "options": [
+        "蓝莓冰5%",
+        "蜜桃冰5%",
+        "草莓冰5%",
+        "樱桃可乐5%",
+        "柑橘汽水5%",
+        "草莓猕猴桃5%",
+        "蓝色拉兹冰5%"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "VOZOL RAVE 微纵 40000 Puffs",
+      "price": 318,
+      "imageAlt": "VOZOL RAVE 微纵 40000 Puffs",
+      "localImage": "/images/products/vp-21521.webp",
+      "description": "VOZOL RAVE 微纵 40000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 21521,
+      "specs": {
+        "口数": "40000 口",
+        "类型": "网红系列",
+        "品牌": "VOZOL",
+        "口味": "3 种"
+      },
+      "brand": "VOZOL",
+      "badges": [
+        "HOT",
+        "呼吸灯",
+        "模式切换"
+      ],
+      "hot": true,
+      "stock": false,
+      "options": [
+        "火龙果香蕉",
+        "芒果冰",
+        "奇异果百香果"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "DOJO OPAL 马卡龙 20000 Puffs",
+      "price": 288,
+      "imageAlt": "DOJO OPAL 马卡龙 20000 Puffs",
+      "localImage": "/images/products/vp-21249.webp",
+      "description": "DOJO OPAL 马卡龙 20000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 21249,
+      "specs": {
+        "口数": "20000 口",
+        "类型": "网红系列",
+        "品牌": "DOJO",
+        "口味": "8 种"
+      },
+      "brand": "DOJO",
+      "badges": [
+        "HOT",
+        "NIC1-2%",
+        "呼吸灯",
+        "模式切换"
+      ],
+      "hot": true,
+      "stock": false,
+      "options": [
+        "蜂蜜葡萄柚茶",
+        "雪茄",
+        "冰柠檬",
+        "橘子奶昔汽水",
+        "超强薄荷醇",
+        "宝矿力冰",
+        "阳光玫瑰冰",
+        "芦荟葡萄冰"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Bubblemon smoki 2.0 – POLA",
+      "price": 98,
+      "imageAlt": "Bubblemon smoki 2.0 – POLA",
+      "localImage": "/images/products/vp-21107.webp",
+      "description": "Bubblemon smoki 2.0 – POLA。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 21107,
+      "specs": {
+        "类型": "网红系列",
+        "品牌": "WE VAPE",
+        "口味": "4 种"
+      },
+      "brand": "WE VAPE",
+      "badges": [
+        "Korea",
+        "NIC1-2%"
+      ],
+      "stock": false,
+      "options": [
+        "青柠",
+        "热带冰爽冰水",
+        "芦荟葡萄",
+        "草莓"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "GEEKBAR HOOKAHX 流星 25000 Puffs",
+      "price": 255,
+      "imageAlt": "GEEKBAR HOOKAHX 流星 25000 Puffs",
+      "localImage": "/images/products/vp-20401.webp",
+      "description": "GEEKBAR HOOKAHX 流星 25000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 20401,
+      "specs": {
+        "口数": "25000 口",
+        "类型": "网红系列",
+        "品牌": "GEEKBAR",
+        "口味": "1 种"
+      },
+      "brand": "GEEKBAR",
+      "badges": [
+        "HOT",
+        "强击喉",
+        "模式切换"
+      ],
+      "hot": true,
+      "stock": false,
+      "options": [
+        "粉蓝棉花糖"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "OLIT HOOKALIT PRO 胡卡利特 60000 Puffs",
+      "price": 358,
+      "imageAlt": "OLIT HOOKALIT PRO 胡卡利特 60000 Puffs",
+      "localImage": "/images/products/vp-20298.webp",
+      "description": "OLIT HOOKALIT PRO 胡卡利特 60000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 20298,
+      "specs": {
+        "口数": "60000 口",
+        "类型": "网红系列",
+        "品牌": "OLIT",
+        "口味": "3 种"
+      },
+      "brand": "OLIT",
+      "badges": [
+        "模式切换"
+      ],
+      "stock": false,
+      "options": [
+        "黑加仑冰",
+        "芒果",
+        "薄荷口香糖"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "DRAGON BAR 阿童木 50000 Puffs",
+      "price": 328,
+      "imageAlt": "DRAGON BAR 阿童木 50000 Puffs",
+      "localImage": "/images/products/vp-20264.webp",
+      "description": "DRAGON BAR 阿童木 50000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 20264,
+      "specs": {
+        "口数": "50000 口",
+        "类型": "网红系列",
+        "品牌": "DRAGONBAR",
+        "口味": "4 种"
+      },
+      "brand": "DRAGONBAR",
+      "badges": [
+        "HOT",
+        "上新口味",
+        "Korea",
+        "NIC1-2%"
+      ],
+      "hot": true,
+      "options": [
+        "苹果芦荟",
+        "香蕉牛奶",
+        "奶油",
+        "红酒"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "ELFBAR Lush King 冰神 pro 35000 Puffs",
+      "price": 315,
+      "imageAlt": "ELFBAR Lush King 冰神 pro 35000 Puffs",
+      "localImage": "/images/products/vp-18610.webp",
+      "description": "ELFBAR Lush King 冰神 pro 35000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 18610,
+      "specs": {
+        "口数": "35000 口",
+        "类型": "网红系列",
+        "品牌": "ELFBAR",
+        "口味": "18 种"
+      },
+      "brand": "ELFBAR",
+      "badges": [
+        "HOT",
+        "上新口味",
+        "Korea",
+        "模式切换"
+      ],
+      "hot": true,
+      "options": [
+        "韩版40K-桃子冰",
+        "韩版40K-蓝莓树莓冰",
+        "韩版40K-柠檬青柠",
+        "韩版40K-草莓猕猴桃",
+        "韩版40K-葡萄樱桃",
+        "韩版40K-西瓜冰",
+        "韩版40K-阳光玫瑰",
+        "韩版40K-西柚饮料",
+        "韩版40K-迈阿密薄荷",
+        "韩版40K-菠萝冰",
+        "韩版40K-苹果冰",
+        "韩版40K-茉莉花绿茶",
+        "韩版40K-柚子冰",
+        "韩版40K-矿泉水",
+        "韩版40K-乌龙茶",
+        "韩版40K-可乐冰",
+        "韩版40K-扎夫兰玫瑰",
+        "韩版40K-黄桃酸奶"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "GEEKBAR PULSE 星空 25000 Puffs",
+      "price": 245,
+      "imageAlt": "GEEKBAR PULSE 星空 25000 Puffs",
+      "localImage": "/images/products/vp-17766.webp",
+      "description": "GEEKBAR PULSE 星空 25000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 17766,
+      "specs": {
+        "口数": "25000 口",
+        "类型": "网红系列",
+        "品牌": "GEEKBAR",
+        "口味": "8 种"
+      },
+      "brand": "GEEKBAR",
+      "badges": [
+        "HOT",
+        "强击喉",
+        "模式切换"
+      ],
+      "hot": true,
+      "stock": false,
+      "options": [
+        "西瓜冰",
+        "蓝莓冰沙",
+        "青苹果冰",
+        "草莓汽水",
+        "黑莓蓝莓",
+        "白桃树莓",
+        "菠萝酸芒果",
+        "树莓蜜桃青柠"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "AL FAKHER CRYSTAL 阿尔法赫 8000 Puffs",
+      "price": 128,
+      "imageAlt": "AL FAKHER CRYSTAL 阿尔法赫 8000 Puffs",
+      "localImage": "/images/products/vp-17254.webp",
+      "description": "AL FAKHER CRYSTAL 阿尔法赫 8000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 17254,
+      "specs": {
+        "口数": "8000 口",
+        "类型": "网红系列",
+        "品牌": "AL FAKHER",
+        "口味": "9 种"
+      },
+      "brand": "AL FAKHER",
+      "badges": [
+        "模式切换"
+      ],
+      "options": [
+        "桃子冰",
+        "芒果冰",
+        "柠檬青柠",
+        "混合莓果",
+        "柠檬薄荷",
+        "芒果菠萝",
+        "菠萝口香糖",
+        "薄荷口香糖",
+        "薄荷"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Bubblemon Graffiti-C 炫彩泡泡兽三代 30000 Puffs",
+      "price": 168,
+      "imageAlt": "Bubblemon Graffiti-C 炫彩泡泡兽三代 30000 Puffs",
+      "localImage": "/images/products/vp-17202.webp",
+      "description": "Bubblemon Graffiti-C 炫彩泡泡兽三代 30000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 17202,
+      "specs": {
+        "口数": "30000 口",
+        "类型": "网红系列",
+        "品牌": "WE VAPE",
+        "口味": "41 种"
+      },
+      "priceMax": 338,
+      "brand": "WE VAPE",
+      "badges": [
+        "HOT",
+        "4盒赠主机或烟弹",
+        "Korea",
+        "NIC1-2%"
+      ],
+      "hot": true,
+      "options": [
+        "美版单主机：粉色 绿色 蓝色 黄色",
+        "美版烟弹-椰子水",
+        "美版烟弹-老冰棍",
+        "美版烟弹-百香果",
+        "韩版单主机：粉色 绿色 蓝色 黄色 黑色",
+        "韩版套装(主机+烟弹)-西瓜蓝莓",
+        "韩版 套装(主机+烟弹)-迈阿密薄荷",
+        "韩版套装(主机+烟弹)-菠萝苹果",
+        "韩版套装(主机+烟弹)-芦荟葡萄",
+        "韩版套装(主机+烟弹)-热带水果",
+        "韩版套装(主机+烟弹)-柠檬汁",
+        "韩版套装(主机+烟弹)-芒果",
+        "韩版套装(主机+烟弹)-青提",
+        "韩版套装(主机+烟弹)-桃子冰",
+        "韩版套装(主机+烟弹)-草莓酸奶",
+        "韩版套装(主机+烟弹)-椰林飘香",
+        "韩版套装(主机+烟弹)-蓝莓樱桃",
+        "韩版套装(主机+烟弹)-青葡萄",
+        "韩版套装(主机+烟弹)-蓝莓树莓",
+        "韩版套装(主机+烟弹)-西瓜",
+        "韩版套装(主机+烟弹)-老冰棍",
+        "韩版套装(主机+烟弹)-冰镇西瓜",
+        "韩版套装(主机+烟弹)-海盐柠檬",
+        "韩版烟弹-西瓜蓝莓",
+        "韩版烟弹-迈阿密薄荷",
+        "韩版烟弹-菠萝苹果",
+        "韩版烟弹-芦荟葡萄",
+        "韩版烟弹-热带水果",
+        "韩版烟弹-柠檬汁",
+        "韩版烟弹-芒果",
+        "韩版烟弹-青提",
+        "韩版烟弹-桃子冰",
+        "韩版烟弹-草莓酸奶",
+        "韩版烟弹-椰林飘香",
+        "韩版烟弹-蓝莓樱桃",
+        "韩版烟弹-青葡萄",
+        "韩版烟弹-蓝莓树莓",
+        "韩版烟弹-西瓜",
+        "韩版烟弹-老冰棍",
+        "韩版烟弹-冰镇西瓜",
+        "韩版烟弹-海盐柠檬"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Al Fakher Crown Bar E-Hose X 阿尔法赫 水烟壶 60000 Puffs",
+      "price": 388,
+      "imageAlt": "Al Fakher Crown Bar E-Hose X 阿尔法赫 水烟壶 60000 Puffs",
+      "localImage": "/images/products/vp-15968.webp",
+      "description": "Al Fakher Crown Bar E-Hose X 阿尔法赫 水烟壶 60000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 15968,
+      "specs": {
+        "口数": "60000 口",
+        "类型": "网红系列",
+        "品牌": "AL FAKHER",
+        "口味": "4 种"
+      },
+      "brand": "AL FAKHER",
+      "badges": [
+        "HOT",
+        "模式切换"
+      ],
+      "hot": true,
+      "options": [
+        "双苹果",
+        "口香糖薄荷",
+        "柠檬薄荷",
+        "魔法之爱"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Al Fakher Crown Bar MEGAMAX 阿尔法赫 40000 Puffs",
+      "price": 228,
+      "imageAlt": "Al Fakher Crown Bar MEGAMAX 阿尔法赫 40000 Puffs",
+      "localImage": "/images/products/vp-15377.webp",
+      "description": "Al Fakher Crown Bar MEGAMAX 阿尔法赫 40000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 15377,
+      "specs": {
+        "口数": "40000 口",
+        "类型": "网红系列",
+        "品牌": "AL FAKHER",
+        "口味": "3 种"
+      },
+      "brand": "AL FAKHER",
+      "stock": false,
+      "options": [
+        "薄荷",
+        "口香糖薄荷",
+        "莓果冰"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Bubblemon Graffiti 炫彩泡泡兽一代 35000 Puffs",
+      "price": 198,
+      "imageAlt": "Bubblemon Graffiti 炫彩泡泡兽一代 35000 Puffs",
+      "localImage": "/images/products/vp-14841.webp",
+      "description": "Bubblemon Graffiti 炫彩泡泡兽一代 35000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 14841,
+      "specs": {
+        "口数": "35000 口",
+        "类型": "网红系列",
+        "品牌": "WE VAPE",
+        "口味": "22 种"
+      },
+      "priceMax": 288,
+      "brand": "WE VAPE",
+      "badges": [
+        "HOT",
+        "上新口味",
+        "Korea",
+        "NIC1-2%"
+      ],
+      "hot": true,
+      "options": [
+        "韩版-柠檬汽水1%",
+        "韩版-菠萝苹果1%",
+        "韩版-草莓酸奶1%",
+        "韩版-芦荟葡萄1%",
+        "韩版-芒果1%",
+        "韩版-黑加仑薄荷1%",
+        "韩版-热带水果1%",
+        "韩版-冰苔原莓1%",
+        "韩版-能量饮料1%",
+        "韩版-7号烟草1%",
+        "韩版-迈阿密薄荷1%",
+        "美版-茉莉花茶3%",
+        "美版-桃子冰3%",
+        "美版-粉红柠檬水3%",
+        "美版-迈阿密薄荷3%",
+        "美版-青提3%",
+        "美版-怪兽能力饮料3%",
+        "美版-矿泉水3%",
+        "美版-双苹果3%",
+        "美版-黄金菠萝3%",
+        "美版-可乐3%",
+        "美版-甜瓜香蕉3%"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Al Fakher HyperMax 阿尔法赫 15000 Puffs",
+      "price": 118,
+      "imageAlt": "Al Fakher HyperMax 阿尔法赫 15000 Puffs",
+      "localImage": "/images/products/vp-14704.webp",
+      "description": "Al Fakher HyperMax 阿尔法赫 15000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 14704,
+      "specs": {
+        "口数": "15000 口",
+        "类型": "网红系列",
+        "品牌": "AL FAKHER",
+        "口味": "4 种"
+      },
+      "brand": "AL FAKHER",
+      "options": [
+        "双苹果",
+        "葡萄薄荷",
+        "柠檬薄荷",
+        "桃子冰"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Malone Bar 马龙克罗心 35000 Puffs",
+      "price": 238,
+      "imageAlt": "Malone Bar 马龙克罗心 35000 Puffs",
+      "localImage": "/images/products/vp-14636.webp",
+      "description": "Malone Bar 马龙克罗心 35000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 14636,
+      "specs": {
+        "口数": "35000 口",
+        "类型": "网红系列",
+        "品牌": "WE VAPE",
+        "口味": "10 种"
+      },
+      "brand": "WE VAPE",
+      "badges": [
+        "HOT",
+        "Korea",
+        "NIC1-2%",
+        "模式切换"
+      ],
+      "hot": true,
+      "options": [
+        "薄荷-1%",
+        "草莓-1%",
+        "西瓜-1%",
+        "宝矿力-1%",
+        "桃子-1%",
+        "青提-1%",
+        "可乐-1%",
+        "茉莉冰-1%",
+        "菠萝-1%",
+        "乌龙茶-1%"
+      ],
+      "recommend": true
+    },
+    {
+      "title": "AL FAKHER Crown Bar Ice Adjust 阿尔法赫 水晶版 15000 Puffs",
+      "price": 168,
+      "imageAlt": "AL FAKHER Crown Bar Ice Adjust 阿尔法赫 水晶版 15000 Puffs",
+      "localImage": "/images/products/vp-14250.webp",
+      "description": "AL FAKHER Crown Bar Ice Adjust 阿尔法赫 水晶版 15000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 14250,
+      "specs": {
+        "口数": "15000 口",
+        "类型": "网红系列",
+        "品牌": "AL FAKHER",
+        "口味": "17 种"
+      },
+      "brand": "AL FAKHER",
+      "badges": [
+        "HOT",
+        "上新口味",
+        "凉度调节",
+        "模式切换"
+      ],
+      "hot": true,
+      "options": [
+        "薄荷口香糖",
+        "蓝莓冰",
+        "黑加仑",
+        "葡萄薄荷",
+        "西瓜冰",
+        "魔法爱",
+        "芒果冰",
+        "菠萝冰",
+        "芒果菠萝",
+        "桃子冰",
+        "柠檬青柠",
+        "草莓力量",
+        "夏日梦境",
+        "黑加仑薄荷",
+        "草莓樱桃",
+        "葡萄",
+        "双苹果"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "TESIYI Ultra Shisha 星空 35000 Puffs",
+      "price": 268,
+      "imageAlt": "TESIYI Ultra Shisha 星空 35000 Puffs",
+      "localImage": "/images/products/vp-13944.webp",
+      "description": "TESIYI Ultra Shisha 星空 35000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 13944,
+      "specs": {
+        "口数": "35000 口",
+        "类型": "网红系列",
+        "品牌": "TESIYI",
+        "口味": "9 种"
+      },
+      "brand": "TESIYI",
+      "badges": [
+        "上新口味"
+      ],
+      "options": [
+        "LOVA666",
+        "柠檬薄荷",
+        "樱桃",
+        "口香糖薄荷",
+        "蓝莓薄荷",
+        "芒果冰",
+        "双苹果",
+        "芒果菠萝",
+        "混合浆果"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "AL FAKHER Crown Bar 阿尔法赫 12000 Puffs",
+      "price": 112,
+      "imageAlt": "AL FAKHER Crown Bar 阿尔法赫 12000 Puffs",
+      "localImage": "/images/products/vp-13556.webp",
+      "description": "AL FAKHER Crown Bar 阿尔法赫 12000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 13556,
+      "specs": {
+        "口数": "12000 口",
+        "类型": "网红系列",
+        "品牌": "AL FAKHER",
+        "口味": "2 种"
+      },
+      "brand": "AL FAKHER",
+      "options": [
+        "12K水滴音效-薄荷口香糖",
+        "12K水滴音效-蓝色薄雾"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "RELX ACE 悦刻 30000 Puffs",
+      "price": 168,
+      "imageAlt": "RELX ACE 悦刻 30000 Puffs",
+      "localImage": "/images/products/vp-13095.webp",
+      "description": "RELX ACE 悦刻 30000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 13095,
+      "specs": {
+        "口数": "30000 口",
+        "类型": "网红系列",
+        "品牌": "RELX",
+        "口味": "40 种"
+      },
+      "priceMax": 268,
+      "brand": "RELX",
+      "badges": [
+        "HOT",
+        "上新口味",
+        "Korea",
+        "模式切换"
+      ],
+      "hot": true,
+      "options": [
+        "韩版25K-茉莉绿茶",
+        "韩版25K-乌龙冰茶",
+        "30K-西瓜冰",
+        "30K-极地薄荷",
+        "30K-龙井茶",
+        "30K-菠萝",
+        "30K-茉莉花茶",
+        "30K-酸梅可乐",
+        "30K-青柠",
+        "30K-百香果",
+        "30K-冰爽荔枝",
+        "30K-绿豆冰",
+        "30K-巨峰葡萄",
+        "30K-草莓冰",
+        "30K-淡香铁观音",
+        "30K-多汁蜜桃冰",
+        "30K-芭乐番石榴",
+        "30K-海盐柠檬",
+        "30K-黄金铁观音",
+        "30K-冰椰子水",
+        "30K-西瓜茉莉",
+        "30K-蜜桃乌龙",
+        "30K-劲爽奇异果",
+        "30K-沙士汽水",
+        "20K-开心果",
+        "20K-鲜桃",
+        "20K-三重芒果",
+        "20K-西瓜冰",
+        "20K-双苹果",
+        "20K-樱桃",
+        "20K-清新薄荷",
+        "20K-菠萝百香果",
+        "20K-爆裂草莓",
+        "20K-奇异果番石榴百香果",
+        "20K-酸葡萄",
+        "20K-香芋冰淇淋",
+        "20K-蓝莓冰",
+        "20K-蓝莓覆盆子",
+        "20K-桃子芒果",
+        "20K-老冰棍"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "ELFBAR Ice King 冰神夏日版 40000 Puffs",
+      "price": 208,
+      "imageAlt": "ELFBAR Ice King 冰神夏日版 40000 Puffs",
+      "localImage": "/images/products/vp-12909.webp",
+      "description": "ELFBAR Ice King 冰神夏日版 40000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 12909,
+      "specs": {
+        "口数": "40000 口",
+        "类型": "网红系列",
+        "品牌": "ELFBAR",
+        "口味": "1 种"
+      },
+      "brand": "ELFBAR",
+      "badges": [
+        "HOT",
+        "凉度调节"
+      ],
+      "hot": true,
+      "stock": false,
+      "options": [
+        "铁观音"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "ELFBAR TRIO 冰神 30000 Puffs",
+      "price": 298,
+      "imageAlt": "ELFBAR TRIO 冰神 30000 Puffs",
+      "localImage": "/images/products/vp-10764.webp",
+      "description": "ELFBAR TRIO 冰神 30000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 10764,
+      "specs": {
+        "口数": "30000 口",
+        "类型": "网红系列",
+        "品牌": "ELFBAR",
+        "口味": "2 种"
+      },
+      "brand": "ELFBAR",
+      "badges": [
+        "模式切换",
+        "自定义"
+      ],
+      "stock": false,
+      "options": [
+        "蓝莓覆盆子冰",
+        "草莓冰"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Solo Series 50000 Puffs",
+      "price": 268,
+      "imageAlt": "Solo Series 50000 Puffs",
+      "localImage": "/images/products/vp-9866.webp",
+      "description": "Solo Series 50000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 9866,
+      "specs": {
+        "口数": "50000 口",
+        "类型": "网红系列",
+        "品牌": "SOLOBAR",
+        "口味": "11 种"
+      },
+      "brand": "SOLOBAR",
+      "badges": [
+        "模式切换",
+        "自定义"
+      ],
+      "options": [
+        "草莓西瓜",
+        "西瓜",
+        "菠萝苹果",
+        "多汁蜜桃",
+        "桃莓冰",
+        "樱花葡萄",
+        "混合莓果",
+        "迈阿密薄荷",
+        "莓果芝士蛋糕",
+        "西瓜草莓泡泡糖",
+        "草莓奇异果"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Bubblemon Graffiti-2 炫彩 泡泡兽二代 30000 Puffs",
+      "price": 188,
+      "imageAlt": "Bubblemon Graffiti-2 炫彩 泡泡兽二代 30000 Puffs",
+      "localImage": "/images/products/vp-9835.webp",
+      "description": "Bubblemon Graffiti-2 炫彩 泡泡兽二代 30000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 9835,
+      "specs": {
+        "口数": "30000 口",
+        "类型": "网红系列",
+        "品牌": "WE VAPE",
+        "口味": "45 种"
+      },
+      "priceMax": 338,
+      "brand": "WE VAPE",
+      "badges": [
+        "HOT",
+        "4盒赠主机或烟弹",
+        "Korea",
+        "NIC1-2%"
+      ],
+      "hot": true,
+      "options": [
+        "单主机：绿色 白色 黄色 粉色 红色 黑色 蓝色",
+        "套装(主机+烟弹)-草莓酸奶",
+        "套装(主机+烟弹)-芦荟葡萄",
+        "套装(主机+烟弹)-黑加仑薄荷",
+        "套装(主机+烟弹)-热带水果",
+        "套装(主机+烟弹)-桃子芒果",
+        "套装(主机+烟弹)-菠萝苹果",
+        "套装(主机+烟弹)-西瓜",
+        "套装(主机+烟弹)-蜂蜜椰子",
+        "套装(主机+烟弹)-桃子冰",
+        "套装(主机+烟弹)-芒果",
+        "套装(主机+烟弹)-薄荷",
+        "套装(主机+烟弹)-柠檬汽水",
+        "套装(主机+烟弹)-蓝莓树莓",
+        "套装(主机+烟弹)-西瓜蓝莓",
+        "套装(主机+烟弹)-蓝莓樱桃",
+        "套装(主机+烟弹)-阳光玫瑰",
+        "套装(主机+烟弹)-海盐柠檬",
+        "套装(主机+烟弹)-青提1.98%",
+        "套装(主机+烟弹)-西瓜沙冰1.98%",
+        "套装(主机+烟弹)-老冰棍1.98%",
+        "套装(主机+烟弹)-绿豆1.98%",
+        "套装(主机+烟弹)-龙井1.98%",
+        "烟弹-草莓酸奶",
+        "烟弹-芦荟葡萄",
+        "烟弹-黑加仑薄荷",
+        "烟弹-热带水果",
+        "烟弹-桃子芒果",
+        "烟弹-菠萝苹果",
+        "烟弹-西瓜",
+        "烟弹-蜂蜜椰子",
+        "烟弹-桃子冰",
+        "烟弹-芒果",
+        "烟弹-薄荷",
+        "烟弹-柠檬汽水",
+        "烟弹-蓝莓树莓",
+        "烟弹-西瓜蓝莓",
+        "烟弹-蓝莓樱桃",
+        "烟弹-阳光玫瑰",
+        "烟弹-海盐柠檬",
+        "烟弹-青提1.98%",
+        "烟弹-西瓜沙冰1.98%",
+        "烟弹-老冰棍1.98%",
+        "烟弹-绿豆1.98%",
+        "烟弹-龙井1.98%"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "YOOZ LINKX 柚子小天才 25000 Puffs",
+      "price": 278,
+      "imageAlt": "YOOZ LINKX 柚子小天才 25000 Puffs",
+      "localImage": "/images/products/vp-6157.webp",
+      "description": "YOOZ LINKX 柚子小天才 25000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 6157,
+      "specs": {
+        "口数": "25000 口",
+        "类型": "网红系列",
+        "品牌": "YOOZ",
+        "口味": "2 种"
+      },
+      "brand": "YOOZ",
+      "badges": [
+        "MINI GAME",
+        "SMART VAPE"
+      ],
+      "stock": false,
+      "options": [
+        "红牛",
+        "蓝莓"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "ELFBAR Ice King 冰神 30000 Puffs",
+      "price": 275,
+      "imageAlt": "ELFBAR Ice King 冰神 30000 Puffs",
+      "localImage": "/images/products/vp-6091.webp",
+      "description": "ELFBAR Ice King 冰神 30000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 6091,
+      "specs": {
+        "口数": "30000 口",
+        "类型": "网红系列",
+        "品牌": "ELFBAR",
+        "口味": "18 种"
+      },
+      "brand": "ELFBAR",
+      "badges": [
+        "Korea",
+        "凉度调节"
+      ],
+      "options": [
+        "韩版-阳光玫瑰",
+        "韩版-葡萄樱桃",
+        "韩版-柠檬",
+        "韩版-茉莉花绿茶",
+        "韩版-迈阿密薄荷",
+        "韩版-菠萝冰",
+        "韩版-果汁朗姆酒",
+        "韩版-薄荷醇",
+        "韩版-苹果冰",
+        "韩版-百香果",
+        "韩版-可乐冰",
+        "韩版-哈密瓜",
+        "韩版-芒果冰",
+        "韩版-柠檬茶",
+        "韩版-乌龙茶",
+        "韩版-绿豆冰",
+        "韩版-老冰棍",
+        "韩版-宝矿力"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "ELFBAR JoinOne Series 25000 Puffs",
+      "price": 198,
+      "imageAlt": "ELFBAR JoinOne Series 25000 Puffs",
+      "localImage": "/images/products/vp-5197.webp",
+      "description": "ELFBAR JoinOne Series 25000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 5197,
+      "specs": {
+        "口数": "25000 口",
+        "类型": "网红系列",
+        "品牌": "ELFBAR",
+        "口味": "29 种"
+      },
+      "priceMax": 298,
+      "brand": "ELFBAR",
+      "badges": [
+        "HOT",
+        "凉度调节",
+        "模式切换",
+        "自定义"
+      ],
+      "hot": true,
+      "options": [
+        "韩版套装(主机+烟弹)-蓝莓树莓冰",
+        "韩版套装(主机+烟弹)-草莓奇异果",
+        "韩版套装(主机+烟弹)-柠檬青柠",
+        "韩版套装(主机+烟弹)-阳光玫瑰",
+        "韩版套装(主机+烟弹)-葡萄樱桃",
+        "韩版套装(主机+烟弹)-百香果奇异果",
+        "韩版套装(主机+烟弹)-桃子冰",
+        "韩版套装(主机+烟弹)-樱桃石榴冰",
+        "韩版套装(主机+烟弹)-宝矿力冰",
+        "韩版套装(主机+烟弹)-迈阿密薄荷",
+        "韩版套装(主机+烟弹)-柚子冰",
+        "韩版套装(主机+烟弹)-茉莉花绿茶",
+        "韩版套装(主机+烟弹)-绿豆冰",
+        "韩版套装(主机+烟弹)-菠萝冰",
+        "韩版套装(主机+烟弹)-西瓜冰",
+        "韩版套装(主机+烟弹)-黑莓草莓薄荷",
+        "韩版烟弹-蓝莓树莓冰",
+        "韩版烟弹-草莓奇异果",
+        "韩版烟弹-柠檬青柠",
+        "韩版烟弹-阳光玫瑰",
+        "韩版烟弹-百香果奇异果",
+        "韩版烟弹-桃子冰",
+        "韩版烟弹-樱桃石榴冰",
+        "韩版烟弹-迈阿密薄荷",
+        "韩版烟弹-茉莉花绿茶",
+        "韩版烟弹-菠萝冰",
+        "韩版烟弹-西瓜冰",
+        "韩版烟弹-黑莓草莓薄荷",
+        "韩版烟弹-绿豆冰"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "VOZOL GEAR SHISHA 微纵 25000 Puffs",
+      "price": 238,
+      "imageAlt": "VOZOL GEAR SHISHA 微纵 25000 Puffs",
+      "localImage": "/images/products/vp-1521.webp",
+      "description": "VOZOL GEAR SHISHA 微纵 25000 Puffs。网红系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 1521,
+      "specs": {
+        "口数": "25000 口",
+        "类型": "网红系列",
+        "品牌": "VOZOL",
+        "口味": "1 种"
+      },
+      "brand": "VOZOL",
+      "badges": [
+        "HOT"
+      ],
+      "hot": true,
+      "stock": false,
+      "options": [
+        "暂时缺货"
+      ],
+      "recommend": false
+    }
+  ]
+}

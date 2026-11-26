@@ -1,6 +1,187 @@
 {
   "id": "gbxl",
   "title": "国标系列",
-  "sort": 7,
-  "products": []
+  "sort": 2,
+  "products": [
+    {
+      "title": "国标 通用烟弹",
+      "price": 75,
+      "imageAlt": "国标 通用烟弹",
+      "localImage": "/images/products/vp-7482.webp",
+      "description": "国标 通用烟弹。国标系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 7482,
+      "specs": {
+        "类型": "国标系列",
+        "品牌": "国标品牌",
+        "口味": "1 种"
+      },
+      "brand": "国标品牌",
+      "options": [
+        "截图圈出后发送客服"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "国标 一次性系列",
+      "price": 95,
+      "imageAlt": "国标 一次性系列",
+      "localImage": "/images/products/vp-7479.webp",
+      "description": "国标 一次性系列。国标系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 7479,
+      "specs": {
+        "类型": "国标系列",
+        "品牌": "国标品牌",
+        "口味": "1 种"
+      },
+      "brand": "国标品牌",
+      "options": [
+        "截图圈出后发送客服"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "国标 VTV",
+      "price": 125,
+      "imageAlt": "国标 VTV",
+      "localImage": "/images/products/vp-7471.webp",
+      "description": "国标 VTV。国标系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 7471,
+      "specs": {
+        "类型": "国标系列",
+        "品牌": "国标品牌",
+        "口味": "1 种"
+      },
+      "brand": "国标品牌",
+      "options": [
+        "截图圈出后发送客服"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "国标 铂岚",
+      "price": 108,
+      "imageAlt": "国标 铂岚",
+      "localImage": "/images/products/vp-7465.webp",
+      "description": "国标 铂岚。国标系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 7465,
+      "specs": {
+        "类型": "国标系列",
+        "品牌": "国标品牌",
+        "口味": "1 种"
+      },
+      "brand": "国标品牌",
+      "options": [
+        "截图圈出后发送客服"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "国标 PUREMIST",
+      "price": 79,
+      "imageAlt": "国标 PUREMIST",
+      "localImage": "/images/products/vp-7460.webp",
+      "description": "国标 PUREMIST。国标系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 7460,
+      "specs": {
+        "类型": "国标系列",
+        "品牌": "国标品牌",
+        "口味": "1 种"
+      },
+      "brand": "国标品牌",
+      "options": [
+        "截图圈出后发送客服"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "国标 SnowPlus",
+      "price": 88,
+      "imageAlt": "国标 SnowPlus",
+      "localImage": "/images/products/vp-7450.webp",
+      "description": "国标 SnowPlus。国标系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 7450,
+      "specs": {
+        "类型": "国标系列",
+        "品牌": "SnowPlus",
+        "口味": "1 种"
+      },
+      "brand": "SnowPlus",
+      "options": [
+        "截图圈出后发送客服"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "国标 LAMI",
+      "price": 3,
+      "imageAlt": "国标 LAMI",
+      "localImage": "/images/products/vp-7444.webp",
+      "description": "国标 LAMI。国标系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 7444,
+      "specs": {
+        "类型": "国标系列",
+        "品牌": "LAMI",
+        "口味": "1 种"
+      },
+      "brand": "LAMI",
+      "options": [
+        "截图圈出后发送客服"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "国标 MOTI",
+      "price": 99,
+      "imageAlt": "国标 MOTI",
+      "localImage": "/images/products/vp-7420.webp",
+      "description": "国标 MOTI。国标系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 7420,
+      "specs": {
+        "类型": "国标系列",
+        "品牌": "MOTI",
+        "口味": "1 种"
+      },
+      "brand": "MOTI",
+      "options": [
+        "截图圈出后发送客服"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "国标 YOOZ",
+      "price": 73,
+      "imageAlt": "国标 YOOZ",
+      "localImage": "/images/products/vp-7416.webp",
+      "description": "国标 YOOZ。国标系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 7416,
+      "specs": {
+        "类型": "国标系列",
+        "品牌": "YOOZ",
+        "口味": "1 种"
+      },
+      "brand": "YOOZ",
+      "options": [
+        "截图圈出后发送客服"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "国标 RELX",
+      "price": 90,
+      "imageAlt": "国标 RELX",
+      "localImage": "/images/products/vp-7388.webp",
+      "description": "国标 RELX。国标系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 7388,
+      "specs": {
+        "类型": "国标系列",
+        "品牌": "RELX",
+        "口味": "1 种"
+      },
+      "brand": "RELX",
+      "options": [
+        "截图圈出后发送客服"
+      ],
+      "recommend": false
+    }
+  ]
 }

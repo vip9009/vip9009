@@ -5,6 +5,8 @@
 设计系统：**黑白极简 + 粉色强调**，字体 Lato，细边框、无圆角卡片、三列商品网格。
 
 > 本站包含本地购物车、结算页和扫码支付说明，但**不接入任何支付接口**；下单后由客服人工确认并扫码付款。页面商品、价格、图片为演示数据，正式使用前请替换为真实内容。
+>
+> 当前商品数据、商品图片、分类图标与 Lottie 动画均来自 vapepu.com，仅作为版式/效果占位素材，正式商用前请替换为自己的内容和素材。
 
 > 完整操作、打包、部署说明见 [`tools/使用手册.md`](tools/使用手册.md)。
 
@@ -210,7 +212,7 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
 ```
 
 - `src/data/index.js` 用 `import.meta.glob('./sections/*.json')` 自动加载全部分区，按 `sort` 升序排列；新增或删除分区文件不需要改代码。
-- 现有分区：`hot`（1）、`disposables`（2）、`jimu`（3）、`pods`（4）、`pod-system`（5）、`e-liquid`（6）、`gbxl`（7）。后三个目前是空分区，用于以后上架烟杆、烟油和国标商品。
+- 现有分区：`hot`（0，优惠活动）、`disposables`（1，一次性系列）、`gbxl`（2，国标系列）、`pods`（4，换弹系列）、`shisha`（5，水烟系列）、`jimu`（6，积木系列）、`combo`（7，组合专区）、`wanghong`（8，网红系列）。
 - `localImage` 填 `public` 下的相对路径，建议使用 800px 宽的 WebP。
 - `subcategory` 是二级分类 ID，对应 `categories.json` 里的子分类；留空表示只归到一级分类。
 - `description` 可选，留空时商品详情使用默认介绍文案：

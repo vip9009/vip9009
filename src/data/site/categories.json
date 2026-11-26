@@ -1,216 +1,64 @@
 {
   "hot": {
-    "title": "热门产品",
+    "title": "优惠活动",
+    "desc": "近期上新与热门款，价格与库存以微信确认为准。",
     "section": "hot",
-    "desc": "近期热门的电子烟与套装，口味齐全，现货直发。",
     "sort": 0,
     "nav": false
   },
   "disposables": {
-    "title": "一次性电子烟",
+    "title": "一次性系列",
+    "desc": "一次性系列现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
     "section": "disposables",
-    "desc": "悦刻、雪加、冰熊、柚子等品牌一次性电子烟，正品保障。",
     "sort": 1,
-    "nav": true,
-    "children": [
-      "relx-disposable",
-      "snowplus-disposable",
-      "icebear-disposable",
-      "yooz-disposable",
-      "other-disposable"
-    ]
+    "nav": true
   },
   "pods": {
-    "title": "烟弹",
+    "title": "换弹系列",
+    "desc": "换弹系列现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
     "section": "pods",
-    "desc": "适配主流烟杆的替换烟弹，多口味可选。",
-    "sort": 2,
-    "nav": true,
-    "children": [
-      "relx-pod",
-      "icebear-pod",
-      "universal-pod",
-      "other-pod"
-    ]
+    "sort": 4,
+    "nav": true
   },
   "jimu": {
-    "title": "积木电子烟",
+    "title": "积木系列",
+    "desc": "积木系列现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
     "section": "jimu",
-    "desc": "悦刻积木、雪加积木、冰熊积木等可玩性更高的换弹套装。",
-    "sort": 5,
-    "nav": true,
-    "children": [
-      "relx-jimu",
-      "snowplus-jimu",
-      "icebear-jimu",
-      "other-jimu"
-    ]
-  },
-  "pod-system": {
-    "title": "烟杆",
-    "section": "pod-system",
-    "desc": "烟杆与主机设备持续上新中，请联系客服获取最新款式与报价。",
-    "sort": 3,
-    "nav": true,
-    "children": [
-      "relx-device",
-      "icebear-device",
-      "other-device"
-    ]
-  },
-  "e-liquid": {
-    "title": "烟油",
-    "section": "e-liquid",
-    "desc": "烟油品类持续上新中，请联系客服获取最新口味与报价。",
-    "sort": 4,
-    "nav": true,
-    "children": [
-      "relx-liquid",
-      "other-liquid"
-    ]
+    "sort": 6,
+    "nav": true
   },
   "gbxl": {
     "title": "国标系列",
+    "desc": "国标系列现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
     "section": "gbxl",
-    "desc": "国标系列商品整理中，请联系客服获取最新款式与报价。",
-    "sort": 6,
-    "nav": true,
-    "children": [
-      "gbxl-disposable",
-      "gbxl-pod",
-      "gbxl-device"
-    ]
+    "sort": 2,
+    "nav": true
+  },
+  "shisha": {
+    "title": "水烟系列",
+    "desc": "水烟系列现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+    "section": "shisha",
+    "sort": 5,
+    "nav": true
+  },
+  "wanghong": {
+    "title": "网红系列",
+    "desc": "网红系列现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+    "section": "wanghong",
+    "sort": 8,
+    "nav": true
+  },
+  "combo": {
+    "title": "组合专区",
+    "desc": "组合专区现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+    "section": "combo",
+    "sort": 7,
+    "nav": true
   },
   "contact": {
     "title": "联系客服",
     "to": "/contact",
     "nav": true,
-    "sort": 7
-  },
-  "relx-disposable": {
-    "title": "悦刻一次性电子烟",
-    "parent": "disposables",
-    "sort": 1,
-    "desc": "悦刻一次性电子烟现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "snowplus-disposable": {
-    "title": "雪加一次性电子烟",
-    "parent": "disposables",
-    "sort": 2,
-    "desc": "雪加一次性电子烟现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "icebear-disposable": {
-    "title": "冰熊一次性电子烟",
-    "parent": "disposables",
-    "sort": 3,
-    "desc": "冰熊一次性电子烟现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "yooz-disposable": {
-    "title": "柚子一次性电子烟",
-    "parent": "disposables",
-    "sort": 4,
-    "desc": "柚子一次性电子烟现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "other-disposable": {
-    "title": "特色一次性电子烟",
-    "parent": "disposables",
-    "sort": 5,
-    "desc": "特色一次性电子烟现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "relx-pod": {
-    "title": "悦刻烟弹",
-    "parent": "pods",
-    "sort": 1,
-    "desc": "悦刻烟弹现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "icebear-pod": {
-    "title": "冰熊烟弹",
-    "parent": "pods",
-    "sort": 2,
-    "desc": "冰熊烟弹现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "universal-pod": {
-    "title": "通配烟弹",
-    "parent": "pods",
-    "sort": 3,
-    "desc": "通配烟弹现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "other-pod": {
-    "title": "特色烟弹",
-    "parent": "pods",
-    "sort": 4,
-    "desc": "特色烟弹现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "relx-device": {
-    "title": "悦刻烟杆",
-    "parent": "pod-system",
-    "sort": 1,
-    "desc": "悦刻烟杆现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "icebear-device": {
-    "title": "冰熊烟杆",
-    "parent": "pod-system",
-    "sort": 2,
-    "desc": "冰熊烟杆现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "other-device": {
-    "title": "特色烟杆",
-    "parent": "pod-system",
-    "sort": 3,
-    "desc": "特色烟杆现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "relx-liquid": {
-    "title": "悦刻烟油",
-    "parent": "e-liquid",
-    "sort": 1,
-    "desc": "悦刻烟油现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "other-liquid": {
-    "title": "特色烟油",
-    "parent": "e-liquid",
-    "sort": 2,
-    "desc": "特色烟油现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "relx-jimu": {
-    "title": "悦刻积木",
-    "parent": "jimu",
-    "sort": 1,
-    "desc": "悦刻积木现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "snowplus-jimu": {
-    "title": "雪加积木",
-    "parent": "jimu",
-    "sort": 2,
-    "desc": "雪加积木现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "icebear-jimu": {
-    "title": "冰熊积木",
-    "parent": "jimu",
-    "sort": 3,
-    "desc": "冰熊积木现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "other-jimu": {
-    "title": "特色积木",
-    "parent": "jimu",
-    "sort": 4,
-    "desc": "特色积木现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "gbxl-disposable": {
-    "title": "国标一次性",
-    "parent": "gbxl",
-    "sort": 1,
-    "desc": "国标一次性现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "gbxl-pod": {
-    "title": "国标烟弹",
-    "parent": "gbxl",
-    "sort": 2,
-    "desc": "国标烟弹现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
-  },
-  "gbxl-device": {
-    "title": "国标烟杆",
-    "parent": "gbxl",
-    "sort": 3,
-    "desc": "国标烟杆现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。"
+    "sort": 99
   }
 }

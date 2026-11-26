@@ -23,38 +23,104 @@
     "note": "扫码支付后，把付款截图发给泡泡哥；企业微信收款码可替换此图。"
   },
   "brands": [
-    "RELX 悦刻",
-    "SnowPlus 雪加",
-    "ZGAR 冰熊",
-    "YOOZ 柚子",
-    "ELFBAR 爱奇迹",
-    "LAMI 徕米",
-    "BUBBLEMON",
-    "SONG 崧",
-    "MOTI",
+    "RELX",
+    "ZGAR",
+    "ELFBAR",
+    "AL FAKHER",
+    "SONG",
+    "SnowPlus",
+    "YOOZ",
+    "WE VAPE",
     "VOZOL",
-    "DRAGON BAR",
-    "BEKE 贝壳"
+    "LAMI",
+    "JEX",
+    "PANDORA",
+    "MOTI",
+    "国标品牌",
+    "BEARFBAR",
+    "GEEKBAR",
+    "OLIT",
+    "VVILD",
+    "COCONINA",
+    "DOJO",
+    "Float X",
+    "PUFFMI",
+    "VAPRIVÉE",
+    "BEKE"
   ],
   "tags": [
-    { "label": "HOT", "tone": "black" },
-    { "label": "新品", "tone": "pink" },
-    { "label": "上新口味", "tone": "pink" },
-    { "label": "模式切换", "tone": "cyan" },
-    { "label": "凉度调节", "tone": "cyan" },
-    { "label": "自定义口感", "tone": "green" },
-    { "label": "强击喉", "tone": "black" },
-    { "label": "FREE", "tone": "pink" },
-    { "label": "SMART VAPE", "tone": "purple" },
-    { "label": "KOREA", "tone": "purple" },
-    { "label": "MINI GAME", "tone": "blue" },
-    { "label": "呼吸灯", "tone": "green" },
-    { "label": "极致顺滑", "tone": "black" },
-    { "label": "口味切换", "tone": "coral" },
-    { "label": "NIC1-2%", "tone": "lime" },
-    { "label": "免充电", "tone": "green" },
-    { "label": "适配悦刻", "tone": "gray" },
-    { "label": "烟杆", "tone": "gray" }
+    {
+      "label": "HOT",
+      "tone": "black"
+    },
+    {
+      "label": "新品",
+      "tone": "pink"
+    },
+    {
+      "label": "上新口味",
+      "tone": "pink"
+    },
+    {
+      "label": "模式切换",
+      "tone": "cyan"
+    },
+    {
+      "label": "凉度调节",
+      "tone": "cyan"
+    },
+    {
+      "label": "自定义口感",
+      "tone": "green"
+    },
+    {
+      "label": "强击喉",
+      "tone": "black"
+    },
+    {
+      "label": "FREE",
+      "tone": "pink"
+    },
+    {
+      "label": "SMART VAPE",
+      "tone": "purple"
+    },
+    {
+      "label": "KOREA",
+      "tone": "purple"
+    },
+    {
+      "label": "MINI GAME",
+      "tone": "blue"
+    },
+    {
+      "label": "呼吸灯",
+      "tone": "green"
+    },
+    {
+      "label": "极致顺滑",
+      "tone": "black"
+    },
+    {
+      "label": "口味切换",
+      "tone": "coral"
+    },
+    {
+      "label": "NIC1-2%",
+      "tone": "lime"
+    },
+    {
+      "label": "免充电",
+      "tone": "green"
+    },
+    {
+      "label": "适配悦刻",
+      "tone": "gray"
+    },
+    {
+      "label": "烟杆",
+      "tone": "gray"
+    }
   ],
   "news": [
     {

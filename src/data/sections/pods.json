@@ -1,35 +1,1219 @@
 {
   "id": "pods",
-  "title": "烟弹",
+  "title": "换弹系列",
+  "sort": 4,
   "products": [
     {
-      "title": "ZGAR冰熊 6.0 PLUS烟弹3.5ml超大容量，悦刻4/5/6/7代杆通用",
-      "price": 48,
-      "imageAlt": "ZGAR冰熊 6.0 PLUS烟弹3.5ml超大容量，悦刻4/5/6/7代杆通用",
-      "localImage": "/images/products/pods-1-800.webp",
-      "subcategory": "relx-pod"
+      "title": "VVILD 小野 V7 Pod 3.5ml*1",
+      "price": 36,
+      "imageAlt": "VVILD 小野 V7 Pod 3.5ml*1",
+      "localImage": "/images/products/vp-45241.webp",
+      "description": "VVILD 小野 V7 Pod 3.5ml*1。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 45241,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "VVILD",
+        "口味": "20 种"
+      },
+      "brand": "VVILD",
+      "badges": [
+        "HOT",
+        "适配悦刻弹"
+      ],
+      "hot": true,
+      "stock": false,
+      "options": [
+        "椰子",
+        "西瓜",
+        "草莓",
+        "绿豆",
+        "青提",
+        "混合莓果",
+        "青苹果",
+        "蜜瓜",
+        "奇异果",
+        "菠萝",
+        "观音赐茶",
+        "龙井茶",
+        "薄荷",
+        "荔枝",
+        "蜜桃",
+        "老冰棍",
+        "青柠",
+        "柠檬茶",
+        "极寒刃",
+        "山竹荔枝"
+      ],
+      "recommend": false
     },
     {
-      "title": "Zgar冰熊6.0s烟弹-3.0ml单颗装-悦刻4/5/6/7代杆通用",
-      "price": 48,
-      "imageAlt": "Zgar冰熊6.0s烟弹-3.0ml单颗装-悦刻4/5/6/7代杆通用",
-      "localImage": "/images/products/pods-2-800.webp",
-      "subcategory": "relx-pod"
+      "title": "Zgar 冰熊元气 Pod 2ml*3",
+      "price": 80,
+      "imageAlt": "Zgar 冰熊元气 Pod 2ml*3",
+      "localImage": "/images/products/vp-45071.webp",
+      "description": "Zgar 冰熊元气 Pod 2ml*3。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 45071,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "ZGAR",
+        "口味": "21 种"
+      },
+      "brand": "ZGAR",
+      "badges": [
+        "HOT",
+        "适配悦刻弹"
+      ],
+      "hot": true,
+      "options": [
+        "西湖龙井",
+        "巨峰葡萄",
+        "水蜜桃",
+        "蜂蜜柚子",
+        "老冰棍",
+        "柠檬冰",
+        "草莓冰",
+        "荔枝冰",
+        "青苹果",
+        "可乐冰",
+        "西瓜冰",
+        "柠檬菠萝",
+        "绿豆冰",
+        "椰子水",
+        "芭乐番石榴",
+        "西柚百香果",
+        "多肉芒芒",
+        "初露青提",
+        "香芋",
+        "薄荷",
+        "桔子汽水"
+      ],
+      "recommend": false
     },
     {
-      "title": "雪加UFO烟弹-5.0ML大容量-适配悦刻4/5/6代烟杆",
+      "title": "RELX ARTISAN 格调",
+      "price": 488,
+      "imageAlt": "RELX ARTISAN 格调",
+      "localImage": "/images/products/vp-44785.webp",
+      "description": "RELX ARTISAN 格调。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 44785,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "RELX",
+        "口味": "3 种"
+      },
+      "brand": "RELX",
+      "badges": [
+        "烟杆",
+        "适配悦刻弹"
+      ],
+      "options": [
+        "苍艾棕",
+        "青纹蓝",
+        "琥珀橙"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Snowplus ACE",
+      "price": 88,
+      "imageAlt": "Snowplus ACE",
+      "localImage": "/images/products/vp-41330.webp",
+      "description": "Snowplus ACE。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 41330,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "SnowPlus",
+        "口味": "11 种"
+      },
+      "priceMax": 188,
+      "brand": "SnowPlus",
+      "badges": [
+        "HOT",
+        "NIC1-2%",
+        "烟杆"
+      ],
+      "hot": true,
+      "stock": false,
+      "options": [
+        "烟杆-深灰色",
+        "青提",
+        "可乐",
+        "西瓜",
+        "青柠",
+        "茉莉龙井",
+        "柠檬菠萝",
+        "西柚百香",
+        "薄荷",
+        "矿泉水",
+        "蜂蜜柚子"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "SONG B05",
+      "price": 99,
+      "imageAlt": "SONG B05",
+      "localImage": "/images/products/vp-40987.webp",
+      "description": "SONG B05。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 40987,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "SONG",
+        "口味": "6 种"
+      },
+      "brand": "SONG",
+      "badges": [
+        "烟杆",
+        "适配悦刻弹"
+      ],
+      "options": [
+        "决战盘",
+        "贝壳彩",
+        "贝壳粉",
+        "贝壳银",
+        "迷幻漩涡",
+        "魔法阵"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "RELX ARTISAN Metal 千锤纹",
+      "price": 668,
+      "imageAlt": "RELX ARTISAN Metal 千锤纹",
+      "localImage": "/images/products/vp-30792.webp",
+      "description": "RELX ARTISAN Metal 千锤纹。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 30792,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "RELX",
+        "口味": "1 种"
+      },
+      "brand": "RELX",
+      "badges": [
+        "烟杆",
+        "适配悦刻弹"
+      ],
+      "stock": false,
+      "options": [
+        "千锤纹"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "RELX ARTISAN Metal 黑镜",
+      "price": 668,
+      "imageAlt": "RELX ARTISAN Metal 黑镜",
+      "localImage": "/images/products/vp-30775.webp",
+      "description": "RELX ARTISAN Metal 黑镜。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 30775,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "RELX",
+        "口味": "1 种"
+      },
+      "brand": "RELX",
+      "badges": [
+        "烟杆",
+        "适配悦刻弹"
+      ],
+      "stock": false,
+      "options": [
+        "黑镜"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "JEX PICCO",
+      "price": 238,
+      "imageAlt": "JEX PICCO",
+      "localImage": "/images/products/vp-28150.webp",
+      "description": "JEX PICCO。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 28150,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "JEX",
+        "口味": "4 种"
+      },
+      "brand": "JEX",
+      "badges": [
+        "烟杆",
+        "适配悦刻弹"
+      ],
+      "options": [
+        "黑",
+        "灰",
+        "黄",
+        "蓝"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "ELFBAR ELFA PRO Prefilled Pod 2ml*2",
+      "price": 150,
+      "imageAlt": "ELFBAR ELFA PRO Prefilled Pod 2ml*2",
+      "localImage": "/images/products/vp-25330.webp",
+      "description": "ELFBAR ELFA PRO Prefilled Pod 2ml*2。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 25330,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "ELFBAR",
+        "口味": "15 种"
+      },
+      "brand": "ELFBAR",
+      "badges": [
+        "NIC1-2%",
+        "油芯分离"
+      ],
+      "stock": false,
+      "options": [
+        "雪梨",
+        "混合蓝莓",
+        "蓝莓",
+        "能量饮料",
+        "芒果",
+        "柠檬青柠",
+        "可乐",
+        "粉红柠檬水",
+        "蜜桃冰",
+        "菠萝冰",
+        "蓝莓泡泡糖",
+        "复合水果",
+        "蓝莓柠檬水",
+        "苹果蜜桃",
+        "奇异果夏日芭乐"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "ELFBAR ELFA PRO Prefilled Pod Kit",
+      "price": 188,
+      "imageAlt": "ELFBAR ELFA PRO Prefilled Pod Kit",
+      "localImage": "/images/products/vp-25307.webp",
+      "description": "ELFBAR ELFA PRO Prefilled Pod Kit。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 25307,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "ELFBAR",
+        "口味": "8 种"
+      },
+      "brand": "ELFBAR",
+      "badges": [
+        "NIC1-2%",
+        "油芯分离",
+        "烟杆"
+      ],
+      "stock": false,
+      "options": [
+        "棕杆+可乐-套装(1杆+1弹)",
+        "紫杆+西瓜-套装(1杆+1弹)",
+        "蓝杆+混合浆果-套装(1杆+1弹)",
+        "绿杆+苹果蜜桃-套装(1杆+1弹)",
+        "粉杆+粉红柠檬水-套装(1杆+1弹)",
+        "黑杆+蓝莓柠檬水-套装(1杆+1弹)",
+        "蓝杆+蓝莓酸树莓-套装(1杆+1弹)",
+        "蓝杆+猕猴百香果芭乐-套装(1杆+1弹)"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "JEX 吉星 Nova Pod 3ml*2",
       "price": 68,
-      "imageAlt": "雪加UFO烟弹-5.0ML大容量-适配悦刻4/5/6代烟杆",
-      "localImage": "/images/products/pods-3-800.webp",
-      "subcategory": "relx-pod"
+      "imageAlt": "JEX 吉星 Nova Pod 3ml*2",
+      "localImage": "/images/products/vp-24892.webp",
+      "description": "JEX 吉星 Nova Pod 3ml*2。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 24892,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "JEX",
+        "口味": "27 种"
+      },
+      "brand": "JEX",
+      "badges": [
+        "适配悦刻弹"
+      ],
+      "options": [
+        "西瓜",
+        "冻柠茶",
+        "龙井",
+        "咖啡",
+        "绿豆",
+        "铁观音",
+        "薄荷(5%)",
+        "青柠",
+        "草莓",
+        "苹果",
+        "蜜桃",
+        "菠萝",
+        "甜瓜",
+        "中式红茶",
+        "青提",
+        "芒果",
+        "可乐",
+        "荔枝",
+        "葡萄",
+        "百香果",
+        "番石榴",
+        "薄荷(3%)",
+        "老冰棍",
+        "橘子汽水",
+        "香芋",
+        "绿箭薄荷",
+        "茉莉绿茶"
+      ],
+      "recommend": false
     },
     {
-      "title": "悦刻Ultra烟弹每盒三颗装-极凉口感，适配悦刻4-7代烟杆",
-      "price": 135,
-      "imageAlt": "悦刻Ultra烟弹每盒三颗装-极凉口感，适配悦刻4-7代烟杆",
-      "localImage": "/images/products/pods-4-800.webp",
-      "subcategory": "relx-pod"
+      "title": "ZGAR 冰熊 NANO",
+      "price": 68,
+      "imageAlt": "ZGAR 冰熊 NANO",
+      "localImage": "/images/products/vp-24835.webp",
+      "description": "ZGAR 冰熊 NANO。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 24835,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "ZGAR",
+        "口味": "4 种"
+      },
+      "brand": "ZGAR",
+      "badges": [
+        "烟杆",
+        "适配悦刻弹"
+      ],
+      "options": [
+        "薰衣草紫",
+        "冷静灰",
+        "薄荷绿",
+        "午夜黑"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "RELX Ultra Pod 2ml*3",
+      "price": 110,
+      "imageAlt": "RELX Ultra Pod 2ml*3",
+      "localImage": "/images/products/vp-22797.webp",
+      "description": "RELX Ultra Pod 2ml*3。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 22797,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "RELX",
+        "口味": "1 种"
+      },
+      "brand": "RELX",
+      "badges": [
+        "HOT",
+        "适配悦刻弹"
+      ],
+      "hot": true,
+      "stock": false,
+      "options": [
+        "百香果"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "JEX RIPPLE 艺术家",
+      "price": 288,
+      "imageAlt": "JEX RIPPLE 艺术家",
+      "localImage": "/images/products/vp-21134.webp",
+      "description": "JEX RIPPLE 艺术家。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 21134,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "JEX",
+        "口味": "5 种"
+      },
+      "brand": "JEX",
+      "badges": [
+        "烟杆",
+        "适配悦刻弹"
+      ],
+      "options": [
+        "枪灰",
+        "哑光黑",
+        "镜面银",
+        "镜面金",
+        "镜面蓝"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "ZGAR 冰熊流光 CLASSICO",
+      "price": 98,
+      "imageAlt": "ZGAR 冰熊流光 CLASSICO",
+      "localImage": "/images/products/vp-20542.webp",
+      "description": "ZGAR 冰熊流光 CLASSICO。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 20542,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "ZGAR",
+        "口味": "4 种"
+      },
+      "brand": "ZGAR",
+      "badges": [
+        "烟杆",
+        "适配悦刻弹"
+      ],
+      "options": [
+        "香槟金",
+        "云露蓝",
+        "薰衣紫",
+        "橄榄绿"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "PANDORA A9 潘多拉",
+      "price": 138,
+      "imageAlt": "PANDORA A9 潘多拉",
+      "localImage": "/images/products/vp-20489.webp",
+      "description": "PANDORA A9 潘多拉。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 20489,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "PANDORA",
+        "口味": "2 种"
+      },
+      "brand": "PANDORA",
+      "badges": [
+        "烟杆",
+        "适配悦刻弹"
+      ],
+      "stock": false,
+      "options": [
+        "绿色",
+        "枪色"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Pandora A8 潘多拉 Pod 2.5ml * 1",
+      "price": 32,
+      "imageAlt": "Pandora A8 潘多拉 Pod 2.5ml * 1",
+      "localImage": "/images/products/vp-19825.webp",
+      "description": "Pandora A8 潘多拉 Pod 2.5ml * 1。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 19825,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "PANDORA",
+        "口味": "18 种"
+      },
+      "brand": "PANDORA",
+      "badges": [
+        "适配悦刻弹"
+      ],
+      "stock": false,
+      "options": [
+        "椰子水",
+        "柠檬酸橙",
+        "草莓",
+        "菠萝",
+        "伯爵红茶",
+        "柠檬",
+        "柠檬柚子",
+        "龙井",
+        "芒果",
+        "蜜桃乌龙",
+        "双苹果",
+        "三重葡萄",
+        "百香果",
+        "蓝莓",
+        "可乐",
+        "冰泉水",
+        "青提",
+        "哈密瓜"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Zgar 冰熊6S Pod 3ml*1",
+      "price": 36,
+      "imageAlt": "Zgar 冰熊6S Pod 3ml*1",
+      "localImage": "/images/products/vp-16529.webp",
+      "description": "Zgar 冰熊6S Pod 3ml*1。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 16529,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "ZGAR",
+        "口味": "31 种"
+      },
+      "brand": "ZGAR",
+      "badges": [
+        "HOT",
+        "30盒增杆",
+        "适配悦刻弹"
+      ],
+      "hot": true,
+      "options": [
+        "柑橘百香果",
+        "铁观音",
+        "柠檬可乐",
+        "轻轻蜜桃乌龙",
+        "清香桂花",
+        "清爽芭乐葡",
+        "草莓冰淇淋",
+        "茉莉绿茶",
+        "牛油果哈密瓜",
+        "柚c冰茶",
+        "西瓜冰",
+        "锡兰柠檬红茶",
+        "提子冰",
+        "杨枝甘露",
+        "手打柠檬冰",
+        "0糖黑葡萄",
+        "杨桃冰",
+        "荔枝",
+        "绿豆冰",
+        "柠檬薄荷",
+        "菠萝椰子",
+        "经典烟草",
+        "薄荷微凉",
+        "芒果西柚",
+        "经典雪碧",
+        "一抹绿",
+        "冻柠檬茶",
+        "水果茶",
+        "柚子茉莉茶",
+        "荔枝冷萃茶",
+        "茉莉桃子茶"
+      ],
+      "recommend": true
+    },
+    {
+      "title": "Al Fakher Crown Bar Mini 阿尔法赫 Pod Kit 3000 Puffs",
+      "price": 59,
+      "imageAlt": "Al Fakher Crown Bar Mini 阿尔法赫 Pod Kit 3000 Puffs",
+      "localImage": "/images/products/vp-14562.webp",
+      "description": "Al Fakher Crown Bar Mini 阿尔法赫 Pod Kit 3000 Puffs。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 14562,
+      "specs": {
+        "口数": "3000 口",
+        "类型": "换弹系列",
+        "品牌": "AL FAKHER",
+        "口味": "11 种"
+      },
+      "brand": "AL FAKHER",
+      "stock": false,
+      "options": [
+        "葡萄",
+        "樱桃",
+        "冰蓝",
+        "西瓜",
+        "菠萝奇异果",
+        "柠檬青柠",
+        "草莓西瓜",
+        "三重芒果",
+        "草莓狂飙",
+        "薄荷",
+        "水蜜桃"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "JEX 吉星 Nova Pod Mini 3ml*1",
+      "price": 34,
+      "imageAlt": "JEX 吉星 Nova Pod Mini 3ml*1",
+      "localImage": "/images/products/vp-14100.webp",
+      "description": "JEX 吉星 Nova Pod Mini 3ml*1。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 14100,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "JEX",
+        "口味": "29 种"
+      },
+      "brand": "JEX",
+      "badges": [
+        "适配悦刻弹"
+      ],
+      "options": [
+        "青柠",
+        "洛神花茶",
+        "老冰棍",
+        "橘子汽水",
+        "龙井",
+        "蜂蜜柚子",
+        "椰子水",
+        "百香果",
+        "荔枝",
+        "番石榴",
+        "芒果",
+        "海盐柠檬",
+        "绿豆",
+        "可乐",
+        "甜瓜",
+        "青提",
+        "蜜桃",
+        "柠檬冰",
+        "薄荷（5%）",
+        "奇异果",
+        "草莓",
+        "葡萄",
+        "苹果",
+        "中式红茶",
+        "西瓜",
+        "香芋",
+        "矿泉水",
+        "冰柠薄荷",
+        "菠萝"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "YOOZ 柚子 V5",
+      "price": 298,
+      "imageAlt": "YOOZ 柚子 V5",
+      "localImage": "/images/products/vp-13776.webp",
+      "description": "YOOZ 柚子 V5。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 13776,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "YOOZ",
+        "口味": "2 种"
+      },
+      "brand": "YOOZ",
+      "badges": [
+        "MINI GAME",
+        "SMART VAPE",
+        "烟杆"
+      ],
+      "stock": false,
+      "options": [
+        "白色",
+        "灰色"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "YOOZ 柚子 V4",
+      "price": 168,
+      "imageAlt": "YOOZ 柚子 V4",
+      "localImage": "/images/products/vp-13604.webp",
+      "description": "YOOZ 柚子 V4。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 13604,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "YOOZ",
+        "口味": "1 种"
+      },
+      "brand": "YOOZ",
+      "badges": [
+        "烟杆"
+      ],
+      "stock": false,
+      "options": [
+        "随机色或私客服"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "RELX Pod Pro Large 3.2ml*1",
+      "price": 45,
+      "imageAlt": "RELX Pod Pro Large 3.2ml*1",
+      "localImage": "/images/products/vp-13458.webp",
+      "description": "RELX Pod Pro Large 3.2ml*1。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 13458,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "RELX",
+        "口味": "4 种"
+      },
+      "brand": "RELX",
+      "badges": [
+        "适配悦刻弹"
+      ],
+      "stock": false,
+      "options": [
+        "苹果",
+        "蓝莓",
+        "桃子",
+        "可乐"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "RELX Infinity 2 Device",
+      "price": 338,
+      "imageAlt": "RELX Infinity 2 Device",
+      "localImage": "/images/products/vp-12978.webp",
+      "description": "RELX Infinity 2 Device。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 12978,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "RELX",
+        "口味": "6 种"
+      },
+      "brand": "RELX",
+      "badges": [
+        "烟杆",
+        "适配悦刻弹"
+      ],
+      "options": [
+        "流星银",
+        "雾叶绿",
+        "深空灰",
+        "暮光绿",
+        "曜石黑",
+        "玫瑰金"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "JEX 艺术家格调",
+      "price": 288,
+      "imageAlt": "JEX 艺术家格调",
+      "localImage": "/images/products/vp-12963.webp",
+      "description": "JEX 艺术家格调。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 12963,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "JEX",
+        "口味": "4 种"
+      },
+      "brand": "JEX",
+      "badges": [
+        "烟杆",
+        "适配悦刻弹"
+      ],
+      "options": [
+        "黑色",
+        "银色",
+        "蓝色",
+        "金色"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "YOOZ Soul 柚子 Pod 3.5ml*1",
+      "price": 36,
+      "imageAlt": "YOOZ Soul 柚子 Pod 3.5ml*1",
+      "localImage": "/images/products/vp-9349.webp",
+      "description": "YOOZ Soul 柚子 Pod 3.5ml*1。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 9349,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "YOOZ",
+        "口味": "22 种"
+      },
+      "brand": "YOOZ",
+      "badges": [
+        "HOT",
+        "适配悦刻弹"
+      ],
+      "hot": true,
+      "options": [
+        "柠檬薄荷",
+        "灵魂冰红茶",
+        "蜜桃乌龙",
+        "灵魂薄荷",
+        "灵魂菠萝",
+        "手打柠檬",
+        "灵魂草莓",
+        "橘子汽水",
+        "灵魂蜜桃",
+        "绿豆",
+        "灵魂西瓜",
+        "灵魂甜瓜",
+        "灵魂可乐",
+        "灵魂葡萄",
+        "灵魂西柚",
+        "灵魂龙井",
+        "老冰棍",
+        "灵魂番石榴",
+        "灵魂荔枝",
+        "灵魂百香果",
+        "灵魂青提",
+        "灵魂铁观音"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "YOOZ 柚子 V3",
+      "price": 138,
+      "imageAlt": "YOOZ 柚子 V3",
+      "localImage": "/images/products/vp-6843.webp",
+      "description": "YOOZ 柚子 V3。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 6843,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "YOOZ",
+        "口味": "8 种"
+      },
+      "brand": "YOOZ",
+      "badges": [
+        "烟杆"
+      ],
+      "options": [
+        "V2-蓝焰",
+        "V2-渐变蓝",
+        "V2-银粉",
+        "V2-金粉",
+        "V2-蓝绿",
+        "V2-渐变绿",
+        "V2-金黄",
+        "V2-蓝黑"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "YOOZ Zero 柚子 Pod Pro 3.5ml*2",
+      "price": 80,
+      "imageAlt": "YOOZ Zero 柚子 Pod Pro 3.5ml*2",
+      "localImage": "/images/products/vp-6733.webp",
+      "description": "YOOZ Zero 柚子 Pod Pro 3.5ml*2。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 6733,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "YOOZ",
+        "口味": "43 种"
+      },
+      "brand": "YOOZ",
+      "badges": [
+        "5盒增杆"
+      ],
+      "options": [
+        "零度乌龙",
+        "混合莓果",
+        "百香果",
+        "牛奶",
+        "树莓西瓜",
+        "冰镇荔枝",
+        "冰镇西瓜",
+        "哈蜜瓜",
+        "冰镇桃子",
+        "草莓红酒",
+        "冻柠檬茶",
+        "草莓芒果",
+        "雪碧",
+        "致爽薄荷",
+        "可乐柠檬",
+        "桃气乌龙",
+        "红酒",
+        "元气奇异果",
+        "劲爽龙眼",
+        "抹茶椰子",
+        "茉莉绿茶",
+        "冰草莓",
+        "芒果椰子",
+        "荔枝葡萄",
+        "冰镇可乐",
+        "冰镇葡萄",
+        "蓝莓薄荷",
+        "铁观音",
+        "绿豆冰",
+        "芒果桃子",
+        "龙井",
+        "杨梅红酒",
+        "番石榴",
+        "芒果荔枝",
+        "巨峰葡萄",
+        "香芋",
+        "草莓冰冰乐",
+        "清新香蕉",
+        "灵魂薄荷",
+        "草莓奇异果",
+        "菠萝",
+        "经典烟草",
+        "西瓜荔枝"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "GOWIF My World Pod 3.5ml*1",
+      "price": 36,
+      "imageAlt": "GOWIF My World Pod 3.5ml*1",
+      "localImage": "/images/products/vp-6251.webp",
+      "description": "GOWIF My World Pod 3.5ml*1。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 6251,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "BEARFBAR",
+        "口味": "15 种"
+      },
+      "brand": "BEARFBAR",
+      "badges": [
+        "HOT",
+        "适配悦刻弹"
+      ],
+      "hot": true,
+      "options": [
+        "椰子",
+        "山楂梅梅冰",
+        "香芋冰淇淋",
+        "芒果",
+        "话梅菠萝",
+        "青苹果",
+        "春日桃桃茶",
+        "铁观音",
+        "泰式冻柠茶",
+        "vc青柠",
+        "绿豆",
+        "斩铁剑薄荷",
+        "荔枝",
+        "100号",
+        "西瓜"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "LAMI 徕米标准装",
+      "price": 188,
+      "imageAlt": "LAMI 徕米标准装",
+      "localImage": "/images/products/vp-5533.webp",
+      "description": "LAMI 徕米标准装。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 5533,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "LAMI",
+        "口味": "5 种"
+      },
+      "brand": "LAMI",
+      "badges": [
+        "烟杆"
+      ],
+      "options": [
+        "黑色",
+        "白色",
+        "蓝色",
+        "绿色",
+        "粉色"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "ZGAR 冰熊 PRO-X",
+      "price": 158,
+      "imageAlt": "ZGAR 冰熊 PRO-X",
+      "localImage": "/images/products/vp-5051.webp",
+      "description": "ZGAR 冰熊 PRO-X。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 5051,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "ZGAR",
+        "口味": "4 种"
+      },
+      "brand": "ZGAR",
+      "badges": [
+        "烟杆",
+        "适配悦刻弹"
+      ],
+      "options": [
+        "深空紫",
+        "天穹灰",
+        "星环银",
+        "玫瑰金"
+      ],
+      "recommend": true
+    },
+    {
+      "title": "Boom Magic 雪茄UFO Pod 5ml*1",
+      "price": 58,
+      "imageAlt": "Boom Magic 雪茄UFO Pod 5ml*1",
+      "localImage": "/images/products/vp-4424.webp",
+      "description": "Boom Magic 雪茄UFO Pod 5ml*1。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 4424,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "SnowPlus",
+        "口味": "25 种"
+      },
+      "brand": "SnowPlus",
+      "badges": [
+        "适配悦刻弹"
+      ],
+      "options": [
+        "百香果百香",
+        "可乐冰",
+        "奇异果",
+        "龙井",
+        "青柠",
+        "青苹果",
+        "西柚苏打",
+        "香芋",
+        "草莓奶昔",
+        "蜜桃",
+        "铁观音",
+        "冰红茶",
+        "荔枝黑加仑",
+        "西瓜",
+        "蓝莓",
+        "柠檬菠萝",
+        "老冰棍",
+        "百香果",
+        "紫葡萄",
+        "绿豆",
+        "西柚百香果",
+        "三重芒果",
+        "茉莉花茶",
+        "青提",
+        "薄荷"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "Zgar 6.0 Plus 冰熊 Pod 3.5ml*1",
+      "price": 36,
+      "imageAlt": "Zgar 6.0 Plus 冰熊 Pod 3.5ml*1",
+      "localImage": "/images/products/vp-2248.webp",
+      "description": "Zgar 6.0 Plus 冰熊 Pod 3.5ml*1。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 2248,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "ZGAR",
+        "口味": "26 种"
+      },
+      "brand": "ZGAR",
+      "badges": [
+        "HOT",
+        "适配悦刻弹"
+      ],
+      "hot": true,
+      "options": [
+        "斩铁剑薄荷",
+        "小绿瓶",
+        "青柠",
+        "冰水",
+        "杨枝甘露",
+        "龙井",
+        "柚子茉莉茶",
+        "西瓜",
+        "茉莉桃子茶",
+        "芒果",
+        "锡兰柠檬茶",
+        "草莓",
+        "零糖黑葡萄",
+        "苹果",
+        "荔枝",
+        "红袍柠檬水",
+        "青提",
+        "绿豆",
+        "菠萝",
+        "甜瓜",
+        "可乐",
+        "橙子",
+        "铁观音",
+        "洛神花",
+        "宝矿力",
+        "百香果"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "SONG C08 Pod 2ml*3",
+      "price": 65,
+      "imageAlt": "SONG C08 Pod 2ml*3",
+      "localImage": "/images/products/vp-1801.webp",
+      "description": "SONG C08 Pod 2ml*3。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 1801,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "SONG",
+        "口味": "21 种"
+      },
+      "brand": "SONG",
+      "badges": [
+        "适配悦刻弹"
+      ],
+      "options": [
+        "柠檬冰",
+        "绿豆冰沙",
+        "冷萃龙井",
+        "薄荷",
+        "妃子笑荔枝",
+        "元气草莓",
+        "菠萝",
+        "葡萄",
+        "可乐",
+        "水蜜桃",
+        "青苹果",
+        "橘子汽水",
+        "哈蜜瓜",
+        "芭乐",
+        "黑加仑",
+        "香芋",
+        "百香果",
+        "椰子水",
+        "青提",
+        "蜜桃乌龙",
+        "冰泉水"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "RELX Pod Pro 2 1.9ml*1",
+      "price": 46,
+      "imageAlt": "RELX Pod Pro 2 1.9ml*1",
+      "localImage": "/images/products/vp-1752.webp",
+      "description": "RELX Pod Pro 2 1.9ml*1。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 1752,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "RELX",
+        "口味": "31 种"
+      },
+      "brand": "RELX",
+      "badges": [
+        "适配悦刻弹"
+      ],
+      "options": [
+        "经典烟草",
+        "零度薄荷5%",
+        "新薄荷5%",
+        "爽薄荷5%",
+        "荔枝柠檬汁",
+        "金桔百香果",
+        "中式红茶",
+        "高凉龙井",
+        "铁观音",
+        "极凉荔枝",
+        "葡萄苹果",
+        "柠檬茶",
+        "西瓜",
+        "老冰棍",
+        "番石榴",
+        "青提",
+        "葡萄",
+        "芒果",
+        "草莓",
+        "奇异果",
+        "脆苹果",
+        "桃子冰",
+        "西梅",
+        "哈密瓜",
+        "蓝莓",
+        "洛神花茶",
+        "青柠",
+        "宝矿力",
+        "矿泉水",
+        "香芋",
+        "咖啡"
+      ],
+      "recommend": false
+    },
+    {
+      "title": "SONG B11 魅影系列",
+      "price": 158,
+      "imageAlt": "SONG B11 魅影系列",
+      "localImage": "/images/products/vp-1688.webp",
+      "description": "SONG B11 魅影系列。换弹系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 1688,
+      "specs": {
+        "类型": "换弹系列",
+        "品牌": "SONG",
+        "口味": "5 种"
+      },
+      "brand": "SONG",
+      "badges": [
+        "烟杆",
+        "适配悦刻弹"
+      ],
+      "options": [
+        "黑",
+        "银",
+        "粉",
+        "蓝",
+        "绿"
+      ],
+      "recommend": false
     }
-  ],
-  "sort": 4
+  ]
 }

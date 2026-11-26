@@ -33,9 +33,11 @@ const gallery = computed(() => {
   return list.length ? list.map(asset) : [image.value]
 })
 const activeImage = ref('')
-const badges = computed(() =>
-  Array.isArray(product.value?.badges) ? product.value.badges.slice(0, 4) : []
-)
+const badges = computed(() => {
+  const list = Array.isArray(product.value?.badges) ? [...product.value.badges] : []
+  if (product.value?.recommend && !list.includes('店长推荐')) list.push('店长推荐')
+  return list.slice(0, 4)
+})
 const isHot = computed(
   () =>
     product.value?.hot === true ||

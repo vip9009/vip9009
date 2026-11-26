@@ -3,54 +3,68 @@ import { computed, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { site, productsData } from '@/data'
 import VpProductCard from '@/components/VpProductCard.vue'
-import CategoryGlyph from '@/components/CategoryGlyph.vue'
 import LottieBox from '@/components/LottieBox.vue'
+import { asset } from '@/utils'
 
 const activeTab = ref('tag')
 const page = ref(0)
-const pageSize = 6
+const pageSize = 3
 
 const hero = computed(() => site.hero || {})
 
-const allProducts = computed(() =>
+const allProducts = computed(() => {
+  const seen = new Set()
+  const list = []
   productsData.sections
     .filter((section) => section.id !== 'hot')
-    .flatMap((section) =>
-      (section.products || []).map((product, index) => ({
-        ...product,
-        sectionId: section.id,
-        sectionTitle: section.title,
-        index
-      }))
-    )
-)
-
-const tiles = computed(() => {
-  const glyphMap = {
-    disposables: 'disposable',
-    pods: 'pod',
-    jimu: 'box',
-    'pod-system': 'device',
-    'e-liquid': 'liquid',
-    gbxl: 'gbxl'
-  }
-  const fromCategories = Object.entries(site.categories)
-    .filter(([id, item]) => !item.parent && id !== 'hot' && id !== 'contact' && item.section)
-    .sort((a, b) => (a[1].sort ?? 999) - (b[1].sort ?? 999))
-    .map(([id, item]) => ({
-      title: item.title,
-      to: `/category/${id}`,
-      glyph: glyphMap[id] || 'disposable',
-      accent: false
-    }))
-  return [
-    ...fromCategories,
-    { title: '组合专区', to: '/category/hot', glyph: 'combo', accent: false },
-    { title: '优惠活动', to: '/category/hot', glyph: 'promo', accent: true, lottie: '/animations/rocket.json' }
-  ].slice(0, 8)
+    .forEach((section) => {
+      ;(section.products || []).forEach((product, index) => {
+        const key = product.sourceId || product.title
+        if (seen.has(key)) return
+        seen.add(key)
+        list.push({
+          ...product,
+          sectionId: section.id,
+          sectionTitle: section.title,
+          index
+        })
+      })
+    })
+  return list
 })
 
-const newProducts = computed(() => allProducts.value.slice(0, 24))
+const tiles = computed(() => {
+  const order = ['disposables', 'pods', 'jimu', 'gbxl', 'shisha', 'wanghong', 'combo']
+  const fromCategories = order
+    .map((id) => {
+      const item = site.categories[id]
+      if (!item) return null
+      return {
+        title: item.title,
+        to: `/category/${id}`,
+        image: `/images/categories/${id}.webp`,
+        lottie: ''
+      }
+    })
+    .filter(Boolean)
+  return [
+    ...fromCategories,
+    { title: '优惠活动', to: '/category/hot', image: '', lottie: '/animations/rocket.json' }
+  ]
+})
+
+const newProducts = computed(() => {
+  const score = (product) => {
+    const badges = product.badges || []
+    if (badges.includes('上新')) return 0
+    if (badges.includes('上新口味')) return 1
+    if (product.hot) return 2
+    return 3
+  }
+  return [...allProducts.value]
+    .sort((a, b) => score(a) - score(b))
+    .slice(0, 72)
+})
 const pageCount = computed(() => Math.max(1, Math.ceil(newProducts.value.length / pageSize)))
 const visibleProducts = computed(() =>
   newProducts.value.slice(page.value * pageSize, (page.value + 1) * pageSize)
@@ -80,14 +94,12 @@ function setPage(index) {
             v-for="tile in tiles"
             :key="tile.title"
             class="category-tile"
-            :class="{ accent: tile.accent }"
             :to="tile.to"
           >
             <span class="category-glyph" :class="{ 'is-lottie': tile.lottie }">
               <LottieBox v-if="tile.lottie" :src="tile.lottie" label="优惠活动动画" />
-              <CategoryGlyph v-else :name="tile.glyph" />
+              <img v-else :src="asset(tile.image)" :alt="tile.title" />
             </span>
-            <b v-if="!tile.lottie">{{ tile.title }}</b>
           </RouterLink>
         </div>
       </div>
@@ -392,9 +404,16 @@ function setPage(index) {
 }
 
 .category-glyph {
-  width: 128px;
-  height: 128px;
+  width: 220px;
+  height: 220px;
   transition: transform 0.25s ease;
+}
+
+.category-glyph img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .category-tile:hover .category-glyph {
@@ -866,8 +885,8 @@ function setPage(index) {
   }
 
   .category-glyph {
-    width: 74px;
-    height: 74px;
+    width: 90px;
+    height: 90px;
   }
 
   .category-glyph.is-lottie {
