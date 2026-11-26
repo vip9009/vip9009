@@ -45,13 +45,6 @@
       "subcategory": "relx-disposable"
     },
     {
-      "title": "崧A66 16000口一次性电子烟-两种口味随意切换",
-      "price": 160,
-      "imageAlt": "崧A66 16000口一次性电子烟-两种口味随意切换",
-      "localImage": "/images/products/disposables-7-800.webp",
-      "subcategory": "other-disposable"
-    },
-    {
       "title": "悦刻RELX ACE 30000口一次性电子烟-液晶显示屏-三种功率模式-超薄机身",
       "price": 200,
       "imageAlt": "悦刻RELX ACE 30000口一次性电子烟-液晶显示屏-三种功率模式-超薄机身",
@@ -93,6 +86,13 @@
       "localImage": "/images/products/hot-20261126142020656688.webp",
       "description": "泡泡哥测试一下",
       "subcategory": "other-disposable"
+    },
+    {
+      "title": "测试一下分类二级",
+      "price": 9999,
+      "imageAlt": "测试一下分类二级",
+      "localImage": "/images/products/disposables-20261126144154772861.webp",
+      "subcategory": "paoapoge"
     }
   ],
   "sort": 2
