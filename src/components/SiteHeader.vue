@@ -108,20 +108,15 @@ onBeforeUnmount(() => {
 <template>
   <div class="header-wrap">
     <div class="announce">
-      <div class="wrapper announce-inner">
-        <RouterLink class="announce-fav" to="/wishlist">
-          <AppIcon name="heart" :size="14" />
-          收藏
-        </RouterLink>
-        <span class="announce-main">{{ site.announcement }}</span>
-        <span class="announce-right">{{ site.announcementRight }}</span>
+      <div class="announce-marquee">
+        <span>{{ site.announcement }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ site.announcementRight }}</span>
       </div>
     </div>
 
     <header class="site-header" :class="{ 'is-scrolled': scrolled }">
       <div class="wrapper header-main">
         <button class="mobile-menu-btn" type="button" aria-label="打开菜单" @click="drawerOpen = true">
-          <AppIcon name="menu" :size="22" />
+          <AppIcon name="menu" :size="24" />
         </button>
 
         <nav class="desktop-nav" aria-label="主导航">
@@ -176,18 +171,9 @@ onBeforeUnmount(() => {
         </RouterLink>
 
         <RouterLink class="mobile-cart" to="/cart" aria-label="购物车">
-          <AppIcon name="cart" :size="21" />
+          <AppIcon name="cart" :size="17" />
           <span v-if="count" class="cart-badge">{{ count }}</span>
         </RouterLink>
-      </div>
-
-      <div v-if="route.path === '/'" class="wrapper search-row">
-        <form class="header-search" role="search" @submit.prevent="submitSearch">
-          <input ref="searchInput" v-model="keyword" type="search" placeholder="搜索..." aria-label="搜索产品" />
-          <button type="submit" aria-label="搜索">
-            <AppIcon name="search" :size="18" />
-          </button>
-        </form>
       </div>
     </header>
 
@@ -250,41 +236,38 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .announce {
-  background: #111111;
-  color: rgba(255, 255, 255, 0.86);
-  font-size: 12px;
-}
-
-.announce-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  height: 42px;
-}
-
-.announce-fav {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.announce-fav:hover {
-  color: #ffffff;
-}
-
-.announce-main {
-  flex: 1;
   overflow: hidden;
+  padding: 10px 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #ffffff;
   text-align: center;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  background: #1d2327;
 }
 
-.announce-right {
+.announce-marquee {
+  overflow: hidden;
   white-space: nowrap;
-  color: rgba(255, 255, 255, 0.62);
+}
+
+.announce-marquee span {
+  display: inline-block;
+  padding-left: 100%;
+  white-space: nowrap;
+  animation: annoscno-scroll 20s linear infinite;
+}
+
+.announce:hover .announce-marquee span {
+  animation-play-state: paused;
+}
+
+@keyframes annoscno-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }
 
 .site-header {
@@ -292,7 +275,6 @@ onBeforeUnmount(() => {
   top: 0;
   z-index: 100;
   background: #ffffff;
-  border-bottom: 1px solid var(--color-border);
   transition: box-shadow 0.2s ease;
 }
 
@@ -305,8 +287,8 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 76px;
-  padding: 0 16px;
+  height: 100px;
+  padding: 0;
 }
 
 .desktop-nav {
@@ -334,7 +316,7 @@ onBeforeUnmount(() => {
   position: relative;
   display: flex;
   align-items: center;
-  height: 76px;
+  height: 100px;
 }
 
 .desktop-nav > ul > li > a {
@@ -402,13 +384,15 @@ onBeforeUnmount(() => {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  height: 38px;
-  padding: 0 14px;
-  font-size: 12px;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 13px;
   font-weight: 700;
-  color: #242125;
-  border: 1px solid #cfcfcf;
+  letter-spacing: 0.03em;
+  color: #000000;
+  border: 1px solid #000000;
   border-radius: 999px;
+  text-transform: uppercase;
   transition: border-color 0.18s ease, color 0.18s ease;
 }
 
@@ -758,19 +742,9 @@ onBeforeUnmount(() => {
     background-size: cover;
   }
 
-  .announce-inner {
-    height: 38px;
-    justify-content: center;
-    font-size: 11px;
-  }
-
-  .announce-fav,
-  .announce-right {
-    display: none;
-  }
-
   .header-main {
-    height: 58px;
+    height: 70px;
+    padding: 0;
   }
 
   .desktop-nav,
@@ -783,23 +757,36 @@ onBeforeUnmount(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 38px;
-    height: 38px;
-    color: #242125;
+    width: 32px;
+    height: 32px;
+    color: #000000;
+  }
+
+  .mobile-menu-btn {
+    width: 24px;
+    height: 32px;
   }
 
   .mobile-cart {
     position: relative;
+    border: 1px solid #000000;
+    border-radius: 999px;
   }
 
   .mobile-cart .cart-badge {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: -6px;
+    right: -6px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    font-size: 10px;
+    color: #ffffff;
+    background: #000000;
   }
 
   .logo-img {
-    height: 21px;
+    height: 26px;
   }
 
   .logo-cn {
@@ -809,14 +796,6 @@ onBeforeUnmount(() => {
   .logo-en {
     font-size: 7px;
     letter-spacing: 0.3em;
-  }
-
-  .search-row {
-    padding: 0 16px 10px;
-  }
-
-  .header-search {
-    height: 38px;
   }
 }
 </style>

@@ -11,3 +11,5 @@ tools/dist/
 *.spec
 __pycache__/
 *.pyc
+
+reference/

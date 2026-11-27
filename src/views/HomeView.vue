@@ -1,14 +1,37 @@
 <script setup>
 import { computed, ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import { site, productsData } from '@/data'
 import VpProductCard from '@/components/VpProductCard.vue'
 import LottieBox from '@/components/LottieBox.vue'
+import AppIcon from '@/components/AppIcon.vue'
 import { asset } from '@/utils'
+import newDividerImg from '@/assets/images/new-divider.png'
+import arrowDownImg from '@/assets/images/arrow-down.png'
+import noSmokingDividerImg from '@/assets/images/no-smoking-divider.png'
 
+const router = useRouter()
 const activeTab = ref('tag')
 const page = ref(0)
 const pageSize = 3
+const pageCount = 9
+const homeKeyword = ref('')
+
+function submitHomeSearch() {
+  const value = homeKeyword.value.trim()
+  if (!value) return
+  router.push({ path: '/search', query: { q: value } })
+}
+
+function circledNumber(value) {
+  if (value >= 1 && value <= 20) return String.fromCodePoint(0x2460 + value - 1)
+  if (value >= 21 && value <= 35) return String.fromCodePoint(0x3251 + value - 21)
+  return String(value)
+}
+
+function pageLabel(index) {
+  return circledNumber((pageCount - index) * pageSize)
+}
 
 const hero = computed(() => site.hero || {})
 
@@ -63,14 +86,45 @@ const newProducts = computed(() => {
   }
   return [...allProducts.value]
     .sort((a, b) => score(a) - score(b))
-    .slice(0, 72)
+    .slice(0, pageCount * pageSize)
 })
-const pageCount = computed(() => Math.max(1, Math.ceil(newProducts.value.length / pageSize)))
 const visibleProducts = computed(() =>
   newProducts.value.slice(page.value * pageSize, (page.value + 1) * pageSize)
 )
 
 const tags = computed(() => site.tags || [])
+const tagRows = computed(() => {
+  const list = tags.value
+  return [list.slice(0, 5), list.slice(5, 9), list.slice(9, 13), list.slice(13)]
+})
+const TAG_COLORS = {
+  HOT: '#000000',
+  上新: '#ff0077',
+  上新口味: '#ff0077',
+  模式切换: '#00f2f2',
+  凉度调节: '#45f7d6',
+  自定义口感: '#00efc7',
+  强击喉: '#0a0002',
+  FREE: '#ff0077',
+  'SMART VAPE': '#ce2cd3',
+  KOREA: '#8224e3',
+  'MINI GAME': '#4423ea',
+  呼吸灯: '#b4f230',
+  极致顺滑: '#0a0103',
+  口味切换: '#ff7c7c',
+  'NIC1-2%': '#c5ff33',
+  免充电: '#09ed77',
+  适配悦刻: '#8e8e8e',
+  烟杆: '#8e8e8e'
+}
+const TAG_LIGHT_TEXT = new Set(['HOT', '强击喉', '极致顺滑'])
+
+function tagStyle(label) {
+  return {
+    background: TAG_COLORS[label] || '#0a0002',
+    color: TAG_LIGHT_TEXT.has(label) ? '#ffffff' : '#000000'
+  }
+}
 const brands = computed(() => site.brands || [])
 const brandItems = computed(() =>
   brands.value.map((name) => ({ name, logo: site.brandLogos?.[name] || '' }))
@@ -98,6 +152,15 @@ function setPage(index) {
 
 <template>
   <div class="home-page">
+    <div class="wrapper home-search">
+      <form class="home-search-form" role="search" @submit.prevent="submitHomeSearch">
+        <input v-model="homeKeyword" type="search" placeholder="搜索..." aria-label="搜索产品" />
+        <button type="submit" aria-label="搜索">
+          <AppIcon name="search" :size="20" />
+        </button>
+      </form>
+    </div>
+
     <div class="wrapper home-top">
       <RouterLink class="hero-banner hero-lottie" :to="hero.link || '/info/about'">
         <LottieBox src="/animations/faq.json" label="常见问题 FAQ 动画" />
@@ -124,10 +187,9 @@ function setPage(index) {
 
     <section class="new-section">
       <div class="wrapper">
-        <div class="new-divider" aria-hidden="true">
-          <span class="divider-arrow left" />
-          <b>NEW</b>
-          <span class="divider-arrow right" />
+        <div class="new-head">
+          <img class="new-divider-img" :src="newDividerImg" alt="NEW 上新专区" />
+          <img class="new-arrow-down" :src="arrowDownImg" alt="" aria-hidden="true" />
         </div>
 
         <div v-if="newProducts.length" class="page-tabs">
@@ -139,7 +201,7 @@ function setPage(index) {
             :class="{ active: page === index - 1 }"
             @click="setPage(index - 1)"
           >
-            {{ index }}
+            {{ pageLabel(index - 1) }}
           </button>
         </div>
 
@@ -171,16 +233,21 @@ function setPage(index) {
           <button type="button" :class="{ active: activeTab === 'news' }" @click="activeTab = 'news'">NEWS</button>
         </div>
 
+        <img class="tag-arrow-down" :src="arrowDownImg" alt="" aria-hidden="true" />
+
         <div v-if="activeTab === 'tag'" class="tag-cloud">
-          <RouterLink
-            v-for="tag in tags"
-            :key="tag.label"
-            class="tag-pill"
-            :class="`tone-${tag.tone}`"
-            :to="`/search?q=${encodeURIComponent(tag.label)}`"
-          >
-            {{ tag.label }}
-          </RouterLink>
+          <div v-for="(row, rowIndex) in tagRows" :key="rowIndex" class="tag-row">
+            <RouterLink
+              v-for="tag in row"
+              :key="tag.label"
+              class="tag-pill"
+              :class="`tone-${tag.tone}`"
+              :style="tagStyle(tag.label)"
+              :to="`/search?q=${encodeURIComponent(tag.label)}`"
+            >
+              {{ tag.label }}
+            </RouterLink>
+          </div>
         </div>
 
         <div v-else-if="activeTab === 'brand'" class="brand-wall">
@@ -228,14 +295,10 @@ function setPage(index) {
       </div>
     </section>
 
-    <div class="no-smoking">
-      <div class="no-smoking-title">
-        <span class="ns-arrow left" />
-        <b>NO SMOKING</b>
-        <span class="ns-arrow right" />
-      </div>
-      <div class="no-smoking-icon">
-        <LottieBox src="/animations/no-smoking.json" fit="contain" :speed="0.5" label="NO SMOKING 动画" />
+    <div class="wrapper no-smoking">
+      <img class="no-smoking-divider" :src="noSmokingDividerImg" alt="" aria-hidden="true" />
+      <div class="no-smoking-lottie">
+        <LottieBox src="/animations/no-smoking-ref.json" fit="contain" :speed="0.5" label="NO SMOKING 动画" />
       </div>
     </div>
   </div>
@@ -246,8 +309,47 @@ function setPage(index) {
   background: #ffffff;
 }
 
+.home-search {
+  padding-top: 11px;
+}
+
+.home-search-form {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.home-search-form input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0 12px;
+  font-size: 16px;
+  color: #333333;
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+.home-search-form input::placeholder {
+  color: #999999;
+}
+
+.home-search-form button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 100%;
+  color: #777777;
+}
+
 .home-top {
-  padding-top: 28px;
+  padding-top: 15px;
 }
 
 .hero-banner {
@@ -276,8 +378,12 @@ function setPage(index) {
 
 .hero-banner.hero-lottie {
   display: block;
+  height: auto;
+  aspect-ratio: 750 / 227;
   padding: 0;
   background: #000000;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px -2px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
 .hero-banner.hero-lottie::before {
@@ -410,20 +516,20 @@ function setPage(index) {
 }
 
 .category-section {
-  padding: 34px 0 8px;
+  padding: 15px 0 0;
 }
 
 .category-tiles {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  row-gap: 26px;
+  column-gap: 20px;
+  row-gap: 7px;
 }
 
 .category-tile {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
   color: #242125;
   transition: color 0.18s ease;
 }
@@ -433,8 +539,9 @@ function setPage(index) {
 }
 
 .category-glyph {
-  width: 220px;
-  height: 220px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
   transition: transform 0.25s ease;
 }
 
@@ -450,8 +557,9 @@ function setPage(index) {
 }
 
 .category-glyph.is-lottie {
-  width: 220px;
-  height: 220px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
 }
 
 .category-tile b {
@@ -465,61 +573,24 @@ function setPage(index) {
 }
 
 .new-section {
-  padding-top: 28px;
+  padding-top: 20px;
 }
 
-.new-divider {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  margin-bottom: 10px;
+.new-head {
+  text-align: center;
 }
 
-.new-divider b {
-  font-family: var(--font-heading);
-  font-size: 40px;
-  font-weight: 900;
-  letter-spacing: 0.02em;
-  font-style: italic;
-  color: #242125;
+.new-divider-img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
-.divider-arrow {
-  position: relative;
-  flex: 1;
-  height: 1px;
-  background: #dddddd;
-}
-
-.divider-arrow::before,
-.divider-arrow::after {
-  content: '';
-  position: absolute;
-  top: -3px;
-  width: 8px;
-  height: 8px;
-  border-top: 1px solid #999999;
-  border-right: 1px solid #999999;
-}
-
-.divider-arrow.left::before {
-  left: 0;
-  transform: rotate(-135deg);
-}
-
-.divider-arrow.left::after {
-  left: 14px;
-  transform: rotate(-135deg);
-}
-
-.divider-arrow.right::before {
-  right: 0;
-  transform: rotate(45deg);
-}
-
-.divider-arrow.right::after {
-  right: 14px;
-  transform: rotate(45deg);
+.new-arrow-down {
+  display: block;
+  width: 14.4px;
+  height: 12.8px;
+  margin: 7px auto 0;
 }
 
 .page-tabs {
@@ -527,38 +598,38 @@ function setPage(index) {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-bottom: 22px;
+  gap: 0;
+  margin-top: 1px;
+  margin-bottom: 16px;
 }
 
 .page-tab {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
-  font-size: 11px;
-  color: #999999;
-  border: 1px solid #dddddd;
-  border-radius: 50%;
-  transition: color 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+  width: 33.2px;
+  height: 32px;
+  padding: 0 9.6px;
+  font-size: 12.8px;
+  color: rgba(102, 102, 102, 0.85);
+  border: 0;
+  border-radius: 99px;
+  transition: color 0.16s ease, background 0.16s ease;
 }
 
 .page-tab:hover {
   color: var(--color-primary);
-  border-color: var(--color-primary);
 }
 
 .page-tab.active {
   color: #ffffff;
   background: #242125;
-  border-color: #242125;
 }
 
 .product-grid-3 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  gap: 0;
 }
 
 .page-slide {
@@ -607,7 +678,7 @@ function setPage(index) {
 }
 
 .tag-section {
-  padding-top: 36px;
+  padding: 8px 0 36px;
 }
 
 .tag-bar {
@@ -617,7 +688,7 @@ function setPage(index) {
   justify-content: center;
   gap: 64px;
   max-width: 1050px;
-  height: 34px;
+  height: 37px;
   margin: 0 auto;
   overflow: hidden;
   background: #111111;
@@ -662,25 +733,39 @@ function setPage(index) {
   color: #ffffff;
 }
 
+.tag-arrow-down {
+  display: block;
+  width: 14.4px;
+  height: 12.8px;
+  margin: 4px auto 0;
+}
+
 .tag-cloud {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 5px;
+  max-width: 760px;
+  padding: 14px 0 0;
+  margin: 0 auto;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
   justify-content: center;
   gap: 6px;
-  max-width: 760px;
-  padding: 20px 0 4px;
-  margin: 0 auto;
 }
 
 .tag-pill {
   display: inline-flex;
   align-items: center;
-  height: 24px;
-  padding: 0 9px;
-  font-size: 10px;
-  font-weight: 700;
-  color: #ffffff;
-  background: #242125;
+  height: 27.5px;
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 400;
+  color: #000000;
+  border-radius: 5px;
 }
 
 .tone-pink { background: #e6007e; }
@@ -864,58 +949,19 @@ function setPage(index) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 46px 20px 26px;
+  padding-top: 7px;
 }
 
-.no-smoking-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
+.no-smoking-divider {
+  display: block;
   width: 100%;
+  height: auto;
 }
 
-.no-smoking-icon {
-  width: 170px;
-  height: 170px;
-}
-
-.no-smoking b {
-  font-family: var(--font-heading);
-  font-size: clamp(36px, 5vw, 64px);
-  font-weight: 900;
-  font-style: italic;
-  letter-spacing: -0.03em;
-  color: #242125;
-}
-
-.ns-arrow {
-  position: relative;
-  width: 80px;
-  height: 1px;
-  background: #cccccc;
-}
-
-.ns-arrow::before,
-.ns-arrow::after {
-  content: '';
-  position: absolute;
-  top: -3px;
-  width: 8px;
-  height: 8px;
-  border-top: 1px solid #999999;
-  border-right: 1px solid #999999;
-}
-
-.ns-arrow.left::before {
-  left: 0;
-  transform: rotate(-135deg);
-}
-
-.ns-arrow.right::before {
-  right: 0;
-  transform: rotate(45deg);
+.no-smoking-lottie {
+  width: 100%;
+  height: 300px;
+  margin-top: 0;
 }
 
 .brand-strip {
@@ -962,9 +1008,28 @@ function setPage(index) {
   color: var(--color-primary);
 }
 
+@media (min-width: 901px) {
+  .category-section {
+    padding-top: 12px;
+  }
+
+  .new-section {
+    padding-top: 17px;
+  }
+
+  .tag-pill {
+    height: 38px;
+    padding: 10px 11px;
+  }
+
+  .tag-section {
+    padding-bottom: 23px;
+  }
+}
+
 @media (max-width: 900px) {
   .home-top {
-    padding-top: 16px;
+    padding-top: 15px;
   }
 
   .hero-banner {
@@ -1032,34 +1097,29 @@ function setPage(index) {
   }
 
   .category-section {
-    padding-top: 22px;
+    padding-top: 15px;
   }
 
-  .category-glyph {
-    width: 90px;
-    height: 90px;
-  }
-
-  .category-glyph.is-lottie {
-    width: 90px;
-    height: 90px;
-  }
-
-  .category-tile b {
-    font-size: 13px;
-  }
-
-  .category-tiles {
-    row-gap: 16px;
-  }
-
-  .new-divider b {
-    font-size: 30px;
+  .new-section {
+    padding-top: 26px;
   }
 
   .product-grid-3 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .product-grid-3::-webkit-scrollbar {
+    display: none;
+  }
+
+  .product-grid-3 > * {
+    flex: 0 0 50%;
+    max-width: 50%;
+    scroll-snap-align: start;
   }
 
   .tag-bar {
@@ -1105,24 +1165,12 @@ function setPage(index) {
   }
 
   .no-smoking {
-    padding: 30px 16px 18px;
+    padding-top: 7px;
   }
 
-  .no-smoking-title {
-    gap: 12px;
-  }
-
-  .no-smoking-icon {
-    width: 140px;
-    height: 140px;
-  }
-
-  .no-smoking b {
-    font-size: 30px;
-  }
-
-  .ns-arrow {
-    width: 40px;
+  .no-smoking-lottie {
+    height: 150px;
+    margin-top: 3px;
   }
 }
 </style>

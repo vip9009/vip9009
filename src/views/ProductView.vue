@@ -224,8 +224,6 @@ watch(
         <RouterLink to="/category/disposables">电子雾化</RouterLink>
         <span>/</span>
         <RouterLink :to="`/category/${sectionId}`">{{ section?.title }}</RouterLink>
-        <span>/</span>
-        <span>{{ title }}</span>
       </nav>
 
       <div class="product-main">
@@ -257,7 +255,7 @@ watch(
               <img :src="thumb" :alt="title" />
             </button>
           </div>
-          <div class="gallery-hint">
+          <div class="gallery-hint" style="display: none">
             <AppIcon name="scan" :size="14" />
             图片为实拍参考，批次不同包装可能略有差异
           </div>
@@ -424,15 +422,14 @@ watch(
 
 <style scoped>
 .product-page {
-  padding-top: 20px;
-  padding-bottom: 50px;
+  padding: 20px 0 50px;
 }
 
 .breadcrumb {
   display: flex;
   flex-wrap: wrap;
   gap: 7px;
-  padding-bottom: 18px;
+  padding: 0 15px 18px;
   font-size: 12px;
   color: #999999;
 }
@@ -858,7 +855,7 @@ watch(
 
 
 .product-tabs {
-  padding-top: 10px;
+  padding: 10px 15px 0;
 }
 
 .tab-head {
@@ -954,7 +951,7 @@ watch(
 }
 
 .related {
-  padding-top: 44px;
+  padding: 44px 15px 0;
 }
 
 .related-head {
@@ -1063,9 +1060,27 @@ watch(
 }
 
 @media (max-width: 900px) {
+  .product-page {
+    padding: 20px 15px 50px;
+  }
+
+  .breadcrumb {
+    justify-content: center;
+    padding: 0 0 0;
+    font-size: 16px;
+  }
+
+  .product-tabs {
+    padding: 10px 0 0;
+  }
+
+  .related {
+    padding: 44px 0 0;
+  }
+
   .product-main {
     grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
+    gap: 10px;
   }
 
   .gallery,
@@ -1109,19 +1124,19 @@ watch(
   }
 
   .qty {
-    width: 100px;
-    height: 42px;
+    width: 112px;
+    height: 45px;
   }
 
   .qty button {
-    width: 31px;
+    width: 35px;
   }
 
   .add-cart {
-    height: 42px;
-    min-width: 108px;
-    padding: 0 14px;
-    font-size: 13px;
+    height: 45px;
+    min-width: 122px;
+    padding: 0 25px;
+    font-size: 14px;
   }
 
   .zoom-viewer {

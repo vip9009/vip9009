@@ -1,15 +1,17 @@
 <script setup>
-import { site } from '@/data'
+import { asset } from '@/utils'
+
+const paymentIcons = [1, 2, 3, 4, 5].map((index) => `/images/ui/payment/payment-${index}.svg`)
 </script>
 
 <template>
   <footer class="footer">
     <div class="wrapper footer-inner">
-      <p>Copyright 2026 © VAPEPU</p>
+      <p class="footer-copy">Copyright 2026 © VAPEPU</p>
       <div class="pay-marks" aria-label="支付方式">
-        <span>微信支付</span>
-        <span>支付宝</span>
-        <span>银行转账</span>
+        <span v-for="icon in paymentIcons" :key="icon" class="pay-icon">
+          <img :src="asset(icon)" alt="" />
+        </span>
       </div>
     </div>
   </footer>
@@ -17,9 +19,9 @@ import { site } from '@/data'
 
 <style scoped>
 .footer {
-  margin-top: 48px;
-  background: #6d6d6d;
-  color: rgba(255, 255, 255, 0.82);
+  margin-top: 60px;
+  color: rgba(255, 255, 255, 0.5);
+  background: #5b5b5b;
 }
 
 .footer-inner {
@@ -28,34 +30,57 @@ import { site } from '@/data'
   justify-content: space-between;
   gap: 20px;
   min-height: 74px;
-  font-size: 12px;
+  padding: 10px 0 15px;
+  font-size: 14.4px;
+}
+
+.footer-copy {
+  font-size: 14.4px;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .pay-marks {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
-.pay-marks span {
-  display: inline-flex;
+.pay-icon {
+  display: flex;
   align-items: center;
-  height: 26px;
-  padding: 0 10px;
-  font-size: 11px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 2px;
+  justify-content: center;
+  width: 50px;
+  height: 31px;
+}
+
+.pay-icon img {
+  display: block;
+  width: 40px;
+  height: 20px;
+  object-fit: contain;
 }
 
 @media (max-width: 640px) {
+  .footer {
+    margin-top: 10px;
+  }
+
   .footer-inner {
-    flex-direction: column;
+    flex-direction: column-reverse;
     justify-content: center;
-    gap: 10px;
-    padding: 18px 0;
+    gap: 8px;
+    min-height: 0;
+    padding: 10px 0 15px;
     text-align: center;
+  }
+
+  .footer-copy {
+    font-size: 14.4px;
+  }
+
+  .pay-marks {
+    justify-content: center;
+    margin-top: 10px;
   }
 }
 </style>

@@ -12,7 +12,7 @@ const page = ref(1)
 const sort = ref('default')
 const keyword = ref('')
 const sidebarOpen = ref(false)
-const pageSize = 12
+const pageSize = 10
 
 const categoryId = computed(() => String(route.params.id || ''))
 const category = computed(() => site.categories[categoryId.value] || null)
@@ -142,6 +142,10 @@ watch(
       </nav>
 
       <div class="category-tools">
+        <button class="filter-toggle" type="button" @click="sidebarOpen = !sidebarOpen">
+          <AppIcon name="menu" :size="16" />
+          筛选
+        </button>
         <span class="result-count">{{ rangeText }}</span>
         <select v-model="sort" aria-label="产品排序">
           <option value="default">默认产品排序</option>
@@ -160,40 +164,25 @@ watch(
         </form>
 
         <h2>产品类别</h2>
+        <div class="side-parent">
+          <span>电子雾化</span>
+          <AppIcon name="chevron-down" :size="14" />
+        </div>
         <div class="side-cats">
-          <div v-for="item in topCategories" :key="item.id" class="side-group">
-            <RouterLink
-              class="side-link"
-              :class="{ active: item.id === activeParentId && !isChild }"
-              :to="`/category/${item.id}`"
-            >
-              {{ item.title }}
-            </RouterLink>
-            <div v-if="item.id === activeParentId && siblings.length" class="side-children">
-              <RouterLink
-                v-for="child in siblings"
-                :key="child.id"
-                :class="{ active: isChild && categoryId === child.id }"
-                :to="`/category/${item.id}?sub=${child.id}`"
-              >
-                {{ child.title }}
-              </RouterLink>
-            </div>
-          </div>
+          <RouterLink
+            v-for="item in topCategories"
+            :key="item.id"
+            class="side-link side-link-child"
+            :class="{ active: item.id === activeParentId }"
+            :to="`/category/${item.id}`"
+          >
+            {{ item.title }}
+          </RouterLink>
         </div>
       </aside>
 
       <section class="category-content">
-        <div class="content-head">
-          <div>
-            <h1>{{ title }}</h1>
-            <p v-if="description" class="category-desc">{{ description }}</p>
-          </div>
-          <button class="filter-toggle" type="button" @click="sidebarOpen = !sidebarOpen">
-            <AppIcon name="menu" :size="16" />
-            筛选
-          </button>
-        </div>
+        <h1 class="sr-only">{{ title }}</h1>
 
         <div v-if="pageItems.length" class="product-grid-3">
           <VpProductCard
@@ -204,6 +193,7 @@ watch(
             :section-title="item.sectionTitle"
             :index="item.index"
             :eager="index < 6"
+            bordered
           />
         </div>
 
@@ -233,7 +223,7 @@ watch(
 
 <style scoped>
 .category-page {
-  padding-top: 26px;
+  padding-top: 25px;
   padding-bottom: 50px;
 }
 
@@ -242,16 +232,16 @@ watch(
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 0 0 22px;
-  border-bottom: 1px solid #eeeeee;
+  padding: 0;
+  margin-bottom: 28px;
 }
 
 .breadcrumb {
   display: flex;
   flex-wrap: wrap;
-  gap: 7px;
-  font-size: 12px;
-  color: #999999;
+  gap: 8px;
+  font-size: 16px;
+  color: #777777;
 }
 
 .breadcrumb a:hover {
@@ -270,31 +260,31 @@ watch(
 }
 
 .result-count {
-  font-size: 11px;
-  color: #999999;
+  font-size: 14.4px;
+  color: #777777;
 }
 
 .category-tools select {
-  height: 34px;
-  padding: 0 26px 0 10px;
-  font-size: 11px;
-  color: #555555;
+  height: 39px;
+  padding: 0 30px 0 12px;
+  font-size: 14.4px;
+  color: #333333;
   background: #ffffff;
   border: 1px solid #dddddd;
-  border-radius: 2px;
+  border-radius: 0;
 }
 
 .category-layout {
   display: grid;
   grid-template-columns: 240px minmax(0, 1fr);
-  gap: 36px;
-  padding-top: 26px;
+  gap: 20px;
+  padding-top: 0;
 }
 
 .side-search {
   display: flex;
-  height: 36px;
-  margin-bottom: 26px;
+  height: 38px;
+  margin-bottom: 20px;
   border: 1px solid #dddddd;
 }
 
@@ -302,7 +292,7 @@ watch(
   flex: 1;
   min-width: 0;
   padding: 0 10px;
-  font-size: 12px;
+  font-size: 14px;
   border: 0;
   outline: none;
 }
@@ -311,48 +301,73 @@ watch(
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
+  width: 44px;
   color: #ffffff;
-  background: #242125;
+  background: #000000;
 }
 
 .sidebar h2 {
+  position: relative;
   padding-bottom: 10px;
-  margin-bottom: 6px;
-  font-size: 15px;
-  border-bottom: 1px solid #eeeeee;
+  margin-bottom: 4px;
+  font-size: 16px;
+  font-weight: 400;
+  border: 0;
+}
+
+.sidebar h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 22px;
+  height: 1px;
+  background: #dddddd;
+}
+
+.side-parent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 0;
+  font-size: 14px;
+  color: #555555;
+}
+
+.side-cats {
+  padding-left: 20px;
 }
 
 .side-group {
-  padding: 6px 0;
+  padding: 4px 0;
 }
 
 .side-link {
   display: block;
   padding: 5px 0;
   font-size: 13px;
-  color: #555555;
+  color: #666666;
 }
 
-.side-link:hover,
-.side-link.active {
+.side-link:hover {
   color: var(--color-primary);
 }
 
 .side-link.active {
   font-weight: 700;
+  color: #242125;
 }
 
 .side-children {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 4px 0 6px 14px;
+  padding: 4px 0 6px 16px;
   border-left: 1px solid #eeeeee;
 }
 
 .side-children a {
-  font-size: 12px;
+  font-size: 13px;
   color: #888888;
 }
 
@@ -361,42 +376,23 @@ watch(
   color: var(--color-primary);
 }
 
-.content-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 18px;
-}
-
-.content-head h1 {
-  font-size: 26px;
-}
-
-.category-desc {
-  margin-top: 6px;
-  font-size: 12px;
-  line-height: 1.7;
-  color: #999999;
-}
-
 .filter-toggle {
   display: none;
-  flex: 0 0 auto;
   align-items: center;
-  gap: 5px;
-  height: 34px;
-  padding: 0 12px;
-  font-size: 12px;
-  color: #555555;
+  gap: 8px;
+  height: auto;
+  padding: 0;
+  font-size: 16px;
+  color: #333333;
   white-space: nowrap;
-  border: 1px solid #dddddd;
+  border: 0;
 }
 
 .product-grid-3 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  gap: 0;
+  width: calc(100% + 10px);
 }
 
 .empty-state {
@@ -467,20 +463,42 @@ watch(
 }
 
 @media (max-width: 900px) {
+  .category-page {
+    padding-top: 12px;
+  }
+
   .category-head {
-    align-items: flex-start;
     flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .breadcrumb {
+    justify-content: center;
+    font-size: 16px;
   }
 
   .category-tools {
+    flex-direction: column;
+    gap: 12px;
     width: 100%;
-    justify-content: space-between;
+    justify-content: center;
+  }
+
+  .result-count {
+    display: none;
+  }
+
+  .category-tools select {
+    width: 148px;
+    height: 40px;
+    font-size: 14px;
   }
 
   .category-layout {
     grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
+    gap: 0;
     padding-top: 18px;
   }
 
@@ -490,6 +508,10 @@ watch(
 
   .sidebar.open {
     display: block;
+    padding: 10px;
+    margin-bottom: 12px;
+    background: #ffffff;
+    border: 1px solid #eeeeee;
   }
 
   .filter-toggle {
@@ -498,11 +520,9 @@ watch(
 
   .product-grid-3 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-
-  .content-head h1 {
-    font-size: 22px;
+    gap: 0;
+    width: auto;
+    margin: 0 -10px;
   }
 }
 </style>

@@ -11,7 +11,8 @@ const props = defineProps({
   sectionId: { type: String, required: true },
   sectionTitle: { type: String, default: '' },
   index: { type: Number, required: true },
-  eager: { type: Boolean, default: false }
+  eager: { type: Boolean, default: false },
+  bordered: { type: Boolean, default: false }
 })
 
 const cart = useCart()
@@ -109,7 +110,7 @@ function addToCart() {
 </script>
 
 <template>
-  <article class="vp-card" :class="{ 'is-sold': !stock }">
+  <article class="vp-card" :class="{ 'is-sold': !stock, 'is-bordered': bordered }">
     <div class="card-top">
       <img v-if="brandLogo" class="card-brand-logo" :src="asset(brandLogo)" :alt="brand" />
       <span v-else class="card-brand">{{ brand }}</span>
@@ -162,24 +163,35 @@ function addToCart() {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 14px;
+  padding: 0;
+  background: transparent;
+}
+
+.vp-card.is-bordered {
+  padding: 0 9.8px 19.6px;
   background: #ffffff;
-  box-shadow: 0 1px 3px -2px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 0 0 1px #e5e5e5;
+}
+
+.vp-card.is-bordered .card-image {
+  width: 100%;
 }
 
 .card-top {
-  position: relative;
-  z-index: 2;
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  z-index: 4;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  min-height: 22px;
+  max-width: 45%;
   gap: 8px;
 }
 
 .card-brand {
   overflow: hidden;
-  max-width: 45%;
+  max-width: 100%;
   font-family: var(--font-heading);
   font-size: 10px;
   font-weight: 900;
@@ -193,7 +205,7 @@ function addToCart() {
 .card-brand-logo {
   display: block;
   max-width: 72px;
-  max-height: 22px;
+  max-height: 20px;
   object-fit: contain;
   object-position: left center;
 }
@@ -288,8 +300,10 @@ function addToCart() {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 245px;
-  margin: 4px 0 6px;
+  width: 70%;
+  height: auto;
+  aspect-ratio: 1;
+  margin: 0 auto;
   overflow: hidden;
 }
 
@@ -297,7 +311,7 @@ function addToCart() {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 10px;
+  padding: 0;
 }
 
 .card-sold {
@@ -367,22 +381,26 @@ function addToCart() {
   display: flex;
   flex: 1;
   flex-direction: column;
+  padding: 10px 10px 20px;
   text-align: center;
 }
 
 .card-cat {
-  font-size: 11px;
-  color: #aaaaaa;
+  font-size: 12px;
+  line-height: 1.2;
+  color: #777777;
+  text-transform: uppercase;
 }
 
 .card-title {
   display: -webkit-box;
-  min-height: 40px;
-  margin: 4px 0 5px;
+  min-height: 23px;
+  margin: 1.36px 0;
   overflow: hidden;
-  font-size: 14px;
-  line-height: 20px;
-  color: #3372a2;
+  font-size: 14.4px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #777777;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
@@ -392,28 +410,30 @@ function addToCart() {
 }
 
 .card-price {
-  margin-bottom: 8px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #242125;
+  margin-bottom: 0;
+  font-size: 14.4px;
+  font-weight: 400;
+  line-height: 1;
+  color: #777777;
 }
 
 .card-buy {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-top: auto;
+  gap: 3px;
+  width: 140px;
+  margin: 5px auto 0;
 }
 
 .card-buy select {
   width: 100%;
-  height: 34px;
-  padding: 0 8px;
-  font-size: 11px;
-  color: #555555;
+  height: 32.6px;
+  padding: 5px 10px;
+  font-size: 13px;
+  color: #333333;
   background: #ffffff;
   border: 1px solid #dddddd;
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 .card-buy select:focus,
@@ -425,7 +445,7 @@ function addToCart() {
 
 .get-btn {
   width: 100%;
-  height: 36px;
+  height: 32.5px;
   padding: 0;
   background: transparent;
   border: 0;
@@ -474,38 +494,57 @@ function addToCart() {
 
 @media (max-width: 900px) {
   .vp-card {
-    padding: 9px;
+    padding: 0;
+  }
+
+  .card-top {
+    top: 4px;
+    left: 8px;
+  }
+
+  .card-brand-logo {
+    max-height: 16px;
   }
 
   .card-image {
-    height: 170px;
-    margin: 2px 0 4px;
+    width: 70%;
+    height: auto;
+    margin: 0 auto;
   }
 
-  .card-image img {
-    padding: 6px;
+  .card-body {
+    min-height: 167px;
+    padding: 9.5px 10px 19px;
+  }
+
+  .card-cat {
+    font-size: 12px;
   }
 
   .card-title {
-    min-height: 36px;
-    font-size: 12px;
-    line-height: 18px;
+    min-height: 22px;
+    font-size: 13.6px;
+    line-height: 19.4px;
   }
 
   .card-price {
-    font-size: 13px;
+    font-size: 13.6px;
   }
 
   .card-buy {
-    grid-template-columns: 1fr;
-    gap: 4px;
+    width: 100%;
+    gap: 3px;
   }
 
   .card-buy select,
   .card-buy button,
   .card-view {
     height: 30px;
-    font-size: 10px;
+    font-size: 12px;
+  }
+
+  .card-buy select {
+    padding: 4px 8px;
   }
 
   .card-wish {

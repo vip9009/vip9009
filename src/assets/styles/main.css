@@ -162,15 +162,36 @@ button {
   background: var(--color-background);
 }
 
+@media (max-width: 1024px) {
+  html {
+    background-image: url('../images/mobile-bg.webp');
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: cover;
+    background-attachment: fixed;
+  }
+
+  body,
+  #app,
+  .site,
+  .site-content,
+  .home-page,
+  .category-section,
+  .new-section,
+  .tag-section {
+    background: transparent !important;
+  }
+}
+
 .wrapper {
   width: var(--wrapper);
   max-width: 100%;
+  padding: 0 15px;
   margin: 0 auto;
 }
 
 .site-content {
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0;
 }
 
 .home-row {
@@ -425,13 +446,13 @@ button {
 
 @media (max-width: 960px) {
   .site-content {
-    padding-bottom: 88px;
+    padding-bottom: 0;
   }
 }
 
 @media (max-width: 768px) {
   .site-content {
-    padding: 0 16px 88px;
+    padding: 0;
   }
 
   .home-row {
@@ -439,7 +460,7 @@ button {
   }
 
   .wrapper {
-    padding: 0;
+    padding: 0 15px;
   }
 
   .page-title {
