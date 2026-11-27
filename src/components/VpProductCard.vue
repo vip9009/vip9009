@@ -24,7 +24,9 @@ const brandLogo = computed(() => site.brandLogos?.[brand.value] || '')
 const route = computed(() => productRoute(props.sectionId, props.index))
 const image = computed(() => asset(props.product.localImage))
 const badges = computed(() => {
-  const list = Array.isArray(props.product.badges) ? [...props.product.badges] : []
+  const list = Array.isArray(props.product.badges)
+    ? props.product.badges.filter((badge) => String(badge).toUpperCase() !== 'HOT')
+    : []
   if (props.product.recommend && !list.includes('店长推荐')) list.push('店长推荐')
   return list.slice(0, 4)
 })
@@ -88,18 +90,13 @@ function addToCart() {
     <div class="card-top">
       <img v-if="brandLogo" class="card-brand-logo" :src="asset(brandLogo)" :alt="brand" />
       <span v-else class="card-brand">{{ brand }}</span>
-      <div class="card-badges" :class="{ single: badges.length === 1 }">
-        <span
-          v-for="(badge, badgeIndex) in badges"
-          :key="badge"
-          class="card-badge"
-          :style="{ animationDelay: `${badgeIndex * 0.12}s` }"
-        >{{ badge }}</span>
-      </div>
     </div>
 
     <RouterLink class="card-image" :to="route">
       <img :src="image" :alt="title" :loading="eager ? 'eager' : 'lazy'" decoding="async" />
+      <div v-if="badges.length" class="card-badges">
+        <span v-for="badge in badges" :key="badge" class="card-badge">{{ badge }}</span>
+      </div>
       <span v-if="isHot" class="card-hot">HOT</span>
     </RouterLink>
 
@@ -176,68 +173,66 @@ function addToCart() {
 }
 
 .card-badges {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  z-index: 3;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 4px;
+  gap: 5px;
+  max-width: calc(100% - 8px);
 }
 
 .card-badge {
   display: inline-flex;
   align-items: center;
-  height: 18px;
-  padding: 0 6px;
-  font-size: 9px;
+  padding: 0.3em 0.6em;
+  font-size: 10px;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1;
   color: #ffffff;
-  background: var(--color-primary);
+  white-space: nowrap;
+  background: #ff0077;
+  border-radius: 2px;
+  transform-origin: center;
+  animation: awl-bounce-in 2000ms ease-in-out 0ms infinite;
 }
 
-.card-badge:nth-child(2n) {
-  background: #242125;
-}
-
-.card-badges.single .card-badge {
-  animation: badge-pulse 2.2s ease-in-out infinite;
-}
-
-.card-badges:not(.single) .card-badge {
-  animation: badge-in 3s cubic-bezier(0.22, 0.61, 0.36, 1) infinite both;
-}
-
-@keyframes badge-pulse {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.58;
-    transform: scale(1.1);
-  }
-}
-
-@keyframes badge-in {
+@keyframes awl-bounce-in {
   0% {
+    transform: scale(0);
+    animation-timing-function: ease-in;
     opacity: 0;
-    transform: translateX(-12px);
   }
-  12% {
+  38% {
+    transform: scale(1);
+    animation-timing-function: ease-out;
     opacity: 1;
-    transform: translateX(0);
   }
-  78% {
-    opacity: 1;
-    transform: translateX(0);
+  55% {
+    transform: scale(0.7);
+    animation-timing-function: ease-in;
   }
-  90%,
+  72%,
+  89%,
   100% {
-    opacity: 0;
-    transform: translateX(-12px);
+    transform: scale(1);
+    animation-timing-function: ease-out;
+  }
+  81% {
+    transform: scale(0.84);
+    animation-timing-function: ease-in;
+  }
+  95% {
+    transform: scale(0.95);
+    animation-timing-function: ease-in;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card-badges .card-badge {
+  .card-badge {
     animation: none;
   }
 }
