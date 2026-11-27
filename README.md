@@ -224,7 +224,7 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
 - 商品详情路由为 `/product/:sectionId/:index`，`index` 是商品在分区中的下标（从 0 开始）。
 - 可选字段：
   - `brand`：品牌，留空时自动从标题识别
-  - `badges`：卡片右上角角标，例如 `["HOT", "上新"]`
+  - `badges`：活动角标显示在图片右上角，例如 `["HOT", "上新"]`；非活动标签（如自定义、呼吸灯、凉度调节）会自动显示在图片左下角
   - `priceMax`：价格区间上限，前台显示 `¥最低 – ¥最高`
   - `stock`：`false` 时显示“无货”并禁用购买
   - `hot`：`true` 时显示 HOT 标记

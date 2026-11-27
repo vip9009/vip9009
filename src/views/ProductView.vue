@@ -7,6 +7,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { useCart } from '@/stores/cart'
 import { useWishlist } from '@/stores/wishlist'
 import { asset, decodeEntities, detectBrand, formatPrice } from '@/utils'
+import { featureTagStyle, isFeatureTag } from '@/utils/tags'
 
 const route = useRoute()
 const cart = useCart()
@@ -34,15 +35,21 @@ const gallery = computed(() => {
   return list.length ? list.map(asset) : [image.value]
 })
 const activeImage = ref('')
-const badges = computed(() => {
+const allBadges = computed(() => {
   const list = Array.isArray(product.value?.badges) ? [...product.value.badges] : []
   if (product.value?.recommend && !list.includes('店长推荐')) list.push('店长推荐')
-  return list.slice(0, 4)
+  return list
 })
+const featureTags = computed(() => allBadges.value.filter((badge) => isFeatureTag(badge)).slice(0, 6))
+const badges = computed(() =>
+  allBadges.value
+    .filter((badge) => String(badge).toUpperCase() !== 'HOT' && !isFeatureTag(badge))
+    .slice(0, 4)
+)
 const isHot = computed(
   () =>
     product.value?.hot === true ||
-    badges.value.some((badge) => String(badge).toUpperCase() === 'HOT')
+    allBadges.value.some((badge) => String(badge).toUpperCase() === 'HOT')
 )
 const stock = computed(() => product.value?.stock !== false)
 const options = computed(() => {
@@ -155,6 +162,12 @@ watchEffect(() => {
           <span v-else class="gallery-brand">{{ brand }}</span>
           <div class="gallery-tags">
             <span v-for="badge in badges" :key="badge">{{ badge }}</span>
+            <span
+              v-for="tag in featureTags"
+              :key="`feature-${tag}`"
+              class="gallery-feature"
+              :style="featureTagStyle(tag)"
+            >{{ tag }}</span>
           </div>
           <div class="gallery-image">
             <img :src="activeImage || image" :alt="title" />
@@ -213,7 +226,7 @@ watchEffect(() => {
 
           <div class="meta">
             <p><span>分类：</span>{{ section?.title }}<template v-if="product.subcategory && site.categories[product.subcategory]">，{{ site.categories[product.subcategory].title }}</template></p>
-            <p v-if="badges.length"><span>标签：</span>{{ badges.join('，') }}</p>
+            <p v-if="allBadges.length"><span>标签：</span>{{ allBadges.join('，') }}</p>
             <p v-if="brand"><span>品牌：</span>{{ brand }}</p>
             <p><span>库存：</span>{{ stock ? '现货，确认后发出' : '暂时无货，可联系客服' }}</p>
           </div>
@@ -370,6 +383,11 @@ watchEffect(() => {
   font-size: 9px;
   color: #ffffff;
   background: var(--color-primary);
+}
+
+.gallery-tags .gallery-feature {
+  font-weight: 600;
+  border-radius: 2px;
 }
 
 .gallery-image {

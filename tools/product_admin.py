@@ -1158,7 +1158,7 @@ class ProductAdmin(tk.Tk):
 
         ttk.Label(dialog, text="角标 / 标签").grid(row=1, column=0, sticky="w", padx=12, pady=6)
         ttk.Entry(dialog, textvariable=badges_var).grid(row=1, column=1, columnspan=2, sticky="ew", padx=(0, 12), pady=6)
-        ttk.Label(dialog, text="多个用逗号分隔，例如：HOT，上新，上新口味", foreground="#777").grid(
+        ttk.Label(dialog, text="活动角标显示右上；自定义/呼吸灯/凉度调节等功能标签显示图片左下", foreground="#777").grid(
             row=2, column=1, columnspan=2, sticky="w", padx=(0, 12)
         )
 

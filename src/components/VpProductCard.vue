@@ -4,6 +4,7 @@ import { RouterLink } from 'vue-router'
 import { useCart } from '@/stores/cart'
 import { site } from '@/data'
 import { asset, decodeEntities, detectBrand, formatPrice, productRoute } from '@/utils'
+import { featureTagStyle, isFeatureTag } from '@/utils/tags'
 
 const props = defineProps({
   product: { type: Object, required: true },
@@ -23,15 +24,21 @@ const brand = computed(() => detectBrand(props.product))
 const brandLogo = computed(() => site.brandLogos?.[brand.value] || '')
 const route = computed(() => productRoute(props.sectionId, props.index))
 const image = computed(() => asset(props.product.localImage))
-const badges = computed(() => {
-  const list = Array.isArray(props.product.badges)
-    ? props.product.badges.filter((badge) => String(badge).toUpperCase() !== 'HOT')
-    : []
+const allBadges = computed(() => {
+  const list = Array.isArray(props.product.badges) ? [...props.product.badges] : []
   if (props.product.recommend && !list.includes('店长推荐')) list.push('店长推荐')
-  return list.slice(0, 4)
+  return list
 })
+const featureTags = computed(() => allBadges.value.filter((badge) => isFeatureTag(badge)).slice(0, 4))
+const badges = computed(() =>
+  allBadges.value
+    .filter((badge) => String(badge).toUpperCase() !== 'HOT' && !isFeatureTag(badge))
+    .slice(0, 4)
+)
 const isHot = computed(
-  () => props.product.hot === true || badges.value.some((badge) => String(badge).toUpperCase() === 'HOT')
+  () =>
+    props.product.hot === true ||
+    allBadges.value.some((badge) => String(badge).toUpperCase() === 'HOT')
 )
 const stock = computed(() => props.product.stock !== false)
 const options = computed(() => {
@@ -98,6 +105,9 @@ function addToCart() {
         <span v-for="badge in badges" :key="badge" class="card-badge">{{ badge }}</span>
       </div>
       <span v-if="isHot" class="card-hot">HOT</span>
+      <div v-if="featureTags.length" class="card-feature-tags">
+        <span v-for="tag in featureTags" :key="tag" :style="featureTagStyle(tag)">{{ tag }}</span>
+      </div>
       <span v-if="!stock" class="card-sold">无货</span>
     </RouterLink>
 
@@ -198,6 +208,26 @@ function addToCart() {
   border-radius: 2px;
   transform-origin: center;
   animation: awl-bounce-in 2000ms ease-in-out 0ms infinite;
+}
+
+.card-feature-tags {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: calc(100% - 8px);
+}
+
+.card-feature-tags span {
+  padding: 3px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  border-radius: 2px;
 }
 
 @keyframes awl-bounce-in {
