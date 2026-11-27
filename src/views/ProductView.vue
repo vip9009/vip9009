@@ -319,8 +319,8 @@ watch(
 
           <div class="sub-actions">
             <button class="wish-btn" type="button" :class="{ active: wishlist.has(sectionId, productIndex) }" @click="toggleWishlist">
-              <AppIcon name="heart" :size="16" />
-              {{ wishlist.has(sectionId, productIndex) ? '已收藏' : '加入收藏' }}
+              <AppIcon name="heart" :size="18" />
+              {{ wishlist.has(sectionId, productIndex) ? '从收藏中删除' : '加入收藏' }}
             </button>
           </div>
 
@@ -335,7 +335,7 @@ watch(
             <p v-if="allBadges.length">
               <span>标签：</span>&nbsp;
               <template v-for="(badge, badgeIndex) in allBadges" :key="badge">
-                <RouterLink :to="`/search?q=${encodeURIComponent(badge)}`">{{ badge }}</RouterLink><template v-if="badgeIndex < allBadges.length - 1">,{{ ' ' }}</template>
+                <RouterLink :to="`/search?q=${encodeURIComponent(badge)}`">{{ badge }}</RouterLink><span v-if="badgeIndex < allBadges.length - 1" class="meta-sep">, </span>
               </template>
             </p>
             <p v-if="brand">
@@ -858,11 +858,19 @@ watch(
   align-items: center;
   gap: 6px;
   font-size: 16px;
-  color: #777777;
+  color: #333333;
+}
+
+.wish-btn:hover {
+  color: #000000;
 }
 
 .wish-btn.active {
-  color: var(--color-primary);
+  color: #000000;
+}
+
+.wish-btn.active svg {
+  fill: currentColor;
 }
 
 .meta {
@@ -887,6 +895,10 @@ watch(
 
 .meta a:hover {
   color: #111111;
+}
+
+.meta-sep {
+  white-space: pre;
 }
 
 .meta span {
