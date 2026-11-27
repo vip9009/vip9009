@@ -7722,6 +7722,64 @@
         }
       ],
       "recommend": false
+    },
+    {
+      "title": "TESIYI Ultra Shisha 星空 35000 Puffs",
+      "price": 268,
+      "imageAlt": "TESIYI Ultra Shisha 星空 35000 Puffs",
+      "localImage": "/images/products/vp-13944.webp",
+      "description": "TESIYI Ultra Shisha 星空 35000 Puffs。水烟系列现货，支持扫码验证。加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
+      "sourceId": 13944,
+      "specs": {
+        "口数": "35000 口",
+        "类型": "水烟系列",
+        "品牌": "TESIYI",
+        "口味": "9 种"
+      },
+      "brand": "ppgege",
+      "badges": [
+        "上新口味"
+      ],
+      "options": [
+        {
+          "label": "LOVA666",
+          "price": 268
+        },
+        {
+          "label": "柠檬薄荷",
+          "price": 268
+        },
+        {
+          "label": "樱桃",
+          "price": 268
+        },
+        {
+          "label": "口香糖薄荷",
+          "price": 268
+        },
+        {
+          "label": "蓝莓薄荷",
+          "price": 268
+        },
+        {
+          "label": "芒果冰",
+          "price": 268
+        },
+        {
+          "label": "双苹果",
+          "price": 268
+        },
+        {
+          "label": "芒果菠萝",
+          "price": 268
+        },
+        {
+          "label": "混合浆果",
+          "price": 268
+        }
+      ],
+      "recommend": false,
+      "subcategory": "dd"
     }
   ]
 }

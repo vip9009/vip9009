@@ -322,12 +322,6 @@ watch(
             </p>
           </div>
 
-          <div class="service-strip">
-            <span>扫码验真</span>
-            <span>物流可查</span>
-            <span>一对一售后</span>
-            <span>QQ {{ site.contacts.qq?.number }}</span>
-          </div>
         </div>
       </div>
 
@@ -861,20 +855,7 @@ watch(
   color: #999999;
 }
 
-.service-strip {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding-top: 12px;
-}
 
-.service-strip span {
-  padding: 4px 8px;
-  font-size: 10px;
-  color: #777777;
-  background: #f7f7f7;
-  border: 1px solid #eeeeee;
-}
 
 .product-tabs {
   padding-top: 10px;

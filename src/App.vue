@@ -108,6 +108,8 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+
+
 .route-progress {
   position: fixed;
   top: 0;

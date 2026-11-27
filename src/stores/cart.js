@@ -12,7 +12,7 @@ function load() {
 }
 
 const state = reactive({
-  items: load()
+  items: load(),
 })
 
 watch(
@@ -24,7 +24,7 @@ watch(
       /* ignore quota errors */
     }
   },
-  { deep: true }
+  { deep: true },
 )
 
 function keyOf(sectionId, index, option) {
@@ -34,7 +34,7 @@ function keyOf(sectionId, index, option) {
 export function useCart() {
   const count = computed(() => state.items.reduce((sum, item) => sum + item.qty, 0))
   const subtotal = computed(() =>
-    state.items.reduce((sum, item) => sum + Number(item.price) * item.qty, 0)
+    state.items.reduce((sum, item) => sum + Number(item.price) * item.qty, 0),
   )
 
   function add({ sectionId, index, title, price, image, option = '', qty = 1 }) {
@@ -52,7 +52,7 @@ export function useCart() {
       price: Number(price),
       image,
       option,
-      qty
+      qty,
     })
   }
 
@@ -63,12 +63,23 @@ export function useCart() {
   }
 
   function remove(key) {
-    state.items = state.items.filter((item) => item.key !== key)
+    const idx = state.items.findIndex((item) => item.key === key)
+    if (idx > -1) state.items.splice(idx, 1)
   }
 
   function clear() {
-    state.items = []
+    state.items.splice(0, state.items.length)
   }
 
-  return { items: state.items, count, subtotal, add, updateQty, remove, clear }
+  return {
+    get items() {
+      return state.items
+    },
+    count,
+    subtotal,
+    add,
+    updateQty,
+    remove,
+    clear,
+  }
 }
