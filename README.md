@@ -204,7 +204,7 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
       "badges": ["HOT", "上新"],
       "stock": true,
       "hot": true,
-      "options": ["黑色", { "label": "蓝色", "price": 298 }],
+      "options": ["黑色", { "label": "蓝色", "price": 298, "stock": false }],
       "specs": { "口数": "30000", "电池": "800mAh" },
       "imageAlt": "图片描述",
       "localImage": "/images/products/disposables-1-800.webp",
@@ -228,7 +228,7 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
   - `priceMax`：价格区间上限，前台显示 `¥最低 – ¥最高`
   - `stock`：`false` 时显示“无货”并禁用购买
   - `hot`：`true` 时显示 HOT 标记
-  - `options`：口味/规格，字符串数组或 `{label, price}` 数组；有值时商品卡显示 SELECT 下拉
+  - `options`：口味/规格，字符串数组或 `{label, price, stock}` 数组；有值时商品卡显示 SELECT 下拉。选中后显示对应口味价格；该口味 `stock: false` 时购买按钮置灰
   - `specs`：参数对象，显示在商品页“参数”Tab
   - `gallery`：详情图数组，留空使用 `localImage`
 - 工具里的「更多信息」可以编辑以上字段，不需要手改 JSON。

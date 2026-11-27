@@ -233,9 +233,22 @@ def check_data() -> int:
                     errors.append(f"{section_id}[{index}]: options 应该是数组")
                 else:
                     for option in options:
-                        if isinstance(option, dict) and not option.get("label"):
-                            errors.append(f"{section_id}[{index}]: 口味缺少名称")
-                        elif not isinstance(option, (str, dict)):
+                        if isinstance(option, dict):
+                            if not option.get("label"):
+                                errors.append(f"{section_id}[{index}]: 口味缺少名称")
+                            if option.get("price") not in (None, ""):
+                                try:
+                                    if float(option.get("price")) <= 0:
+                                        raise ValueError
+                                except (TypeError, ValueError):
+                                    errors.append(
+                                        f"{section_id}[{index}]: 口味价格不正确：{option.get('label')}"
+                                    )
+                            if "stock" in option and not isinstance(option.get("stock"), bool):
+                                errors.append(
+                                    f"{section_id}[{index}]: 口味库存标记应为 true/false：{option.get('label')}"
+                                )
+                        elif not isinstance(option, str):
                             errors.append(f"{section_id}[{index}]: 口味格式不正确")
             local_image = product.get("localImage", "")
             path = image_path(local_image)
@@ -1077,7 +1090,10 @@ class ProductAdmin(tk.Tk):
         lines = []
         for item in options or []:
             if isinstance(item, dict):
-                lines.append(f"{item.get('label', '')}|{item.get('price', '')}")
+                line = f"{item.get('label', '')}|{item.get('price', '')}"
+                if item.get("stock") is False:
+                    line += "|无货"
+                lines.append(line)
             else:
                 lines.append(str(item))
         return "\n".join(lines)
@@ -1179,7 +1195,7 @@ class ProductAdmin(tk.Tk):
         options_text = tk.Text(dialog, height=7, wrap="word", relief="solid", borderwidth=1)
         options_text.grid(row=7, column=1, columnspan=2, sticky="nsew", padx=(0, 12), pady=6)
         options_text.insert("1.0", self._options_text(self.extra.get("options")))
-        ttk.Label(dialog, text="每行一个口味；需要单独价格时写：名称|价格", foreground="#777").grid(
+        ttk.Label(dialog, text="每行一个口味；单独价格写：名称|价格；该口味无货写：名称|价格|无货", foreground="#777").grid(
             row=8, column=1, columnspan=2, sticky="w", padx=(0, 12)
         )
 
@@ -1215,19 +1231,30 @@ class ProductAdmin(tk.Tk):
                 if not line:
                     continue
                 if "|" in line:
-                    label, price = line.split("|", 1)
-                    label = label.strip()
-                    try:
-                        price_value = compact_price(price.strip())
-                        if float(price_value) <= 0:
-                            raise ValueError
-                    except (TypeError, ValueError):
-                        messagebox.showwarning("口味价格不正确", f"这一行价格不正确：{line}", parent=dialog)
-                        return
+                    parts = line.split("|")
+                    label = parts[0].strip()
+                    price_raw = parts[1].strip() if len(parts) > 1 else ""
+                    flag = "|".join(parts[2:]).strip()
+                    out_of_stock = any(word in flag for word in ("无货", "缺货", "售罄"))
                     if not label:
                         messagebox.showwarning("口味名称缺失", f"这一行缺少名称：{line}", parent=dialog)
                         return
-                    options.append({"label": label, "price": price_value})
+                    option = {"label": label}
+                    if price_raw:
+                        try:
+                            price_value = compact_price(price_raw)
+                            if float(price_value) <= 0:
+                                raise ValueError
+                        except (TypeError, ValueError):
+                            messagebox.showwarning("口味价格不正确", f"这一行价格不正确：{line}", parent=dialog)
+                            return
+                        option["price"] = price_value
+                    if out_of_stock:
+                        option["stock"] = False
+                    if len(option) == 1:
+                        options.append(label)
+                    else:
+                        options.append(option)
                 else:
                     options.append(line)
 

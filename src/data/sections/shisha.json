@@ -23,12 +23,30 @@
       ],
       "hot": true,
       "options": [
-        "蓝莓樱桃",
-        "柠檬薄荷",
-        "蓝莓薄荷",
-        "樱桃气泡",
-        "柠檬青柠",
-        "胡巴"
+        {
+          "label": "蓝莓樱桃",
+          "price": 258
+        },
+        {
+          "label": "柠檬薄荷",
+          "price": 258
+        },
+        {
+          "label": "蓝莓薄荷",
+          "price": 258
+        },
+        {
+          "label": "樱桃气泡",
+          "price": 258
+        },
+        {
+          "label": "柠檬青柠",
+          "price": 258
+        },
+        {
+          "label": "胡巴",
+          "price": 258
+        }
       ],
       "recommend": false
     },
@@ -53,15 +71,42 @@
       ],
       "hot": true,
       "options": [
-        "墨西哥芒果",
-        "双苹果",
-        "蓝莓冰",
-        "桃子芒果西瓜",
-        "黑加仑冰",
-        "奇异果百香果番石榴",
-        "柠檬薄荷",
-        "混合水果",
-        "草莓奇异果"
+        {
+          "label": "墨西哥芒果",
+          "price": 288
+        },
+        {
+          "label": "双苹果",
+          "price": 288
+        },
+        {
+          "label": "蓝莓冰",
+          "price": 288
+        },
+        {
+          "label": "桃子芒果西瓜",
+          "price": 288
+        },
+        {
+          "label": "黑加仑冰",
+          "price": 288
+        },
+        {
+          "label": "奇异果百香果番石榴",
+          "price": 288
+        },
+        {
+          "label": "柠檬薄荷",
+          "price": 288
+        },
+        {
+          "label": "混合水果",
+          "price": 288
+        },
+        {
+          "label": "草莓奇异果",
+          "price": 288
+        }
       ],
       "recommend": false
     },
@@ -86,8 +131,16 @@
       "hot": true,
       "stock": false,
       "options": [
-        "冰爽薄荷",
-        "口香糖薄荷"
+        {
+          "label": "冰爽薄荷",
+          "price": 438,
+          "stock": false
+        },
+        {
+          "label": "口香糖薄荷",
+          "price": 438,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -111,10 +164,26 @@
       "hot": true,
       "stock": false,
       "options": [
-        "西瓜",
-        "夏威夷",
-        "芬达",
-        "龙梅"
+        {
+          "label": "西瓜",
+          "price": 258,
+          "stock": false
+        },
+        {
+          "label": "夏威夷",
+          "price": 258,
+          "stock": false
+        },
+        {
+          "label": "芬达",
+          "price": 258,
+          "stock": false
+        },
+        {
+          "label": "龙梅",
+          "price": 258,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -137,9 +206,21 @@
       ],
       "stock": false,
       "options": [
-        "黑加仑冰",
-        "芒果",
-        "薄荷口香糖"
+        {
+          "label": "黑加仑冰",
+          "price": 358,
+          "stock": false
+        },
+        {
+          "label": "芒果",
+          "price": 358,
+          "stock": false
+        },
+        {
+          "label": "薄荷口香糖",
+          "price": 358,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -161,15 +242,42 @@
         "模式切换"
       ],
       "options": [
-        "桃子冰",
-        "芒果冰",
-        "柠檬青柠",
-        "混合莓果",
-        "柠檬薄荷",
-        "芒果菠萝",
-        "菠萝口香糖",
-        "薄荷口香糖",
-        "薄荷"
+        {
+          "label": "桃子冰",
+          "price": 128
+        },
+        {
+          "label": "芒果冰",
+          "price": 128
+        },
+        {
+          "label": "柠檬青柠",
+          "price": 128
+        },
+        {
+          "label": "混合莓果",
+          "price": 128
+        },
+        {
+          "label": "柠檬薄荷",
+          "price": 128
+        },
+        {
+          "label": "芒果菠萝",
+          "price": 128
+        },
+        {
+          "label": "菠萝口香糖",
+          "price": 128
+        },
+        {
+          "label": "薄荷口香糖",
+          "price": 128
+        },
+        {
+          "label": "薄荷",
+          "price": 128
+        }
       ],
       "recommend": false
     },
@@ -193,10 +301,22 @@
       ],
       "hot": true,
       "options": [
-        "双苹果",
-        "口香糖薄荷",
-        "柠檬薄荷",
-        "魔法之爱"
+        {
+          "label": "双苹果",
+          "price": 388
+        },
+        {
+          "label": "口香糖薄荷",
+          "price": 388
+        },
+        {
+          "label": "柠檬薄荷",
+          "price": 388
+        },
+        {
+          "label": "魔法之爱",
+          "price": 388
+        }
       ],
       "recommend": false
     },
@@ -216,9 +336,21 @@
       "brand": "AL FAKHER",
       "stock": false,
       "options": [
-        "薄荷",
-        "口香糖薄荷",
-        "莓果冰"
+        {
+          "label": "薄荷",
+          "price": 228,
+          "stock": false
+        },
+        {
+          "label": "口香糖薄荷",
+          "price": 228,
+          "stock": false
+        },
+        {
+          "label": "莓果冰",
+          "price": 228,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -241,7 +373,11 @@
       ],
       "stock": false,
       "options": [
-        "14K-薄荷(买1增1)"
+        {
+          "label": "14K-薄荷(买1增1)",
+          "price": 118,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -260,10 +396,22 @@
       },
       "brand": "AL FAKHER",
       "options": [
-        "双苹果",
-        "葡萄薄荷",
-        "柠檬薄荷",
-        "桃子冰"
+        {
+          "label": "双苹果",
+          "price": 118
+        },
+        {
+          "label": "葡萄薄荷",
+          "price": 118
+        },
+        {
+          "label": "柠檬薄荷",
+          "price": 118
+        },
+        {
+          "label": "桃子冰",
+          "price": 118
+        }
       ],
       "recommend": false
     },
@@ -289,23 +437,74 @@
       ],
       "hot": true,
       "options": [
-        "薄荷口香糖",
-        "蓝莓冰",
-        "黑加仑",
-        "葡萄薄荷",
-        "西瓜冰",
-        "魔法爱",
-        "芒果冰",
-        "菠萝冰",
-        "芒果菠萝",
-        "桃子冰",
-        "柠檬青柠",
-        "草莓力量",
-        "夏日梦境",
-        "黑加仑薄荷",
-        "草莓樱桃",
-        "葡萄",
-        "双苹果"
+        {
+          "label": "薄荷口香糖",
+          "price": 168
+        },
+        {
+          "label": "蓝莓冰",
+          "price": 168
+        },
+        {
+          "label": "黑加仑",
+          "price": 168
+        },
+        {
+          "label": "葡萄薄荷",
+          "price": 168
+        },
+        {
+          "label": "西瓜冰",
+          "price": 168
+        },
+        {
+          "label": "魔法爱",
+          "price": 168
+        },
+        {
+          "label": "芒果冰",
+          "price": 168
+        },
+        {
+          "label": "菠萝冰",
+          "price": 168
+        },
+        {
+          "label": "芒果菠萝",
+          "price": 168
+        },
+        {
+          "label": "桃子冰",
+          "price": 168
+        },
+        {
+          "label": "柠檬青柠",
+          "price": 168
+        },
+        {
+          "label": "草莓力量",
+          "price": 168
+        },
+        {
+          "label": "夏日梦境",
+          "price": 168
+        },
+        {
+          "label": "黑加仑薄荷",
+          "price": 168
+        },
+        {
+          "label": "草莓樱桃",
+          "price": 168
+        },
+        {
+          "label": "葡萄",
+          "price": 168
+        },
+        {
+          "label": "双苹果",
+          "price": 168
+        }
       ],
       "recommend": false
     },
@@ -327,15 +526,42 @@
         "上新口味"
       ],
       "options": [
-        "LOVA666",
-        "柠檬薄荷",
-        "樱桃",
-        "口香糖薄荷",
-        "蓝莓薄荷",
-        "芒果冰",
-        "双苹果",
-        "芒果菠萝",
-        "混合浆果"
+        {
+          "label": "LOVA666",
+          "price": 268
+        },
+        {
+          "label": "柠檬薄荷",
+          "price": 268
+        },
+        {
+          "label": "樱桃",
+          "price": 268
+        },
+        {
+          "label": "口香糖薄荷",
+          "price": 268
+        },
+        {
+          "label": "蓝莓薄荷",
+          "price": 268
+        },
+        {
+          "label": "芒果冰",
+          "price": 268
+        },
+        {
+          "label": "双苹果",
+          "price": 268
+        },
+        {
+          "label": "芒果菠萝",
+          "price": 268
+        },
+        {
+          "label": "混合浆果",
+          "price": 268
+        }
       ],
       "recommend": false
     },
@@ -354,8 +580,14 @@
       },
       "brand": "AL FAKHER",
       "options": [
-        "12K水滴音效-薄荷口香糖",
-        "12K水滴音效-蓝色薄雾"
+        {
+          "label": "12K水滴音效-薄荷口香糖",
+          "price": 112
+        },
+        {
+          "label": "12K水滴音效-蓝色薄雾",
+          "price": 112
+        }
       ],
       "recommend": false
     },
@@ -375,8 +607,16 @@
       "brand": "AL FAKHER",
       "stock": false,
       "options": [
-        "柠檬",
-        "蓝莓"
+        {
+          "label": "柠檬",
+          "price": 88,
+          "stock": false
+        },
+        {
+          "label": "蓝莓",
+          "price": 88,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -400,7 +640,11 @@
       "hot": true,
       "stock": false,
       "options": [
-        "暂时缺货"
+        {
+          "label": "暂时缺货",
+          "price": 238,
+          "stock": false
+        }
       ],
       "recommend": false
     }

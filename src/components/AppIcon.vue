@@ -104,5 +104,9 @@ defineProps({
       <path d="M14 4h6v6M20 4l-8 8" />
       <path d="M20 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5" />
     </template>
+    <template v-else-if="name === 'expand'">
+      <path d="M14 4h6v6M10 20H4v-6" />
+      <path d="m20 4-7 7M4 20l7-7" />
+    </template>
   </svg>
 </template>

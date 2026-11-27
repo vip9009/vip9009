@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watchEffect } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { site, productsData } from '@/data'
 import VpProductCard from '@/components/VpProductCard.vue'
@@ -7,7 +7,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { useCart } from '@/stores/cart'
 import { useWishlist } from '@/stores/wishlist'
 import { asset, decodeEntities, detectBrand, formatPrice } from '@/utils'
-import { featureTagStyle, isFeatureTag } from '@/utils/tags'
+import { isFeatureTag } from '@/utils/tags'
 
 const route = useRoute()
 const cart = useCart()
@@ -40,7 +40,6 @@ const allBadges = computed(() => {
   if (product.value?.recommend && !list.includes('店长推荐')) list.push('店长推荐')
   return list
 })
-const featureTags = computed(() => allBadges.value.filter((badge) => isFeatureTag(badge)).slice(0, 6))
 const badges = computed(() =>
   allBadges.value
     .filter((badge) => String(badge).toUpperCase() !== 'HOT' && !isFeatureTag(badge))
@@ -57,21 +56,38 @@ const options = computed(() => {
   return list
     .map((entry) =>
       typeof entry === 'string'
-        ? { label: entry, price: product.value?.price }
-        : { label: entry.label || entry.name || '', price: entry.price ?? product.value?.price }
+        ? { label: entry, price: product.value?.price, stock: true }
+        : {
+            label: entry.label || entry.name || '',
+            price: entry.price ?? product.value?.price,
+            stock: entry.stock !== false
+          }
     )
     .filter((entry) => entry.label)
 })
+const selectedOption = computed(
+  () => options.value.find((entry) => entry.label === option.value) || null
+)
 const priceLabel = computed(() => {
   const price = Number(product.value?.price)
   const max = Number(product.value?.priceMax)
   if (Number.isFinite(max) && max > price) return `${formatPrice(price)} – ${formatPrice(max)}`
   return formatPrice(product.value?.price)
 })
-const activePrice = computed(() => {
-  const match = options.value.find((entry) => entry.label === option.value)
-  return match ? Number(match.price) : Number(product.value?.price)
+const activePrice = computed(() => selectedOption.value?.price ?? product.value?.price)
+const canAdd = computed(
+  () =>
+    stock.value &&
+    (!options.value.length || Boolean(option.value)) &&
+    (selectedOption.value ? selectedOption.value.stock : true)
+)
+const addLabel = computed(() => {
+  if (!stock.value) return '无货'
+  if (selectedOption.value && !selectedOption.value.stock) return '该口味无货'
+  return added.value ? '已加入购物车' : '加入购物车'
 })
+const zoomOpen = ref(false)
+const zoomed = ref(false)
 const specRows = computed(() => {
   const specs = product.value?.specs
   if (specs && typeof specs === 'object' && !Array.isArray(specs)) {
@@ -101,11 +117,19 @@ const related = computed(() => {
 
 function addToCart() {
   error.value = ''
-  if (!stock.value) return
+  if (!stock.value) {
+    error.value = '该商品暂时无货，可以联系客服确认补货时间。'
+    return
+  }
   if (options.value.length && !option.value) {
     error.value = '请先选择口味/规格。'
     return
   }
+  if (selectedOption.value && !selectedOption.value.stock) {
+    error.value = '该口味暂时无货，请选择其他口味。'
+    return
+  }
+  if (!canAdd.value) return
   cart.add({
     sectionId: sectionId.value,
     index: productIndex.value,
@@ -122,6 +146,39 @@ function addToCart() {
   }, 1800)
 }
 
+function clearOption() {
+  option.value = ''
+  error.value = ''
+}
+
+function openZoom() {
+  zoomOpen.value = true
+  zoomed.value = false
+  document.body.style.overflow = 'hidden'
+}
+
+function closeZoom() {
+  zoomOpen.value = false
+  zoomed.value = false
+  document.body.style.overflow = ''
+}
+
+function toggleZoom() {
+  zoomed.value = !zoomed.value
+}
+
+function onKeydown(event) {
+  if (event.key === 'Escape' && zoomOpen.value) closeZoom()
+}
+
+onMounted(() => window.addEventListener('keydown', onKeydown))
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onKeydown)
+  document.body.style.overflow = ''
+  clearTimeout(addedTimer)
+})
+
 function toggleWishlist() {
   if (!product.value) return
   wishlist.toggle({
@@ -137,10 +194,25 @@ function changeQty(delta) {
   quantity.value = Math.max(1, Math.min(99, quantity.value + delta))
 }
 
-watchEffect(() => {
-  if (!activeImage.value && image.value) activeImage.value = image.value
-  if (product.value) document.title = `${title.value} - 泡泡哥雾化`
-})
+watch(
+  image,
+  (value) => {
+    activeImage.value = value
+  },
+  { immediate: true }
+)
+
+watch(
+  product,
+  () => {
+    option.value = ''
+    quantity.value = 1
+    added.value = false
+    error.value = ''
+    if (product.value) document.title = `${title.value} - 泡泡哥雾化`
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -158,19 +230,21 @@ watchEffect(() => {
 
       <div class="product-main">
         <div class="gallery">
-          <img v-if="brandLogo" class="gallery-brand-logo" :src="asset(brandLogo)" :alt="brand" />
-          <span v-else class="gallery-brand">{{ brand }}</span>
-          <div class="gallery-tags">
-            <span v-for="badge in badges" :key="badge">{{ badge }}</span>
-            <span
-              v-for="tag in featureTags"
-              :key="`feature-${tag}`"
-              class="gallery-feature"
-              :style="featureTagStyle(tag)"
-            >{{ tag }}</span>
-          </div>
-          <div class="gallery-image">
-            <img :src="activeImage || image" :alt="title" />
+          <div class="gallery-stage">
+            <div class="gallery-brand-row">
+              <img v-if="brandLogo" class="gallery-brand-logo" :src="asset(brandLogo)" :alt="brand" />
+              <span v-else class="gallery-brand">{{ brand }}</span>
+            </div>
+            <div class="gallery-image">
+              <img :src="activeImage || image" :alt="title" />
+              <div v-if="badges.length" class="gallery-badges">
+                <span v-for="badge in badges" :key="badge" class="gallery-badge">{{ badge }}</span>
+              </div>
+              <span v-if="isHot" class="gallery-hot">HOT</span>
+              <button class="zoom-button" type="button" aria-label="查看大图" @click="openZoom">
+                <AppIcon name="expand" :size="15" />
+              </button>
+            </div>
           </div>
           <div v-if="gallery.length > 1" class="gallery-thumbs">
             <button
@@ -191,16 +265,28 @@ watchEffect(() => {
 
         <div class="info">
           <h1>{{ title }}</h1>
-          <div class="price">{{ priceLabel }}</div>
+          <span class="title-divider"></span>
+
+          <div class="price-row">
+            <div class="price">{{ priceLabel }}</div>
+            <button v-if="option" class="clear-option" type="button" @click="clearOption">清除</button>
+          </div>
 
           <div v-if="options.length" class="option-row">
             <label for="option">口味</label>
             <select id="option" v-model="option">
               <option value="">选择一个选项</option>
               <option v-for="entry in options" :key="entry.label" :value="entry.label">
-                {{ entry.label }}
+                {{ entry.label }}{{ entry.stock === false ? '（无货）' : '' }}
               </option>
             </select>
+          </div>
+
+          <div v-if="selectedOption" class="variation-meta">
+            <div class="variation-price">{{ formatPrice(selectedOption.price) }}</div>
+            <p class="variation-stock" :class="{ out: !selectedOption.stock }">
+              {{ selectedOption.stock ? '有货' : '无货' }}
+            </p>
           </div>
 
           <div class="buy-row">
@@ -209,15 +295,14 @@ watchEffect(() => {
               <input :value="quantity" readonly aria-label="数量" />
               <button type="button" aria-label="增加" @click="changeQty(1)">＋</button>
             </div>
-            <button class="add-cart" type="button" :disabled="!stock" @click="addToCart">
-              {{ stock ? (added ? '已加入购物车' : '加入购物车') : '无货' }}
+            <button class="add-cart" type="button" :disabled="!canAdd" @click="addToCart">
+              {{ addLabel }}
             </button>
           </div>
 
           <p v-if="error" class="form-error">{{ error }}</p>
 
           <div class="sub-actions">
-            <span v-if="isHot" class="hot-mark">HOT</span>
             <button class="wish-btn" type="button" :class="{ active: wishlist.has(sectionId, productIndex) }" @click="toggleWishlist">
               <AppIcon name="heart" :size="16" />
               {{ wishlist.has(sectionId, productIndex) ? '已收藏' : '加入收藏' }}
@@ -228,7 +313,13 @@ watchEffect(() => {
             <p><span>分类：</span>{{ section?.title }}<template v-if="product.subcategory && site.categories[product.subcategory]">，{{ site.categories[product.subcategory].title }}</template></p>
             <p v-if="allBadges.length"><span>标签：</span>{{ allBadges.join('，') }}</p>
             <p v-if="brand"><span>品牌：</span>{{ brand }}</p>
-            <p><span>库存：</span>{{ stock ? '现货，确认后发出' : '暂时无货，可联系客服' }}</p>
+            <p>
+              <span>库存：</span>
+              <template v-if="selectedOption">
+                {{ selectedOption.stock ? '现货，确认后发出' : '该口味暂时无货，请选择其他口味' }}
+              </template>
+              <template v-else>{{ stock ? '现货，确认后发出' : '暂时无货，可联系客服' }}</template>
+            </p>
           </div>
 
           <div class="service-strip">
@@ -319,6 +410,21 @@ watchEffect(() => {
       <p>商品可能已经下架，返回首页看看当前在售的商品。</p>
       <RouterLink class="black-btn" to="/">返回首页</RouterLink>
     </div>
+
+    <Teleport to="body">
+      <div v-if="zoomOpen" class="zoom-viewer" @click.self="closeZoom">
+        <button class="zoom-close" type="button" aria-label="关闭" @click="closeZoom">
+          <AppIcon name="close" :size="22" />
+        </button>
+        <img
+          :class="{ zoomed }"
+          :src="activeImage || image"
+          :alt="title"
+          @click="toggleZoom"
+        />
+        <span class="zoom-tip">{{ zoomed ? '点击图片缩小' : '点击图片放大' }} · ESC 关闭</span>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -343,18 +449,36 @@ watchEffect(() => {
 
 .product-main {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: 54px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0;
   padding: 10px 0 30px;
 }
 
 .gallery {
   position: relative;
+  padding: 0 15px;
+}
+
+.info {
+  padding: 0 15px;
+}
+
+.gallery-stage {
+  position: relative;
+}
+
+.gallery-brand-row {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  min-height: 24px;
 }
 
 .gallery-brand {
   display: block;
-  margin-bottom: 6px;
   font-family: var(--font-heading);
   font-size: 11px;
   font-weight: 900;
@@ -365,36 +489,19 @@ watchEffect(() => {
 .gallery-brand-logo {
   display: block;
   max-width: 110px;
-  max-height: 26px;
-  margin-bottom: 8px;
+  max-height: 24px;
   object-fit: contain;
   object-position: left center;
 }
 
-.gallery-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 10px;
-}
-
-.gallery-tags span {
-  padding: 2px 7px;
-  font-size: 9px;
-  color: #ffffff;
-  background: var(--color-primary);
-}
-
-.gallery-tags .gallery-feature {
-  font-weight: 600;
-  border-radius: 2px;
-}
-
 .gallery-image {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 520px;
+  height: 510px;
+  padding-top: 32px;
+  box-sizing: border-box;
 }
 
 .gallery-image img {
@@ -402,6 +509,136 @@ watchEffect(() => {
   max-height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 30px 24px rgba(0, 0, 0, 0.12));
+}
+
+.gallery-badges {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  z-index: 6;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 5px;
+  max-width: calc(100% - 8px);
+}
+
+.gallery-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3em 0.6em;
+  font-size: 10px;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1;
+  color: #ffffff;
+  white-space: nowrap;
+  background: #ff0077;
+  border-radius: 2px;
+  transform-origin: center;
+  animation: detail-bounce 2000ms ease-in-out 0ms infinite;
+}
+
+.gallery-hot {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  z-index: 5;
+  padding: 0.3em 0.6em;
+  font-family: var(--font-heading);
+  font-size: 10px;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1;
+  color: #ffffff;
+  background: #0a0002;
+  border-radius: 2px;
+  transform: translateY(-50%);
+  animation: detail-heartbeat 2000ms ease-in-out 0ms infinite;
+}
+
+.zoom-button {
+  position: absolute;
+  bottom: 9px;
+  left: 12px;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 39px;
+  height: 39px;
+  color: #c0c0c0;
+  background: rgba(255, 255, 255, 0.7);
+  border: 2px solid #c0c0c0;
+  border-radius: 999px;
+  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.zoom-button:hover {
+  color: #242125;
+  background: #ffffff;
+  border-color: #242125;
+}
+
+@keyframes detail-bounce {
+  0% {
+    transform: scale(0);
+    animation-timing-function: ease-in;
+    opacity: 0;
+  }
+  38% {
+    transform: scale(1);
+    animation-timing-function: ease-out;
+    opacity: 1;
+  }
+  55% {
+    transform: scale(0.7);
+    animation-timing-function: ease-in;
+  }
+  72%,
+  89%,
+  100% {
+    transform: scale(1);
+    animation-timing-function: ease-out;
+  }
+  81% {
+    transform: scale(0.84);
+    animation-timing-function: ease-in;
+  }
+  95% {
+    transform: scale(0.95);
+    animation-timing-function: ease-in;
+  }
+}
+
+@keyframes detail-heartbeat {
+  0% {
+    transform: translateY(-50%) scale(1);
+    animation-timing-function: ease-out;
+  }
+  10% {
+    transform: translateY(-50%) scale(0.91);
+    animation-timing-function: ease-in;
+  }
+  17% {
+    transform: translateY(-50%) scale(0.98);
+    animation-timing-function: ease-out;
+  }
+  33% {
+    transform: translateY(-50%) scale(0.87);
+    animation-timing-function: ease-in;
+  }
+  45% {
+    transform: translateY(-50%) scale(1);
+    animation-timing-function: ease-out;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-badge,
+  .gallery-hot {
+    animation: none;
+  }
 }
 
 .gallery-thumbs {
@@ -438,40 +675,66 @@ watchEffect(() => {
 
 .info h1 {
   margin-bottom: 10px;
-  font-size: 30px;
-  line-height: 1.2;
-  color: #242125;
+  font-size: 27px;
+  line-height: 1.3;
+  color: #555555;
+}
+
+.title-divider {
+  display: block;
+  width: 30px;
+  height: 1px;
+  margin-bottom: 14px;
+  background: #dddddd;
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
 }
 
 .price {
-  padding-bottom: 16px;
-  margin-bottom: 16px;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
-  border-bottom: 1px solid #eeeeee;
+  color: #777777;
+}
+
+.clear-option {
+  font-size: 13px;
+  color: #666666;
+}
+
+.clear-option:hover {
+  color: var(--color-primary);
 }
 
 .option-row {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
+  margin-top: 6px;
 }
 
 .option-row label {
-  font-size: 12px;
+  flex: 0 0 auto;
+  padding-right: 20px;
+  font-size: 14px;
+  font-weight: 700;
   color: #777777;
 }
 
 .option-row select {
   flex: 1;
   height: 40px;
-  padding: 0 10px;
-  font-size: 12px;
-  color: #555555;
+  padding: 0 15px;
+  margin: 7px 0 15px;
+  font-size: 14px;
+  color: #333333;
   background: #ffffff;
   border: 1px solid #dddddd;
-  border-radius: 2px;
+  border-radius: 8px;
 }
 
 .option-row select:focus,
@@ -481,52 +744,82 @@ watchEffect(() => {
   box-shadow: none;
 }
 
+.variation-meta {
+  padding-top: 7px;
+  border-top: 1px dashed #dddddd;
+}
+
+.variation-price {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #777777;
+}
+
+.variation-stock {
+  margin: 4px 0 15px;
+  font-size: 13px;
+  color: #008000;
+}
+
+.variation-stock.out {
+  color: #c0392b;
+}
+
 .buy-row {
   display: flex;
-  gap: 8px;
+  gap: 24px;
   margin-bottom: 10px;
 }
 
 .qty {
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
-  height: 44px;
+  width: 112px;
+  height: 45px;
+  overflow: hidden;
   border: 1px solid #dddddd;
+  border-radius: 8px;
 }
 
 .qty button {
-  width: 34px;
+  width: 35px;
   height: 100%;
-  font-size: 15px;
-  color: #555555;
+  font-size: 18px;
+  font-weight: 700;
+  color: #333333;
+  background: #f5f5f5;
 }
 
 .qty input {
-  width: 42px;
+  width: 40px;
   height: 100%;
   text-align: center;
+  background: #ffffff;
   border: 0;
-  border-right: 1px solid #eeeeee;
-  border-left: 1px solid #eeeeee;
   outline: none;
 }
 
 .add-cart {
-  flex: 1;
-  height: 44px;
+  height: 45px;
+  min-width: 122px;
+  padding: 0 25px;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
   color: #ffffff;
-  background: #6d6d6d;
+  background: #000000;
+  border-radius: 8px;
 }
 
-.add-cart:hover {
+.add-cart:hover:not(:disabled) {
   background: var(--color-primary);
 }
 
 .add-cart:disabled {
-  color: #cccccc;
-  background: #f5f5f5;
+  color: #ffffff;
+  background: #000000;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
@@ -541,14 +834,6 @@ watchEffect(() => {
   align-items: center;
   gap: 12px;
   padding-bottom: 14px;
-}
-
-.hot-mark {
-  padding: 3px 8px;
-  font-size: 9px;
-  font-weight: 900;
-  color: #ffffff;
-  background: #242125;
 }
 
 .wish-btn {
@@ -742,22 +1027,124 @@ watchEffect(() => {
   background: #242125;
 }
 
+.zoom-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.zoom-viewer img {
+  max-width: 92vw;
+  max-height: 86vh;
+  object-fit: contain;
+  cursor: zoom-in;
+  user-select: none;
+  transition: transform 0.25s ease;
+}
+
+.zoom-viewer img.zoomed {
+  transform: scale(1.6);
+  cursor: zoom-out;
+}
+
+.zoom-close {
+  position: absolute;
+  top: 22px;
+  right: 26px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  transition: background 0.18s ease;
+}
+
+.zoom-close:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.zoom-tip {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.72);
+  transform: translateX(-50%);
+}
+
 @media (max-width: 900px) {
   .product-main {
     grid-template-columns: minmax(0, 1fr);
     gap: 24px;
   }
 
+  .gallery,
+  .info {
+    padding: 0;
+  }
+
   .gallery-image {
-    height: 330px;
+    height: 360px;
+    padding-top: 28px;
+  }
+
+  .zoom-button {
+    width: 34px;
+    height: 34px;
+    bottom: 8px;
+    left: 8px;
+  }
+
+  .gallery-brand-logo {
+    max-height: 20px;
   }
 
   .info h1 {
     font-size: 22px;
   }
 
-  .price {
-    font-size: 18px;
+  .price,
+  .variation-price {
+    font-size: 20px;
+  }
+
+  .option-row label {
+    padding-right: 12px;
+    font-size: 13px;
+  }
+
+  .option-row select {
+    padding: 0 10px;
+    font-size: 13px;
+  }
+
+  .qty {
+    width: 100px;
+    height: 42px;
+  }
+
+  .qty button {
+    width: 31px;
+  }
+
+  .add-cart {
+    height: 42px;
+    min-width: 108px;
+    padding: 0 14px;
+    font-size: 13px;
+  }
+
+  .zoom-viewer {
+    padding: 18px;
   }
 
   .tab-body {

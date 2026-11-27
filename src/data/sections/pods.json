@@ -23,26 +23,106 @@
       "hot": true,
       "stock": false,
       "options": [
-        "椰子",
-        "西瓜",
-        "草莓",
-        "绿豆",
-        "青提",
-        "混合莓果",
-        "青苹果",
-        "蜜瓜",
-        "奇异果",
-        "菠萝",
-        "观音赐茶",
-        "龙井茶",
-        "薄荷",
-        "荔枝",
-        "蜜桃",
-        "老冰棍",
-        "青柠",
-        "柠檬茶",
-        "极寒刃",
-        "山竹荔枝"
+        {
+          "label": "椰子",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "西瓜",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "草莓",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "绿豆",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "青提",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "混合莓果",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "青苹果",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "蜜瓜",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "奇异果",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "菠萝",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "观音赐茶",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "龙井茶",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "薄荷",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "荔枝",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "蜜桃",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "老冰棍",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "青柠",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "柠檬茶",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "极寒刃",
+          "price": 36,
+          "stock": false
+        },
+        {
+          "label": "山竹荔枝",
+          "price": 36,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -65,27 +145,90 @@
       ],
       "hot": true,
       "options": [
-        "西湖龙井",
-        "巨峰葡萄",
-        "水蜜桃",
-        "蜂蜜柚子",
-        "老冰棍",
-        "柠檬冰",
-        "草莓冰",
-        "荔枝冰",
-        "青苹果",
-        "可乐冰",
-        "西瓜冰",
-        "柠檬菠萝",
-        "绿豆冰",
-        "椰子水",
-        "芭乐番石榴",
-        "西柚百香果",
-        "多肉芒芒",
-        "初露青提",
-        "香芋",
-        "薄荷",
-        "桔子汽水"
+        {
+          "label": "西湖龙井",
+          "price": 80
+        },
+        {
+          "label": "巨峰葡萄",
+          "price": 80
+        },
+        {
+          "label": "水蜜桃",
+          "price": 80
+        },
+        {
+          "label": "蜂蜜柚子",
+          "price": 80
+        },
+        {
+          "label": "老冰棍",
+          "price": 80
+        },
+        {
+          "label": "柠檬冰",
+          "price": 80
+        },
+        {
+          "label": "草莓冰",
+          "price": 80
+        },
+        {
+          "label": "荔枝冰",
+          "price": 80
+        },
+        {
+          "label": "青苹果",
+          "price": 80
+        },
+        {
+          "label": "可乐冰",
+          "price": 80
+        },
+        {
+          "label": "西瓜冰",
+          "price": 80
+        },
+        {
+          "label": "柠檬菠萝",
+          "price": 80
+        },
+        {
+          "label": "绿豆冰",
+          "price": 80
+        },
+        {
+          "label": "椰子水",
+          "price": 80
+        },
+        {
+          "label": "芭乐番石榴",
+          "price": 80
+        },
+        {
+          "label": "西柚百香果",
+          "price": 80
+        },
+        {
+          "label": "多肉芒芒",
+          "price": 80
+        },
+        {
+          "label": "初露青提",
+          "price": 80
+        },
+        {
+          "label": "香芋",
+          "price": 80
+        },
+        {
+          "label": "薄荷",
+          "price": 80
+        },
+        {
+          "label": "桔子汽水",
+          "price": 80
+        }
       ],
       "recommend": false
     },
@@ -107,9 +250,18 @@
         "适配悦刻弹"
       ],
       "options": [
-        "苍艾棕",
-        "青纹蓝",
-        "琥珀橙"
+        {
+          "label": "苍艾棕",
+          "price": 488
+        },
+        {
+          "label": "青纹蓝",
+          "price": 488
+        },
+        {
+          "label": "琥珀橙",
+          "price": 488
+        }
       ],
       "recommend": false
     },
@@ -135,17 +287,61 @@
       "hot": true,
       "stock": false,
       "options": [
-        "烟杆-深灰色",
-        "青提",
-        "可乐",
-        "西瓜",
-        "青柠",
-        "茉莉龙井",
-        "柠檬菠萝",
-        "西柚百香",
-        "薄荷",
-        "矿泉水",
-        "蜂蜜柚子"
+        {
+          "label": "烟杆-深灰色",
+          "price": 188,
+          "stock": false
+        },
+        {
+          "label": "青提",
+          "price": 88,
+          "stock": false
+        },
+        {
+          "label": "可乐",
+          "price": 88,
+          "stock": false
+        },
+        {
+          "label": "西瓜",
+          "price": 88,
+          "stock": false
+        },
+        {
+          "label": "青柠",
+          "price": 88,
+          "stock": false
+        },
+        {
+          "label": "茉莉龙井",
+          "price": 88,
+          "stock": false
+        },
+        {
+          "label": "柠檬菠萝",
+          "price": 88,
+          "stock": false
+        },
+        {
+          "label": "西柚百香",
+          "price": 88,
+          "stock": false
+        },
+        {
+          "label": "薄荷",
+          "price": 88,
+          "stock": false
+        },
+        {
+          "label": "矿泉水",
+          "price": 88,
+          "stock": false
+        },
+        {
+          "label": "蜂蜜柚子",
+          "price": 88,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -167,12 +363,30 @@
         "适配悦刻弹"
       ],
       "options": [
-        "决战盘",
-        "贝壳彩",
-        "贝壳粉",
-        "贝壳银",
-        "迷幻漩涡",
-        "魔法阵"
+        {
+          "label": "决战盘",
+          "price": 99
+        },
+        {
+          "label": "贝壳彩",
+          "price": 99
+        },
+        {
+          "label": "贝壳粉",
+          "price": 99
+        },
+        {
+          "label": "贝壳银",
+          "price": 99
+        },
+        {
+          "label": "迷幻漩涡",
+          "price": 99
+        },
+        {
+          "label": "魔法阵",
+          "price": 99
+        }
       ],
       "recommend": false
     },
@@ -195,7 +409,11 @@
       ],
       "stock": false,
       "options": [
-        "千锤纹"
+        {
+          "label": "千锤纹",
+          "price": 668,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -218,7 +436,11 @@
       ],
       "stock": false,
       "options": [
-        "黑镜"
+        {
+          "label": "黑镜",
+          "price": 668,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -240,10 +462,22 @@
         "适配悦刻弹"
       ],
       "options": [
-        "黑",
-        "灰",
-        "黄",
-        "蓝"
+        {
+          "label": "黑",
+          "price": 238
+        },
+        {
+          "label": "灰",
+          "price": 238
+        },
+        {
+          "label": "黄",
+          "price": 238
+        },
+        {
+          "label": "蓝",
+          "price": 238
+        }
       ],
       "recommend": false
     },
@@ -266,21 +500,81 @@
       ],
       "stock": false,
       "options": [
-        "雪梨",
-        "混合蓝莓",
-        "蓝莓",
-        "能量饮料",
-        "芒果",
-        "柠檬青柠",
-        "可乐",
-        "粉红柠檬水",
-        "蜜桃冰",
-        "菠萝冰",
-        "蓝莓泡泡糖",
-        "复合水果",
-        "蓝莓柠檬水",
-        "苹果蜜桃",
-        "奇异果夏日芭乐"
+        {
+          "label": "雪梨",
+          "price": 150,
+          "stock": false
+        },
+        {
+          "label": "混合蓝莓",
+          "price": 150,
+          "stock": false
+        },
+        {
+          "label": "蓝莓",
+          "price": 150,
+          "stock": false
+        },
+        {
+          "label": "能量饮料",
+          "price": 150,
+          "stock": false
+        },
+        {
+          "label": "芒果",
+          "price": 150,
+          "stock": false
+        },
+        {
+          "label": "柠檬青柠",
+          "price": 150,
+          "stock": false
+        },
+        {
+          "label": "可乐",
+          "price": 150,
+          "stock": false
+        },
+        {
+          "label": "粉红柠檬水",
+          "price": 150,
+          "stock": false
+        },
+        {
+          "label": "蜜桃冰",
+          "price": 150,
+          "stock": false
+        },
+        {
+          "label": "菠萝冰",
+          "price": 150,
+          "stock": false
+        },
+        {
+          "label": "蓝莓泡泡糖",
+          "price": 150,
+          "stock": false
+        },
+        {
+          "label": "复合水果",
+          "price": 150,
+          "stock": false
+        },
+        {
+          "label": "蓝莓柠檬水",
+          "price": 150,
+          "stock": false
+        },
+        {
+          "label": "苹果蜜桃",
+          "price": 150,
+          "stock": false
+        },
+        {
+          "label": "奇异果夏日芭乐",
+          "price": 150,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -304,14 +598,46 @@
       ],
       "stock": false,
       "options": [
-        "棕杆+可乐-套装(1杆+1弹)",
-        "紫杆+西瓜-套装(1杆+1弹)",
-        "蓝杆+混合浆果-套装(1杆+1弹)",
-        "绿杆+苹果蜜桃-套装(1杆+1弹)",
-        "粉杆+粉红柠檬水-套装(1杆+1弹)",
-        "黑杆+蓝莓柠檬水-套装(1杆+1弹)",
-        "蓝杆+蓝莓酸树莓-套装(1杆+1弹)",
-        "蓝杆+猕猴百香果芭乐-套装(1杆+1弹)"
+        {
+          "label": "棕杆+可乐-套装(1杆+1弹)",
+          "price": 188,
+          "stock": false
+        },
+        {
+          "label": "紫杆+西瓜-套装(1杆+1弹)",
+          "price": 188,
+          "stock": false
+        },
+        {
+          "label": "蓝杆+混合浆果-套装(1杆+1弹)",
+          "price": 188,
+          "stock": false
+        },
+        {
+          "label": "绿杆+苹果蜜桃-套装(1杆+1弹)",
+          "price": 188,
+          "stock": false
+        },
+        {
+          "label": "粉杆+粉红柠檬水-套装(1杆+1弹)",
+          "price": 188,
+          "stock": false
+        },
+        {
+          "label": "黑杆+蓝莓柠檬水-套装(1杆+1弹)",
+          "price": 188,
+          "stock": false
+        },
+        {
+          "label": "蓝杆+蓝莓酸树莓-套装(1杆+1弹)",
+          "price": 188,
+          "stock": false
+        },
+        {
+          "label": "蓝杆+猕猴百香果芭乐-套装(1杆+1弹)",
+          "price": 188,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -332,33 +658,114 @@
         "适配悦刻弹"
       ],
       "options": [
-        "西瓜",
-        "冻柠茶",
-        "龙井",
-        "咖啡",
-        "绿豆",
-        "铁观音",
-        "薄荷(5%)",
-        "青柠",
-        "草莓",
-        "苹果",
-        "蜜桃",
-        "菠萝",
-        "甜瓜",
-        "中式红茶",
-        "青提",
-        "芒果",
-        "可乐",
-        "荔枝",
-        "葡萄",
-        "百香果",
-        "番石榴",
-        "薄荷(3%)",
-        "老冰棍",
-        "橘子汽水",
-        "香芋",
-        "绿箭薄荷",
-        "茉莉绿茶"
+        {
+          "label": "西瓜",
+          "price": 68
+        },
+        {
+          "label": "冻柠茶",
+          "price": 68
+        },
+        {
+          "label": "龙井",
+          "price": 68
+        },
+        {
+          "label": "咖啡",
+          "price": 68
+        },
+        {
+          "label": "绿豆",
+          "price": 68
+        },
+        {
+          "label": "铁观音",
+          "price": 68
+        },
+        {
+          "label": "薄荷(5%)",
+          "price": 68
+        },
+        {
+          "label": "青柠",
+          "price": 68
+        },
+        {
+          "label": "草莓",
+          "price": 68
+        },
+        {
+          "label": "苹果",
+          "price": 68
+        },
+        {
+          "label": "蜜桃",
+          "price": 68
+        },
+        {
+          "label": "菠萝",
+          "price": 68
+        },
+        {
+          "label": "甜瓜",
+          "price": 68
+        },
+        {
+          "label": "中式红茶",
+          "price": 68
+        },
+        {
+          "label": "青提",
+          "price": 68
+        },
+        {
+          "label": "芒果",
+          "price": 68
+        },
+        {
+          "label": "可乐",
+          "price": 68
+        },
+        {
+          "label": "荔枝",
+          "price": 68
+        },
+        {
+          "label": "葡萄",
+          "price": 68
+        },
+        {
+          "label": "百香果",
+          "price": 68
+        },
+        {
+          "label": "番石榴",
+          "price": 68
+        },
+        {
+          "label": "薄荷(3%)",
+          "price": 68
+        },
+        {
+          "label": "老冰棍",
+          "price": 68
+        },
+        {
+          "label": "橘子汽水",
+          "price": 68
+        },
+        {
+          "label": "香芋",
+          "price": 68
+        },
+        {
+          "label": "绿箭薄荷",
+          "price": 68
+        },
+        {
+          "label": "茉莉绿茶",
+          "price": 68
+        }
       ],
       "recommend": false
     },
@@ -380,10 +787,22 @@
         "适配悦刻弹"
       ],
       "options": [
-        "薰衣草紫",
-        "冷静灰",
-        "薄荷绿",
-        "午夜黑"
+        {
+          "label": "薰衣草紫",
+          "price": 68
+        },
+        {
+          "label": "冷静灰",
+          "price": 68
+        },
+        {
+          "label": "薄荷绿",
+          "price": 68
+        },
+        {
+          "label": "午夜黑",
+          "price": 68
+        }
       ],
       "recommend": false
     },
@@ -407,7 +826,11 @@
       "hot": true,
       "stock": false,
       "options": [
-        "百香果"
+        {
+          "label": "百香果",
+          "price": 110,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -429,11 +852,26 @@
         "适配悦刻弹"
       ],
       "options": [
-        "枪灰",
-        "哑光黑",
-        "镜面银",
-        "镜面金",
-        "镜面蓝"
+        {
+          "label": "枪灰",
+          "price": 288
+        },
+        {
+          "label": "哑光黑",
+          "price": 288
+        },
+        {
+          "label": "镜面银",
+          "price": 288
+        },
+        {
+          "label": "镜面金",
+          "price": 288
+        },
+        {
+          "label": "镜面蓝",
+          "price": 288
+        }
       ],
       "recommend": false
     },
@@ -455,10 +893,22 @@
         "适配悦刻弹"
       ],
       "options": [
-        "香槟金",
-        "云露蓝",
-        "薰衣紫",
-        "橄榄绿"
+        {
+          "label": "香槟金",
+          "price": 98
+        },
+        {
+          "label": "云露蓝",
+          "price": 98
+        },
+        {
+          "label": "薰衣紫",
+          "price": 98
+        },
+        {
+          "label": "橄榄绿",
+          "price": 98
+        }
       ],
       "recommend": false
     },
@@ -481,8 +931,16 @@
       ],
       "stock": false,
       "options": [
-        "绿色",
-        "枪色"
+        {
+          "label": "绿色",
+          "price": 138,
+          "stock": false
+        },
+        {
+          "label": "枪色",
+          "price": 138,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -504,24 +962,96 @@
       ],
       "stock": false,
       "options": [
-        "椰子水",
-        "柠檬酸橙",
-        "草莓",
-        "菠萝",
-        "伯爵红茶",
-        "柠檬",
-        "柠檬柚子",
-        "龙井",
-        "芒果",
-        "蜜桃乌龙",
-        "双苹果",
-        "三重葡萄",
-        "百香果",
-        "蓝莓",
-        "可乐",
-        "冰泉水",
-        "青提",
-        "哈密瓜"
+        {
+          "label": "椰子水",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "柠檬酸橙",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "草莓",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "菠萝",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "伯爵红茶",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "柠檬",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "柠檬柚子",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "龙井",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "芒果",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "蜜桃乌龙",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "双苹果",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "三重葡萄",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "百香果",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "蓝莓",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "可乐",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "冰泉水",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "青提",
+          "price": 32,
+          "stock": false
+        },
+        {
+          "label": "哈密瓜",
+          "price": 32,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -545,37 +1075,130 @@
       ],
       "hot": true,
       "options": [
-        "柑橘百香果",
-        "铁观音",
-        "柠檬可乐",
-        "轻轻蜜桃乌龙",
-        "清香桂花",
-        "清爽芭乐葡",
-        "草莓冰淇淋",
-        "茉莉绿茶",
-        "牛油果哈密瓜",
-        "柚c冰茶",
-        "西瓜冰",
-        "锡兰柠檬红茶",
-        "提子冰",
-        "杨枝甘露",
-        "手打柠檬冰",
-        "0糖黑葡萄",
-        "杨桃冰",
-        "荔枝",
-        "绿豆冰",
-        "柠檬薄荷",
-        "菠萝椰子",
-        "经典烟草",
-        "薄荷微凉",
-        "芒果西柚",
-        "经典雪碧",
-        "一抹绿",
-        "冻柠檬茶",
-        "水果茶",
-        "柚子茉莉茶",
-        "荔枝冷萃茶",
-        "茉莉桃子茶"
+        {
+          "label": "柑橘百香果",
+          "price": 36
+        },
+        {
+          "label": "铁观音",
+          "price": 36
+        },
+        {
+          "label": "柠檬可乐",
+          "price": 36
+        },
+        {
+          "label": "轻轻蜜桃乌龙",
+          "price": 36
+        },
+        {
+          "label": "清香桂花",
+          "price": 36
+        },
+        {
+          "label": "清爽芭乐葡",
+          "price": 36
+        },
+        {
+          "label": "草莓冰淇淋",
+          "price": 36
+        },
+        {
+          "label": "茉莉绿茶",
+          "price": 36
+        },
+        {
+          "label": "牛油果哈密瓜",
+          "price": 36
+        },
+        {
+          "label": "柚c冰茶",
+          "price": 36
+        },
+        {
+          "label": "西瓜冰",
+          "price": 36
+        },
+        {
+          "label": "锡兰柠檬红茶",
+          "price": 36
+        },
+        {
+          "label": "提子冰",
+          "price": 36
+        },
+        {
+          "label": "杨枝甘露",
+          "price": 36
+        },
+        {
+          "label": "手打柠檬冰",
+          "price": 36
+        },
+        {
+          "label": "0糖黑葡萄",
+          "price": 36
+        },
+        {
+          "label": "杨桃冰",
+          "price": 36
+        },
+        {
+          "label": "荔枝",
+          "price": 36
+        },
+        {
+          "label": "绿豆冰",
+          "price": 36
+        },
+        {
+          "label": "柠檬薄荷",
+          "price": 36
+        },
+        {
+          "label": "菠萝椰子",
+          "price": 36
+        },
+        {
+          "label": "经典烟草",
+          "price": 36
+        },
+        {
+          "label": "薄荷微凉",
+          "price": 36
+        },
+        {
+          "label": "芒果西柚",
+          "price": 36
+        },
+        {
+          "label": "经典雪碧",
+          "price": 36
+        },
+        {
+          "label": "一抹绿",
+          "price": 36
+        },
+        {
+          "label": "冻柠檬茶",
+          "price": 36
+        },
+        {
+          "label": "水果茶",
+          "price": 36
+        },
+        {
+          "label": "柚子茉莉茶",
+          "price": 36
+        },
+        {
+          "label": "荔枝冷萃茶",
+          "price": 36
+        },
+        {
+          "label": "茉莉桃子茶",
+          "price": 36
+        }
       ],
       "recommend": true
     },
@@ -595,17 +1218,61 @@
       "brand": "AL FAKHER",
       "stock": false,
       "options": [
-        "葡萄",
-        "樱桃",
-        "冰蓝",
-        "西瓜",
-        "菠萝奇异果",
-        "柠檬青柠",
-        "草莓西瓜",
-        "三重芒果",
-        "草莓狂飙",
-        "薄荷",
-        "水蜜桃"
+        {
+          "label": "葡萄",
+          "price": 59,
+          "stock": false
+        },
+        {
+          "label": "樱桃",
+          "price": 59,
+          "stock": false
+        },
+        {
+          "label": "冰蓝",
+          "price": 59,
+          "stock": false
+        },
+        {
+          "label": "西瓜",
+          "price": 59,
+          "stock": false
+        },
+        {
+          "label": "菠萝奇异果",
+          "price": 59,
+          "stock": false
+        },
+        {
+          "label": "柠檬青柠",
+          "price": 59,
+          "stock": false
+        },
+        {
+          "label": "草莓西瓜",
+          "price": 59,
+          "stock": false
+        },
+        {
+          "label": "三重芒果",
+          "price": 59,
+          "stock": false
+        },
+        {
+          "label": "草莓狂飙",
+          "price": 59,
+          "stock": false
+        },
+        {
+          "label": "薄荷",
+          "price": 59,
+          "stock": false
+        },
+        {
+          "label": "水蜜桃",
+          "price": 59,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -626,35 +1293,122 @@
         "适配悦刻弹"
       ],
       "options": [
-        "青柠",
-        "洛神花茶",
-        "老冰棍",
-        "橘子汽水",
-        "龙井",
-        "蜂蜜柚子",
-        "椰子水",
-        "百香果",
-        "荔枝",
-        "番石榴",
-        "芒果",
-        "海盐柠檬",
-        "绿豆",
-        "可乐",
-        "甜瓜",
-        "青提",
-        "蜜桃",
-        "柠檬冰",
-        "薄荷（5%）",
-        "奇异果",
-        "草莓",
-        "葡萄",
-        "苹果",
-        "中式红茶",
-        "西瓜",
-        "香芋",
-        "矿泉水",
-        "冰柠薄荷",
-        "菠萝"
+        {
+          "label": "青柠",
+          "price": 34
+        },
+        {
+          "label": "洛神花茶",
+          "price": 34
+        },
+        {
+          "label": "老冰棍",
+          "price": 34
+        },
+        {
+          "label": "橘子汽水",
+          "price": 34
+        },
+        {
+          "label": "龙井",
+          "price": 34
+        },
+        {
+          "label": "蜂蜜柚子",
+          "price": 34
+        },
+        {
+          "label": "椰子水",
+          "price": 34
+        },
+        {
+          "label": "百香果",
+          "price": 34
+        },
+        {
+          "label": "荔枝",
+          "price": 34
+        },
+        {
+          "label": "番石榴",
+          "price": 34
+        },
+        {
+          "label": "芒果",
+          "price": 34
+        },
+        {
+          "label": "海盐柠檬",
+          "price": 34
+        },
+        {
+          "label": "绿豆",
+          "price": 34
+        },
+        {
+          "label": "可乐",
+          "price": 34
+        },
+        {
+          "label": "甜瓜",
+          "price": 34
+        },
+        {
+          "label": "青提",
+          "price": 34
+        },
+        {
+          "label": "蜜桃",
+          "price": 34
+        },
+        {
+          "label": "柠檬冰",
+          "price": 34
+        },
+        {
+          "label": "薄荷（5%）",
+          "price": 34
+        },
+        {
+          "label": "奇异果",
+          "price": 34
+        },
+        {
+          "label": "草莓",
+          "price": 34
+        },
+        {
+          "label": "葡萄",
+          "price": 34
+        },
+        {
+          "label": "苹果",
+          "price": 34
+        },
+        {
+          "label": "中式红茶",
+          "price": 34
+        },
+        {
+          "label": "西瓜",
+          "price": 34
+        },
+        {
+          "label": "香芋",
+          "price": 34
+        },
+        {
+          "label": "矿泉水",
+          "price": 34
+        },
+        {
+          "label": "冰柠薄荷",
+          "price": 34
+        },
+        {
+          "label": "菠萝",
+          "price": 34
+        }
       ],
       "recommend": false
     },
@@ -678,8 +1432,16 @@
       ],
       "stock": false,
       "options": [
-        "白色",
-        "灰色"
+        {
+          "label": "白色",
+          "price": 298,
+          "stock": false
+        },
+        {
+          "label": "灰色",
+          "price": 298,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -701,7 +1463,11 @@
       ],
       "stock": false,
       "options": [
-        "随机色或私客服"
+        {
+          "label": "随机色或私客服",
+          "price": 168,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -723,10 +1489,26 @@
       ],
       "stock": false,
       "options": [
-        "苹果",
-        "蓝莓",
-        "桃子",
-        "可乐"
+        {
+          "label": "苹果",
+          "price": 45,
+          "stock": false
+        },
+        {
+          "label": "蓝莓",
+          "price": 45,
+          "stock": false
+        },
+        {
+          "label": "桃子",
+          "price": 45,
+          "stock": false
+        },
+        {
+          "label": "可乐",
+          "price": 45,
+          "stock": false
+        }
       ],
       "recommend": false
     },
@@ -748,12 +1530,30 @@
         "适配悦刻弹"
       ],
       "options": [
-        "流星银",
-        "雾叶绿",
-        "深空灰",
-        "暮光绿",
-        "曜石黑",
-        "玫瑰金"
+        {
+          "label": "流星银",
+          "price": 338
+        },
+        {
+          "label": "雾叶绿",
+          "price": 338
+        },
+        {
+          "label": "深空灰",
+          "price": 338
+        },
+        {
+          "label": "暮光绿",
+          "price": 338
+        },
+        {
+          "label": "曜石黑",
+          "price": 338
+        },
+        {
+          "label": "玫瑰金",
+          "price": 338
+        }
       ],
       "recommend": false
     },
@@ -775,10 +1575,22 @@
         "适配悦刻弹"
       ],
       "options": [
-        "黑色",
-        "银色",
-        "蓝色",
-        "金色"
+        {
+          "label": "黑色",
+          "price": 288
+        },
+        {
+          "label": "银色",
+          "price": 288
+        },
+        {
+          "label": "蓝色",
+          "price": 288
+        },
+        {
+          "label": "金色",
+          "price": 288
+        }
       ],
       "recommend": false
     },
@@ -801,28 +1613,94 @@
       ],
       "hot": true,
       "options": [
-        "柠檬薄荷",
-        "灵魂冰红茶",
-        "蜜桃乌龙",
-        "灵魂薄荷",
-        "灵魂菠萝",
-        "手打柠檬",
-        "灵魂草莓",
-        "橘子汽水",
-        "灵魂蜜桃",
-        "绿豆",
-        "灵魂西瓜",
-        "灵魂甜瓜",
-        "灵魂可乐",
-        "灵魂葡萄",
-        "灵魂西柚",
-        "灵魂龙井",
-        "老冰棍",
-        "灵魂番石榴",
-        "灵魂荔枝",
-        "灵魂百香果",
-        "灵魂青提",
-        "灵魂铁观音"
+        {
+          "label": "柠檬薄荷",
+          "price": 36
+        },
+        {
+          "label": "灵魂冰红茶",
+          "price": 36
+        },
+        {
+          "label": "蜜桃乌龙",
+          "price": 36
+        },
+        {
+          "label": "灵魂薄荷",
+          "price": 36
+        },
+        {
+          "label": "灵魂菠萝",
+          "price": 36
+        },
+        {
+          "label": "手打柠檬",
+          "price": 36
+        },
+        {
+          "label": "灵魂草莓",
+          "price": 36
+        },
+        {
+          "label": "橘子汽水",
+          "price": 36
+        },
+        {
+          "label": "灵魂蜜桃",
+          "price": 36
+        },
+        {
+          "label": "绿豆",
+          "price": 36
+        },
+        {
+          "label": "灵魂西瓜",
+          "price": 36
+        },
+        {
+          "label": "灵魂甜瓜",
+          "price": 36
+        },
+        {
+          "label": "灵魂可乐",
+          "price": 36
+        },
+        {
+          "label": "灵魂葡萄",
+          "price": 36
+        },
+        {
+          "label": "灵魂西柚",
+          "price": 36
+        },
+        {
+          "label": "灵魂龙井",
+          "price": 36
+        },
+        {
+          "label": "老冰棍",
+          "price": 36
+        },
+        {
+          "label": "灵魂番石榴",
+          "price": 36
+        },
+        {
+          "label": "灵魂荔枝",
+          "price": 36
+        },
+        {
+          "label": "灵魂百香果",
+          "price": 36
+        },
+        {
+          "label": "灵魂青提",
+          "price": 36
+        },
+        {
+          "label": "灵魂铁观音",
+          "price": 36
+        }
       ],
       "recommend": false
     },
@@ -843,14 +1721,38 @@
         "烟杆"
       ],
       "options": [
-        "V2-蓝焰",
-        "V2-渐变蓝",
-        "V2-银粉",
-        "V2-金粉",
-        "V2-蓝绿",
-        "V2-渐变绿",
-        "V2-金黄",
-        "V2-蓝黑"
+        {
+          "label": "V2-蓝焰",
+          "price": 138
+        },
+        {
+          "label": "V2-渐变蓝",
+          "price": 138
+        },
+        {
+          "label": "V2-银粉",
+          "price": 138
+        },
+        {
+          "label": "V2-金粉",
+          "price": 138
+        },
+        {
+          "label": "V2-蓝绿",
+          "price": 138
+        },
+        {
+          "label": "V2-渐变绿",
+          "price": 138
+        },
+        {
+          "label": "V2-金黄",
+          "price": 138
+        },
+        {
+          "label": "V2-蓝黑",
+          "price": 138
+        }
       ],
       "recommend": false
     },
@@ -871,49 +1773,178 @@
         "5盒增杆"
       ],
       "options": [
-        "零度乌龙",
-        "混合莓果",
-        "百香果",
-        "牛奶",
-        "树莓西瓜",
-        "冰镇荔枝",
-        "冰镇西瓜",
-        "哈蜜瓜",
-        "冰镇桃子",
-        "草莓红酒",
-        "冻柠檬茶",
-        "草莓芒果",
-        "雪碧",
-        "致爽薄荷",
-        "可乐柠檬",
-        "桃气乌龙",
-        "红酒",
-        "元气奇异果",
-        "劲爽龙眼",
-        "抹茶椰子",
-        "茉莉绿茶",
-        "冰草莓",
-        "芒果椰子",
-        "荔枝葡萄",
-        "冰镇可乐",
-        "冰镇葡萄",
-        "蓝莓薄荷",
-        "铁观音",
-        "绿豆冰",
-        "芒果桃子",
-        "龙井",
-        "杨梅红酒",
-        "番石榴",
-        "芒果荔枝",
-        "巨峰葡萄",
-        "香芋",
-        "草莓冰冰乐",
-        "清新香蕉",
-        "灵魂薄荷",
-        "草莓奇异果",
-        "菠萝",
-        "经典烟草",
-        "西瓜荔枝"
+        {
+          "label": "零度乌龙",
+          "price": 80
+        },
+        {
+          "label": "混合莓果",
+          "price": 80
+        },
+        {
+          "label": "百香果",
+          "price": 80
+        },
+        {
+          "label": "牛奶",
+          "price": 80
+        },
+        {
+          "label": "树莓西瓜",
+          "price": 80
+        },
+        {
+          "label": "冰镇荔枝",
+          "price": 80
+        },
+        {
+          "label": "冰镇西瓜",
+          "price": 80
+        },
+        {
+          "label": "哈蜜瓜",
+          "price": 80
+        },
+        {
+          "label": "冰镇桃子",
+          "price": 80
+        },
+        {
+          "label": "草莓红酒",
+          "price": 80
+        },
+        {
+          "label": "冻柠檬茶",
+          "price": 80
+        },
+        {
+          "label": "草莓芒果",
+          "price": 80
+        },
+        {
+          "label": "雪碧",
+          "price": 80
+        },
+        {
+          "label": "致爽薄荷",
+          "price": 80
+        },
+        {
+          "label": "可乐柠檬",
+          "price": 80
+        },
+        {
+          "label": "桃气乌龙",
+          "price": 80
+        },
+        {
+          "label": "红酒",
+          "price": 80
+        },
+        {
+          "label": "元气奇异果",
+          "price": 80
+        },
+        {
+          "label": "劲爽龙眼",
+          "price": 80
+        },
+        {
+          "label": "抹茶椰子",
+          "price": 80
+        },
+        {
+          "label": "茉莉绿茶",
+          "price": 80
+        },
+        {
+          "label": "冰草莓",
+          "price": 80
+        },
+        {
+          "label": "芒果椰子",
+          "price": 80
+        },
+        {
+          "label": "荔枝葡萄",
+          "price": 80
+        },
+        {
+          "label": "冰镇可乐",
+          "price": 80
+        },
+        {
+          "label": "冰镇葡萄",
+          "price": 80
+        },
+        {
+          "label": "蓝莓薄荷",
+          "price": 80
+        },
+        {
+          "label": "铁观音",
+          "price": 80
+        },
+        {
+          "label": "绿豆冰",
+          "price": 80
+        },
+        {
+          "label": "芒果桃子",
+          "price": 80
+        },
+        {
+          "label": "龙井",
+          "price": 80
+        },
+        {
+          "label": "杨梅红酒",
+          "price": 80
+        },
+        {
+          "label": "番石榴",
+          "price": 80
+        },
+        {
+          "label": "芒果荔枝",
+          "price": 80
+        },
+        {
+          "label": "巨峰葡萄",
+          "price": 80
+        },
+        {
+          "label": "香芋",
+          "price": 80
+        },
+        {
+          "label": "草莓冰冰乐",
+          "price": 80
+        },
+        {
+          "label": "清新香蕉",
+          "price": 80
+        },
+        {
+          "label": "灵魂薄荷",
+          "price": 80
+        },
+        {
+          "label": "草莓奇异果",
+          "price": 80
+        },
+        {
+          "label": "菠萝",
+          "price": 80
+        },
+        {
+          "label": "经典烟草",
+          "price": 80
+        },
+        {
+          "label": "西瓜荔枝",
+          "price": 80
+        }
       ],
       "recommend": false
     },
@@ -936,21 +1967,66 @@
       ],
       "hot": true,
       "options": [
-        "椰子",
-        "山楂梅梅冰",
-        "香芋冰淇淋",
-        "芒果",
-        "话梅菠萝",
-        "青苹果",
-        "春日桃桃茶",
-        "铁观音",
-        "泰式冻柠茶",
-        "vc青柠",
-        "绿豆",
-        "斩铁剑薄荷",
-        "荔枝",
-        "100号",
-        "西瓜"
+        {
+          "label": "椰子",
+          "price": 36
+        },
+        {
+          "label": "山楂梅梅冰",
+          "price": 36
+        },
+        {
+          "label": "香芋冰淇淋",
+          "price": 36
+        },
+        {
+          "label": "芒果",
+          "price": 36
+        },
+        {
+          "label": "话梅菠萝",
+          "price": 36
+        },
+        {
+          "label": "青苹果",
+          "price": 36
+        },
+        {
+          "label": "春日桃桃茶",
+          "price": 36
+        },
+        {
+          "label": "铁观音",
+          "price": 36
+        },
+        {
+          "label": "泰式冻柠茶",
+          "price": 36
+        },
+        {
+          "label": "vc青柠",
+          "price": 36
+        },
+        {
+          "label": "绿豆",
+          "price": 36
+        },
+        {
+          "label": "斩铁剑薄荷",
+          "price": 36
+        },
+        {
+          "label": "荔枝",
+          "price": 36
+        },
+        {
+          "label": "100号",
+          "price": 36
+        },
+        {
+          "label": "西瓜",
+          "price": 36
+        }
       ],
       "recommend": false
     },
@@ -971,11 +2047,26 @@
         "烟杆"
       ],
       "options": [
-        "黑色",
-        "白色",
-        "蓝色",
-        "绿色",
-        "粉色"
+        {
+          "label": "黑色",
+          "price": 188
+        },
+        {
+          "label": "白色",
+          "price": 188
+        },
+        {
+          "label": "蓝色",
+          "price": 188
+        },
+        {
+          "label": "绿色",
+          "price": 188
+        },
+        {
+          "label": "粉色",
+          "price": 188
+        }
       ],
       "recommend": false
     },
@@ -997,10 +2088,22 @@
         "适配悦刻弹"
       ],
       "options": [
-        "深空紫",
-        "天穹灰",
-        "星环银",
-        "玫瑰金"
+        {
+          "label": "深空紫",
+          "price": 158
+        },
+        {
+          "label": "天穹灰",
+          "price": 158
+        },
+        {
+          "label": "星环银",
+          "price": 158
+        },
+        {
+          "label": "玫瑰金",
+          "price": 158
+        }
       ],
       "recommend": true
     },
@@ -1021,31 +2124,106 @@
         "适配悦刻弹"
       ],
       "options": [
-        "百香果百香",
-        "可乐冰",
-        "奇异果",
-        "龙井",
-        "青柠",
-        "青苹果",
-        "西柚苏打",
-        "香芋",
-        "草莓奶昔",
-        "蜜桃",
-        "铁观音",
-        "冰红茶",
-        "荔枝黑加仑",
-        "西瓜",
-        "蓝莓",
-        "柠檬菠萝",
-        "老冰棍",
-        "百香果",
-        "紫葡萄",
-        "绿豆",
-        "西柚百香果",
-        "三重芒果",
-        "茉莉花茶",
-        "青提",
-        "薄荷"
+        {
+          "label": "百香果百香",
+          "price": 58
+        },
+        {
+          "label": "可乐冰",
+          "price": 58
+        },
+        {
+          "label": "奇异果",
+          "price": 58
+        },
+        {
+          "label": "龙井",
+          "price": 58
+        },
+        {
+          "label": "青柠",
+          "price": 58
+        },
+        {
+          "label": "青苹果",
+          "price": 58
+        },
+        {
+          "label": "西柚苏打",
+          "price": 58
+        },
+        {
+          "label": "香芋",
+          "price": 58
+        },
+        {
+          "label": "草莓奶昔",
+          "price": 58
+        },
+        {
+          "label": "蜜桃",
+          "price": 58
+        },
+        {
+          "label": "铁观音",
+          "price": 58
+        },
+        {
+          "label": "冰红茶",
+          "price": 58
+        },
+        {
+          "label": "荔枝黑加仑",
+          "price": 58
+        },
+        {
+          "label": "西瓜",
+          "price": 58
+        },
+        {
+          "label": "蓝莓",
+          "price": 58
+        },
+        {
+          "label": "柠檬菠萝",
+          "price": 58
+        },
+        {
+          "label": "老冰棍",
+          "price": 58
+        },
+        {
+          "label": "百香果",
+          "price": 58
+        },
+        {
+          "label": "紫葡萄",
+          "price": 58
+        },
+        {
+          "label": "绿豆",
+          "price": 58
+        },
+        {
+          "label": "西柚百香果",
+          "price": 58
+        },
+        {
+          "label": "三重芒果",
+          "price": 58
+        },
+        {
+          "label": "茉莉花茶",
+          "price": 58
+        },
+        {
+          "label": "青提",
+          "price": 58
+        },
+        {
+          "label": "薄荷",
+          "price": 58
+        }
       ],
       "recommend": false
     },
@@ -1068,32 +2246,110 @@
       ],
       "hot": true,
       "options": [
-        "斩铁剑薄荷",
-        "小绿瓶",
-        "青柠",
-        "冰水",
-        "杨枝甘露",
-        "龙井",
-        "柚子茉莉茶",
-        "西瓜",
-        "茉莉桃子茶",
-        "芒果",
-        "锡兰柠檬茶",
-        "草莓",
-        "零糖黑葡萄",
-        "苹果",
-        "荔枝",
-        "红袍柠檬水",
-        "青提",
-        "绿豆",
-        "菠萝",
-        "甜瓜",
-        "可乐",
-        "橙子",
-        "铁观音",
-        "洛神花",
-        "宝矿力",
-        "百香果"
+        {
+          "label": "斩铁剑薄荷",
+          "price": 36
+        },
+        {
+          "label": "小绿瓶",
+          "price": 36
+        },
+        {
+          "label": "青柠",
+          "price": 36
+        },
+        {
+          "label": "冰水",
+          "price": 36
+        },
+        {
+          "label": "杨枝甘露",
+          "price": 36
+        },
+        {
+          "label": "龙井",
+          "price": 36
+        },
+        {
+          "label": "柚子茉莉茶",
+          "price": 36
+        },
+        {
+          "label": "西瓜",
+          "price": 36
+        },
+        {
+          "label": "茉莉桃子茶",
+          "price": 36
+        },
+        {
+          "label": "芒果",
+          "price": 36
+        },
+        {
+          "label": "锡兰柠檬茶",
+          "price": 36
+        },
+        {
+          "label": "草莓",
+          "price": 36
+        },
+        {
+          "label": "零糖黑葡萄",
+          "price": 36
+        },
+        {
+          "label": "苹果",
+          "price": 36
+        },
+        {
+          "label": "荔枝",
+          "price": 36
+        },
+        {
+          "label": "红袍柠檬水",
+          "price": 36
+        },
+        {
+          "label": "青提",
+          "price": 36
+        },
+        {
+          "label": "绿豆",
+          "price": 36
+        },
+        {
+          "label": "菠萝",
+          "price": 36
+        },
+        {
+          "label": "甜瓜",
+          "price": 36
+        },
+        {
+          "label": "可乐",
+          "price": 36
+        },
+        {
+          "label": "橙子",
+          "price": 36
+        },
+        {
+          "label": "铁观音",
+          "price": 36
+        },
+        {
+          "label": "洛神花",
+          "price": 36
+        },
+        {
+          "label": "宝矿力",
+          "price": 36
+        },
+        {
+          "label": "百香果",
+          "price": 36
+        }
       ],
       "recommend": false
     },
@@ -1114,27 +2370,90 @@
         "适配悦刻弹"
       ],
       "options": [
-        "柠檬冰",
-        "绿豆冰沙",
-        "冷萃龙井",
-        "薄荷",
-        "妃子笑荔枝",
-        "元气草莓",
-        "菠萝",
-        "葡萄",
-        "可乐",
-        "水蜜桃",
-        "青苹果",
-        "橘子汽水",
-        "哈蜜瓜",
-        "芭乐",
-        "黑加仑",
-        "香芋",
-        "百香果",
-        "椰子水",
-        "青提",
-        "蜜桃乌龙",
-        "冰泉水"
+        {
+          "label": "柠檬冰",
+          "price": 65
+        },
+        {
+          "label": "绿豆冰沙",
+          "price": 65
+        },
+        {
+          "label": "冷萃龙井",
+          "price": 65
+        },
+        {
+          "label": "薄荷",
+          "price": 65
+        },
+        {
+          "label": "妃子笑荔枝",
+          "price": 65
+        },
+        {
+          "label": "元气草莓",
+          "price": 65
+        },
+        {
+          "label": "菠萝",
+          "price": 65
+        },
+        {
+          "label": "葡萄",
+          "price": 65
+        },
+        {
+          "label": "可乐",
+          "price": 65
+        },
+        {
+          "label": "水蜜桃",
+          "price": 65
+        },
+        {
+          "label": "青苹果",
+          "price": 65
+        },
+        {
+          "label": "橘子汽水",
+          "price": 65
+        },
+        {
+          "label": "哈蜜瓜",
+          "price": 65
+        },
+        {
+          "label": "芭乐",
+          "price": 65
+        },
+        {
+          "label": "黑加仑",
+          "price": 65
+        },
+        {
+          "label": "香芋",
+          "price": 65
+        },
+        {
+          "label": "百香果",
+          "price": 65
+        },
+        {
+          "label": "椰子水",
+          "price": 65
+        },
+        {
+          "label": "青提",
+          "price": 65
+        },
+        {
+          "label": "蜜桃乌龙",
+          "price": 65
+        },
+        {
+          "label": "冰泉水",
+          "price": 65
+        }
       ],
       "recommend": false
     },
@@ -1155,37 +2474,130 @@
         "适配悦刻弹"
       ],
       "options": [
-        "经典烟草",
-        "零度薄荷5%",
-        "新薄荷5%",
-        "爽薄荷5%",
-        "荔枝柠檬汁",
-        "金桔百香果",
-        "中式红茶",
-        "高凉龙井",
-        "铁观音",
-        "极凉荔枝",
-        "葡萄苹果",
-        "柠檬茶",
-        "西瓜",
-        "老冰棍",
-        "番石榴",
-        "青提",
-        "葡萄",
-        "芒果",
-        "草莓",
-        "奇异果",
-        "脆苹果",
-        "桃子冰",
-        "西梅",
-        "哈密瓜",
-        "蓝莓",
-        "洛神花茶",
-        "青柠",
-        "宝矿力",
-        "矿泉水",
-        "香芋",
-        "咖啡"
+        {
+          "label": "经典烟草",
+          "price": 46
+        },
+        {
+          "label": "零度薄荷5%",
+          "price": 46
+        },
+        {
+          "label": "新薄荷5%",
+          "price": 46
+        },
+        {
+          "label": "爽薄荷5%",
+          "price": 46
+        },
+        {
+          "label": "荔枝柠檬汁",
+          "price": 46
+        },
+        {
+          "label": "金桔百香果",
+          "price": 46
+        },
+        {
+          "label": "中式红茶",
+          "price": 46
+        },
+        {
+          "label": "高凉龙井",
+          "price": 46
+        },
+        {
+          "label": "铁观音",
+          "price": 46
+        },
+        {
+          "label": "极凉荔枝",
+          "price": 46
+        },
+        {
+          "label": "葡萄苹果",
+          "price": 46
+        },
+        {
+          "label": "柠檬茶",
+          "price": 46
+        },
+        {
+          "label": "西瓜",
+          "price": 46
+        },
+        {
+          "label": "老冰棍",
+          "price": 46
+        },
+        {
+          "label": "番石榴",
+          "price": 46
+        },
+        {
+          "label": "青提",
+          "price": 46
+        },
+        {
+          "label": "葡萄",
+          "price": 46
+        },
+        {
+          "label": "芒果",
+          "price": 46
+        },
+        {
+          "label": "草莓",
+          "price": 46
+        },
+        {
+          "label": "奇异果",
+          "price": 46
+        },
+        {
+          "label": "脆苹果",
+          "price": 46
+        },
+        {
+          "label": "桃子冰",
+          "price": 46
+        },
+        {
+          "label": "西梅",
+          "price": 46
+        },
+        {
+          "label": "哈密瓜",
+          "price": 46
+        },
+        {
+          "label": "蓝莓",
+          "price": 46
+        },
+        {
+          "label": "洛神花茶",
+          "price": 46
+        },
+        {
+          "label": "青柠",
+          "price": 46
+        },
+        {
+          "label": "宝矿力",
+          "price": 46
+        },
+        {
+          "label": "矿泉水",
+          "price": 46
+        },
+        {
+          "label": "香芋",
+          "price": 46
+        },
+        {
+          "label": "咖啡",
+          "price": 46
+        }
       ],
       "recommend": false
     },
@@ -1207,11 +2619,26 @@
         "适配悦刻弹"
       ],
       "options": [
-        "黑",
-        "银",
-        "粉",
-        "蓝",
-        "绿"
+        {
+          "label": "黑",
+          "price": 158
+        },
+        {
+          "label": "银",
+          "price": 158
+        },
+        {
+          "label": "粉",
+          "price": 158
+        },
+        {
+          "label": "蓝",
+          "price": 158
+        },
+        {
+          "label": "绿",
+          "price": 158
+        }
       ],
       "recommend": false
     }

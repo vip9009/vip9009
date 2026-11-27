@@ -46,12 +46,20 @@ const options = computed(() => {
   return list
     .map((entry) =>
       typeof entry === 'string'
-        ? { label: entry, price: props.product.price }
-        : { label: entry.label || entry.name || '', price: entry.price ?? props.product.price }
+        ? { label: entry, price: props.product.price, stock: true }
+        : {
+            label: entry.label || entry.name || '',
+            price: entry.price ?? props.product.price,
+            stock: entry.stock !== false
+          }
     )
     .filter((entry) => entry.label)
 })
+const selectedOption = computed(() =>
+  options.value.find((entry) => entry.label === option.value)
+)
 const priceLabel = computed(() => {
+  if (selectedOption.value) return formatPrice(selectedOption.value.price)
   const price = Number(props.product.price)
   const max = Number(props.product.priceMax)
   if (Number.isFinite(max) && max > price) {
@@ -59,22 +67,21 @@ const priceLabel = computed(() => {
   }
   return formatPrice(props.product.price)
 })
-const activePrice = computed(() => {
-  const match = options.value.find((entry) => entry.label === option.value)
-  return match ? match.price : props.product.price
-})
+const activePrice = computed(() => selectedOption.value?.price ?? props.product.price)
+const canAdd = computed(
+  () =>
+    stock.value &&
+    (!options.value.length || Boolean(option.value)) &&
+    (selectedOption.value ? selectedOption.value.stock : true)
+)
 const getImage = computed(() => {
   if (added.value) return asset('/images/ui/get-success.webp')
-  if (!options.value.length || option.value) return asset('/images/ui/get-active.webp')
+  if (canAdd.value) return asset('/images/ui/get-active.webp')
   return asset('/images/ui/get-default.webp')
 })
 
 function addToCart() {
-  if (!stock.value) return
-  if (options.value.length && !option.value) {
-    window.alert('请先选择口味/规格。')
-    return
-  }
+  if (!canAdd.value) return
   cart.add({
     sectionId: props.sectionId,
     index: props.index,
@@ -121,10 +128,10 @@ function addToCart() {
           <select v-model="option" aria-label="选择口味">
             <option value="">SELECT</option>
             <option v-for="entry in options" :key="entry.label" :value="entry.label">
-              {{ entry.label }}
+              {{ entry.label }}{{ entry.stock === false ? '（无货）' : '' }}
             </option>
           </select>
-          <button class="get-btn" type="button" :disabled="!option" @click="addToCart">
+          <button class="get-btn" type="button" :disabled="!canAdd" @click="addToCart">
             <img :src="getImage" alt="GET" />
           </button>
         </div>
@@ -303,7 +310,7 @@ function addToCart() {
 .card-hot {
   position: absolute;
   top: 50%;
-  right: 12px;
+  right: 0;
   z-index: 2;
   padding: 0.3em 0.6em;
   font-family: var(--font-heading);
