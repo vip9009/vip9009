@@ -9,6 +9,7 @@ import { buildOrderText, copyToClipboard } from '@/utils/orderText'
 const cart = useCart()
 const address = ref('')
 const copied = ref(false)
+const finished = ref(false)
 const error = ref('')
 
 const freeOver = computed(() => Number(site.shipping?.freeOver ?? 138))
@@ -48,9 +49,12 @@ async function copyOrder() {
     return
   }
   copied.value = true
-  window.setTimeout(() => {
-    copied.value = false
-  }, 4000)
+}
+
+function finishOrder() {
+  cart.clear()
+  finished.value = true
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 </script>
 
@@ -64,7 +68,17 @@ async function copyOrder() {
       <span>发给客服</span>
     </nav>
 
-    <div v-if="!cart.items.length" class="empty-cart">
+    <div v-if="finished" class="order-done">
+      <span class="done-mark">✓</span>
+      <h1>购物车已清空</h1>
+      <p>订单信息已复制。请把订单信息和付款截图发给客服，等待客服确认发货。</p>
+      <div class="done-actions">
+        <RouterLink class="black-btn" to="/">继续购物</RouterLink>
+        <RouterLink class="ghost-btn" to="/contact">联系客服</RouterLink>
+      </div>
+    </div>
+
+    <div v-else-if="!cart.items.length" class="empty-cart">
       <p>您的购物车目前是空的。</p>
       <RouterLink class="black-btn" to="/category/hot">返回商店</RouterLink>
     </div>
@@ -128,6 +142,9 @@ async function copyOrder() {
         <p v-if="copied" class="copy-success">
           订单信息已复制。请加客服微信 / QQ，把信息和付款截图一起发过去。
         </p>
+        <button v-if="copied" class="clear-cart-btn" type="button" @click="finishOrder">
+          我已发给客服，清空购物车
+        </button>
         <RouterLink class="checkout-contact" to="/contact">查看客服微信 / QQ 联系方式 →</RouterLink>
       </aside>
     </div>
@@ -135,6 +152,62 @@ async function copyOrder() {
 </template>
 
 <style scoped>
+
+.clear-cart-btn {
+  width: 100%;
+  height: 42px;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555555;
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+}
+
+.clear-cart-btn:hover {
+  color: #111111;
+  border-color: #111111;
+}
+
+.order-done {
+  max-width: 560px;
+  padding: 60px 20px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.done-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  margin-bottom: 14px;
+  font-size: 24px;
+  color: #ffffff;
+  background: #242125;
+  border-radius: 50%;
+}
+
+.order-done h1 {
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.order-done p {
+  margin-bottom: 20px;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #777777;
+}
+
+.done-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
 .page {
   padding-top: 34px;
   padding-bottom: 30px;
