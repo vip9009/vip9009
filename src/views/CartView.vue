@@ -1,20 +1,3 @@
-<script setup>
-import { computed } from 'vue'
-import { RouterLink } from 'vue-router'
-import { site } from '@/data'
-import { useCart } from '@/stores/cart'
-import { asset, formatPrice } from '@/utils'
-
-const cart = useCart()
-
-const freeOver = computed(() => Number(site.shipping?.freeOver ?? 138))
-const fee = computed(() => Number(site.shipping?.fee ?? 8))
-const shippingFee = computed(() =>
-  cart.items.length && cart.subtotal.value < freeOver.value ? fee.value : 0
-)
-const total = computed(() => cart.subtotal.value + shippingFee.value)
-</script>
-
 <template>
   <div class="wrapper page">
     <nav class="steps" aria-label="购物流程">
@@ -84,7 +67,22 @@ const total = computed(() => cart.subtotal.value + shippingFee.value)
     </div>
   </div>
 </template>
+<script setup>
+import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
+import { site } from '@/data'
+import { useCart } from '@/stores/cart'
+import { asset, formatPrice } from '@/utils'
 
+const cart = useCart()
+
+const freeOver = computed(() => Number(site.shipping?.freeOver ?? 138))
+const fee = computed(() => Number(site.shipping?.fee ?? 8))
+const shippingFee = computed(() =>
+  cart.items.length && cart.subtotal.value < freeOver.value ? fee.value : 0
+)
+const total = computed(() => cart.subtotal.value + shippingFee.value)
+</script>
 <style scoped>
 .page {
   padding-top: 34px;
@@ -307,16 +305,25 @@ const total = computed(() => cart.subtotal.value + shippingFee.value)
 }
 
 @media (max-width: 900px) {
+  .page {
+    padding-top: 22px;
+    padding-bottom: 40px;
+  }
+
   .steps {
     gap: 8px;
-    padding-bottom: 22px;
-    font-size: 15px;
+    padding-bottom: 20px;
+    font-size: 14px;
   }
 
   .cart-layout {
     grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
+    gap: 22px;
     padding-right: 0;
+  }
+
+  .cart-table {
+    border-top: 0;
   }
 
   .cart-table thead {
@@ -324,39 +331,133 @@ const total = computed(() => cart.subtotal.value + shippingFee.value)
   }
 
   .cart-table,
-  .cart-table tbody,
-  .cart-table tr,
-  .cart-table td {
+  .cart-table tbody {
     display: block;
     width: 100%;
   }
 
   .cart-table tr {
-    padding: 12px 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 10px 12px;
+    padding: 16px 0;
+    border-top: 1px solid #eeeeee;
     border-bottom: 1px solid #eeeeee;
   }
 
+  .cart-table tr + tr {
+    border-top: 0;
+  }
+
   .cart-table td {
-    padding: 4px 0;
+    display: block;
+    width: auto;
+    padding: 0;
+    font-size: 13px;
     border: 0;
   }
 
-  .cart-table td::before {
+  .cart-table .product-cell {
+    position: relative;
+    display: flex;
+    grid-column: 1 / -1;
+    align-items: center;
+    gap: 12px;
+    padding: 0 30px 0 0;
+  }
+
+  .product-cell img {
+    flex: 0 0 auto;
+    width: 64px;
+    height: 64px;
+  }
+
+  .product-cell > div {
+    min-width: 0;
+  }
+
+  .product-cell a {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 1.45;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .product-cell small {
+    margin-top: 4px;
+  }
+
+  .remove {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 24px;
+    height: 24px;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .cart-table td[data-label]::before {
     content: attr(data-label);
-    display: inline-block;
-    width: 50px;
+    display: inline;
+    width: auto;
+    margin-right: 4px;
     font-size: 11px;
     color: #999999;
   }
 
-  .cart-table .product-cell {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  .cart-table td[data-label='价格'] {
+    grid-row: 2;
+    grid-column: 1;
+    white-space: nowrap;
   }
 
-  .product-cell::before {
-    display: none;
+  .cart-table td[data-label='数量'] {
+    grid-row: 2;
+    grid-column: 2;
+    white-space: nowrap;
+  }
+
+  .cart-table td[data-label='小计'] {
+    grid-row: 2;
+    grid-column: 3;
+    white-space: nowrap;
+  }
+
+  .qty {
+    height: 30px;
+  }
+
+  .qty button {
+    width: 28px;
+  }
+
+  .qty input {
+    width: 30px;
+  }
+
+  .cart-actions {
+    padding-top: 14px;
+  }
+
+  .ghost-btn {
+    height: 36px;
+    padding: 0 14px;
+  }
+
+  .summary {
+    padding: 18px;
+  }
+
+  .summary h2 {
+    font-size: 14px;
+  }
+
+  .checkout-btn {
+    height: 44px;
   }
 }
 </style>
