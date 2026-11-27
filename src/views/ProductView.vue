@@ -76,16 +76,9 @@ const priceLabel = computed(() => {
 })
 const activePrice = computed(() => selectedOption.value?.price ?? product.value?.price)
 const canAdd = computed(
-  () =>
-    stock.value &&
-    (!options.value.length || Boolean(option.value)) &&
-    (selectedOption.value ? selectedOption.value.stock : true)
+  () => stock.value && (selectedOption.value ? selectedOption.value.stock : true)
 )
-const addLabel = computed(() => {
-  if (!stock.value) return '无货'
-  if (selectedOption.value && !selectedOption.value.stock) return '该口味无货'
-  return added.value ? '已加入购物车' : '加入购物车'
-})
+const addLabel = computed(() => (added.value ? '已加入购物车' : '加入购物车'))
 const zoomOpen = ref(false)
 const zoomed = ref(false)
 const specRows = computed(() => {
@@ -115,21 +108,21 @@ const related = computed(() => {
     .slice(0, 4)
 })
 
+watch(option, (value) => {
+  if (value) error.value = ''
+})
+
 function addToCart() {
   error.value = ''
-  if (!stock.value) {
-    error.value = '该商品暂时无货，可以联系客服确认补货时间。'
+  if (!stock.value || (selectedOption.value && !selectedOption.value.stock)) {
+    error.value = '抱歉，该产品暂无库存,请选择其它产品。'
     return
   }
   if (options.value.length && !option.value) {
-    error.value = '请先选择口味/规格。'
+    error.value = '加入购物车之前请选定产品选项。'
+    document.getElementById('option')?.focus()
     return
   }
-  if (selectedOption.value && !selectedOption.value.stock) {
-    error.value = '该口味暂时无货，请选择其他口味。'
-    return
-  }
-  if (!canAdd.value) return
   cart.add({
     sectionId: sectionId.value,
     index: productIndex.value,
@@ -310,7 +303,7 @@ watch(
               <input :value="quantity" readonly aria-label="数量" />
               <button type="button" aria-label="增加" @click="changeQty(1)">＋</button>
             </div>
-            <button class="add-cart" type="button" :disabled="!canAdd" @click="addToCart">
+            <button class="add-cart" type="button" :class="{ 'is-unavailable': !canAdd }" @click="addToCart">
               {{ addLabel }}
             </button>
           </div>
@@ -833,6 +826,15 @@ watch(
   background: var(--color-primary);
 }
 
+.add-cart.is-unavailable {
+  color: #ffffff;
+  background: #6d6d6d;
+}
+
+.add-cart.is-unavailable:hover {
+  background: #6d6d6d;
+}
+
 .add-cart:disabled {
   color: #ffffff;
   background: #000000;
@@ -841,9 +843,10 @@ watch(
 }
 
 .form-error {
-  margin-bottom: 8px;
-  font-size: 11px;
-  color: #c0392b;
+  margin: 8px 0 10px;
+  font-size: 12.8px;
+  font-weight: 600;
+  color: #b20000;
 }
 
 .sub-actions {
