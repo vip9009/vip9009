@@ -739,7 +739,7 @@ watch(
   padding-right: 20px;
   font-size: 14.4px;
   font-weight: 700;
-  color: #777777;
+  color: #111111;
 }
 
 .option-row select {
@@ -1172,6 +1172,8 @@ watch(
   .option-row label {
     padding-right: 18px;
     font-size: 14px;
+    font-weight: 700;
+    color: #111111;
   }
 
   .option-row select {
