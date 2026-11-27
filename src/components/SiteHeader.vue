@@ -750,6 +750,14 @@ onBeforeUnmount(() => {
 }
 
 @media (max-width: 900px) {
+  .site-header {
+    background-color: #ffffff;
+    background-image: url('../assets/images/header-bg.webp');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: cover;
+  }
+
   .announce-inner {
     height: 38px;
     justify-content: center;
