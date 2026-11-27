@@ -780,9 +780,9 @@ function setPage(index) {
 
 .brand-wall {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 8px;
-  max-width: 760px;
+  grid-template-columns: repeat(6, 61px);
+  gap: 5px 6px;
+  justify-content: center;
   padding: 18px 0 8px;
   margin: 0 auto;
 }
@@ -791,32 +791,32 @@ function setPage(index) {
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 1 / 1;
-  padding: 8px;
+  width: 61px;
+  height: 62px;
+  padding: 4px;
   font-family: var(--font-heading);
-  font-size: 14px;
+  font-size: 9px;
   font-weight: 900;
   color: #999999;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   text-align: center;
   background: #ffffff;
-  border: 1px solid #dddddd;
-  transition: border-color 0.18s ease, transform 0.18s ease;
+  border: 2px double #000000;
+  transition: border-color 0.18s ease;
 }
 
 .brand-word img {
-  max-width: 82%;
-  max-height: 62%;
+  max-width: 88%;
+  max-height: 58%;
   object-fit: contain;
   filter: grayscale(1);
   opacity: 0.78;
-  transition: filter 0.18s ease, opacity 0.18s ease;
+  transition: opacity 0.18s ease;
 }
 
 .brand-word:hover {
   color: var(--color-primary);
   border-color: var(--color-primary);
-  transform: translateY(-2px);
 }
 
 .brand-word:hover img {
@@ -1127,13 +1127,16 @@ function setPage(index) {
   }
 
   .brand-wall {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 4px;
+    grid-template-columns: repeat(6, 39px);
+    gap: 5px 6px;
+    padding: 12px 0 8px;
   }
 
   .brand-word {
-    padding: 4px;
-    font-size: 8px;
+    width: 39px;
+    height: 40px;
+    padding: 3px;
+    font-size: 7px;
     line-height: 1.1;
     letter-spacing: 0;
     word-break: break-word;

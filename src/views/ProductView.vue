@@ -209,7 +209,24 @@ watch(
     quantity.value = 1
     added.value = false
     error.value = ''
-    if (product.value) document.title = `${title.value} - 泡泡哥雾化`
+    if (product.value) {
+      document.title = `${title.value} - 泡泡哥雾化`
+      try {
+        const key = 'paopao-recent-v1'
+        const list = JSON.parse(localStorage.getItem(key) || '[]')
+        const current = {
+          sectionId: sectionId.value,
+          index: productIndex.value,
+          title: title.value,
+          price: Number(product.value.price) || 0,
+          image: image.value
+        }
+        const next = [current, ...list.filter((item) => !(item.sectionId === current.sectionId && item.index === current.index))]
+        localStorage.setItem(key, JSON.stringify(next.slice(0, 6)))
+      } catch {
+        /* ignore storage errors */
+      }
+    }
   },
   { immediate: true }
 )

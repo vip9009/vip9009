@@ -5,7 +5,7 @@ import { site, productsData } from '@/data'
 import VpProductCard from '@/components/VpProductCard.vue'
 import AppIcon from '@/components/AppIcon.vue'
 import { filterByBrand } from '@/utils/categories'
-import { decodeEntities } from '@/utils'
+import { decodeEntities, formatPrice } from '@/utils'
 
 const route = useRoute()
 const sort = ref('default')
@@ -13,6 +13,25 @@ const keyword = ref('')
 const sidebarOpen = ref(false)
 const pageSize = 10
 const visibleCount = ref(pageSize)
+const recent = ref([])
+
+function loadRecent() {
+  try {
+    const list = JSON.parse(localStorage.getItem('paopao-recent-v1') || '[]')
+    recent.value = Array.isArray(list) ? list.slice(0, 3) : []
+  } catch {
+    recent.value = []
+  }
+}
+
+function toggleFilter() {
+  sidebarOpen.value = !sidebarOpen.value
+  if (sidebarOpen.value) loadRecent()
+}
+
+watch(sidebarOpen, (open) => {
+  document.body.style.overflow = open && window.innerWidth <= 900 ? 'hidden' : ''
+})
 
 const categoryId = computed(() => String(route.params.id || ''))
 const category = computed(() => site.categories[categoryId.value] || null)
@@ -79,7 +98,10 @@ function onScroll() {
 }
 
 onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }))
-onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+  document.body.style.overflow = ''
+})
 
 const topCategories = computed(() =>
   Object.entries(site.categories)
@@ -144,7 +166,7 @@ watch(
       </nav>
 
       <div class="category-tools">
-        <button class="filter-toggle" type="button" @click="sidebarOpen = !sidebarOpen">
+        <button class="filter-toggle" type="button" @click="toggleFilter">
           <AppIcon name="menu" :size="16" />
           筛选
         </button>
@@ -164,6 +186,23 @@ watch(
           <input v-model="keyword" type="search" placeholder="搜索..." aria-label="分类内搜索" />
           <button type="button" aria-label="搜索"><AppIcon name="search" :size="17" /></button>
         </form>
+
+        <div v-if="recent.length" class="recent-block">
+          <h3>最近浏览过的产品</h3>
+          <RouterLink
+            v-for="item in recent"
+            :key="`${item.sectionId}-${item.index}`"
+            class="recent-item"
+            :to="`/product/${item.sectionId}/${item.index}`"
+            @click="sidebarOpen = false"
+          >
+            <img :src="item.image" :alt="item.title" />
+            <span class="recent-info">
+              <b>{{ item.title }}</b>
+              <em>{{ formatPrice(item.price) }}</em>
+            </span>
+          </RouterLink>
+        </div>
 
         <h2>产品类别</h2>
         <div class="side-parent">
@@ -208,6 +247,23 @@ watch(
         <div v-if="visibleCount < total" class="load-sentinel" aria-hidden="true" />
       </section>
     </div>
+
+    <Teleport to="body">
+      <Transition name="filter-fade">
+        <div v-if="sidebarOpen" class="filter-mask" @click="sidebarOpen = false" />
+      </Transition>
+      <Transition name="filter-fade">
+        <button
+          v-if="sidebarOpen"
+          class="filter-close"
+          type="button"
+          aria-label="关闭筛选"
+          @click="sidebarOpen = false"
+        >
+          <AppIcon name="close" :size="24" />
+        </button>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -326,6 +382,40 @@ watch(
 
 .side-cats {
   padding-left: 20px;
+}
+
+.recent-block {
+  display: none;
+}
+
+.filter-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  background: rgba(11, 11, 11, 0.6);
+}
+
+.filter-close {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 1300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: #ffffff;
+}
+
+.filter-fade-enter-active,
+.filter-fade-leave-active {
+  transition: opacity 0.22s ease;
+}
+
+.filter-fade-enter-from,
+.filter-fade-leave-to {
+  opacity: 0;
 }
 
 .side-group {
@@ -493,15 +583,114 @@ watch(
   }
 
   .sidebar {
-    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1200;
+    display: block;
+    width: 300px;
+    height: 100vh;
+    padding: 20px;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transform: translateX(-101%);
+    transition: transform 0.25s ease;
   }
 
   .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar h2 {
+    margin-top: 2px;
+    font-size: 16px;
+  }
+
+  .side-parent {
+    font-size: 16px;
+  }
+
+  .side-cats {
+    padding-left: 16px;
+  }
+
+  .side-link {
+    padding: 6px 0;
+    font-size: 14px;
+  }
+
+  .side-search {
+    height: 40px;
+    margin-bottom: 24px;
+  }
+
+  .side-search button {
+    width: 44px;
+  }
+
+  .recent-block {
     display: block;
-    padding: 10px;
-    margin-bottom: 12px;
-    background: #ffffff;
-    border: 1px solid #eeeeee;
+    margin-bottom: 28px;
+  }
+
+  .recent-block h3 {
+    padding-bottom: 10px;
+    margin-bottom: 4px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #333333;
+  }
+
+  .recent-block h3::after {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 1px;
+    margin-top: 10px;
+    background: #dddddd;
+  }
+
+  .recent-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  .recent-item img {
+    flex: 0 0 auto;
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+  }
+
+  .recent-info {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 3px;
+    text-align: left;
+  }
+
+  .recent-info b {
+    overflow: hidden;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: #3372a2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .recent-info em {
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    color: #242125;
   }
 
   .filter-toggle {
