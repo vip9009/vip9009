@@ -716,7 +716,7 @@ watch(
   font-size: 24px;
   font-weight: 700;
   line-height: 24px;
-  color: #777777;
+  color: #111111;
 }
 
 .clear-option {
@@ -770,7 +770,7 @@ watch(
   font-size: 24px;
   font-weight: 700;
   line-height: 1.2;
-  color: #777777;
+  color: #111111;
 }
 
 .variation-stock {
