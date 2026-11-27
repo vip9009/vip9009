@@ -325,9 +325,23 @@ watch(
           </div>
 
           <div class="meta">
-            <p><span>分类：</span>{{ section?.title }}<template v-if="product.subcategory && site.categories[product.subcategory]">，{{ site.categories[product.subcategory].title }}</template></p>
-            <p v-if="allBadges.length"><span>标签：</span>{{ allBadges.join('，') }}</p>
-            <p v-if="brand"><span>品牌：</span>{{ brand }}</p>
+            <p>
+              <span>分类：</span>&nbsp;
+              <RouterLink :to="`/category/${sectionId}`">{{ section?.title }}</RouterLink>
+              <template v-if="product.subcategory && site.categories[product.subcategory]">
+                ，<RouterLink :to="`/category/${sectionId}?sub=${product.subcategory}`">{{ site.categories[product.subcategory].title }}</RouterLink>
+              </template>
+            </p>
+            <p v-if="allBadges.length">
+              <span>标签：</span>&nbsp;
+              <template v-for="(badge, badgeIndex) in allBadges" :key="badge">
+                <RouterLink :to="`/search?q=${encodeURIComponent(badge)}`">{{ badge }}</RouterLink><template v-if="badgeIndex < allBadges.length - 1">,{{ ' ' }}</template>
+              </template>
+            </p>
+            <p v-if="brand">
+              <span>品牌：</span>&nbsp;
+              <RouterLink :to="`/search?q=${encodeURIComponent(brand)}`">{{ brand }}</RouterLink>
+            </p>
           </div>
 
         </div>
@@ -723,7 +737,7 @@ watch(
 .option-row label {
   flex: 0 0 auto;
   padding-right: 20px;
-  font-size: 14px;
+  font-size: 14.4px;
   font-weight: 700;
   color: #777777;
 }
@@ -733,7 +747,7 @@ watch(
   height: 40px;
   padding: 10px 15px;
   margin: 8px 0 15px;
-  font-size: 16px;
+  font-size: 14px;
   color: #333333;
   background: #ffffff;
   border: 1px solid #dddddd;
@@ -766,7 +780,7 @@ watch(
 }
 
 .variation-stock.out {
-  color: #c0392b;
+  color: #008000;
 }
 
 .buy-row {
@@ -854,10 +868,25 @@ watch(
 .meta {
   padding: 15px 0;
   font-size: 12.8px;
-  line-height: 1.6;
+  line-height: 1.2;
   color: #777777;
-  border-top: 1px dashed #e0e0e0;
-  border-bottom: 1px dashed #e0e0e0;
+  border-top: 1px dotted #d9d9d9;
+  border-bottom: 1px dotted #d9d9d9;
+}
+
+.meta p {
+  padding: 5px 0;
+  margin: 0;
+  line-height: 15.36px;
+}
+
+.meta a {
+  color: #334862;
+  text-decoration: none;
+}
+
+.meta a:hover {
+  color: #111111;
 }
 
 .meta span {
