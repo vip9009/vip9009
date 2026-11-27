@@ -1139,67 +1139,145 @@ class ProductAdmin(tk.Tk):
         else:
             product.pop("specs", None)
 
+    def _known_badges(self):
+        names = []
+        for tag in self.general.get("tags", []) or []:
+            label = tag.get("label") if isinstance(tag, dict) else tag
+            label = str(label or "").strip()
+            if label:
+                names.append(label)
+        for name in (
+            "HOT", "上新", "上新口味", "店长推荐", "5盒", "5盒赠主机",
+            "5盒增主机", "5盒增杆", "买1增1", "买2增1", "买3增1", "买4增1",
+            "买5增1", "4盒赠主机或烟弹", "4赠", "30盒增杆",
+        ):
+            names.append(name)
+        for section in self.sections.values():
+            for product in section.get("products", []) or []:
+                for badge in product.get("badges", []) or []:
+                    label = str(badge or "").strip()
+                    if label:
+                        names.append(label)
+        deduped = []
+        seen = set()
+        for name in names:
+            if name not in seen:
+                seen.add(name)
+                deduped.append(name)
+        return deduped
+
     def edit_extra(self):
         dialog = tk.Toplevel(self)
         dialog.title("更多商品信息")
-        dialog.geometry("640x700")
+        dialog.geometry("680x820")
         dialog.transient(self)
         dialog.grab_set()
         dialog.columnconfigure(1, weight=1)
 
-        brand_var = tk.StringVar(value=self.extra.get("brand", ""))
-        badges_var = tk.StringVar(value="，".join(self.extra.get("badges") or []))
+        current_brand = str(self.extra.get("brand", "")).strip()
+        brand_values = []
+        for brand in self.general.get("brands", []) or []:
+            label = str(brand or "").strip()
+            if label and label not in brand_values:
+                brand_values.append(label)
+        if current_brand and current_brand not in brand_values:
+            brand_values.append(current_brand)
+        brand_var = tk.StringVar(value=current_brand or "（无品牌）")
+
+        current_badges = [str(item).strip() for item in (self.extra.get("badges") or []) if str(item).strip()]
+        known_badges = self._known_badges()
+        extra_badges = [item for item in current_badges if item not in known_badges]
+
         price_max_var = tk.StringVar(value=str(self.extra.get("priceMax") or ""))
         stock_var = tk.BooleanVar(value=self.extra.get("stock", True))
         hot_var = tk.BooleanVar(value=self.extra.get("hot", False))
 
         ttk.Label(dialog, text="品牌").grid(row=0, column=0, sticky="w", padx=12, pady=6)
-        ttk.Entry(dialog, textvariable=brand_var).grid(row=0, column=1, columnspan=2, sticky="ew", padx=(0, 12), pady=6)
-
-        ttk.Label(dialog, text="角标 / 标签").grid(row=1, column=0, sticky="w", padx=12, pady=6)
-        ttk.Entry(dialog, textvariable=badges_var).grid(row=1, column=1, columnspan=2, sticky="ew", padx=(0, 12), pady=6)
-        ttk.Label(dialog, text="活动角标显示右上；自定义/呼吸灯/凉度调节等功能标签显示图片左下", foreground="#777").grid(
-            row=2, column=1, columnspan=2, sticky="w", padx=(0, 12)
+        ttk.Combobox(
+            dialog,
+            textvariable=brand_var,
+            values=["（无品牌）", *brand_values],
+            state="readonly",
+        ).grid(row=0, column=1, columnspan=2, sticky="ew", padx=(0, 12), pady=6)
+        ttk.Label(dialog, text="品牌来自站点品牌墙；这样前台 Logo、品牌链接才能匹配", foreground="#777").grid(
+            row=1, column=1, columnspan=2, sticky="w", padx=(0, 12)
         )
 
-        ttk.Label(dialog, text="价格上限").grid(row=3, column=0, sticky="w", padx=12, pady=6)
-        ttk.Entry(dialog, textvariable=price_max_var, width=16).grid(row=3, column=1, sticky="w", padx=(0, 12), pady=6)
+        ttk.Label(dialog, text="常用标签").grid(row=2, column=0, sticky="nw", padx=12, pady=6)
+        badge_frame = ttk.Frame(dialog)
+        badge_frame.grid(row=2, column=1, columnspan=2, sticky="nsew", padx=(0, 12), pady=6)
+        badge_list = tk.Listbox(
+            badge_frame,
+            height=7,
+            selectmode=tk.MULTIPLE,
+            exportselection=False,
+            activestyle="none",
+            relief="solid",
+            borderwidth=1,
+        )
+        badge_scroll = ttk.Scrollbar(badge_frame, orient="vertical", command=badge_list.yview)
+        badge_list.configure(yscrollcommand=badge_scroll.set)
+        badge_list.pack(side="left", fill="both", expand=True)
+        badge_scroll.pack(side="right", fill="y")
+        for index, name in enumerate(known_badges):
+            badge_list.insert("end", name)
+            if name in current_badges:
+                badge_list.selection_set(index)
+        ttk.Label(
+            dialog,
+            text="按住 Ctrl / Shift 多选；活动角标显示图片右上，功能标签显示图片左下",
+            foreground="#777",
+        ).grid(row=3, column=1, columnspan=2, sticky="w", padx=(0, 12))
+
+        ttk.Label(dialog, text="额外标签").grid(row=4, column=0, sticky="w", padx=12, pady=6)
+        extra_badges_var = tk.StringVar(value="，".join(extra_badges))
+        ttk.Entry(dialog, textvariable=extra_badges_var).grid(
+            row=4, column=1, columnspan=2, sticky="ew", padx=(0, 12), pady=6
+        )
+        ttk.Label(dialog, text="常用标签里没有的，用逗号分隔写在这里", foreground="#777").grid(
+            row=5, column=1, columnspan=2, sticky="w", padx=(0, 12)
+        )
+
+        ttk.Label(dialog, text="价格上限").grid(row=6, column=0, sticky="w", padx=12, pady=6)
+        ttk.Entry(dialog, textvariable=price_max_var, width=16).grid(row=6, column=1, sticky="w", padx=(0, 12), pady=6)
         ttk.Label(dialog, text="留空表示单一价格；填写后前台显示价格区间", foreground="#777").grid(
-            row=4, column=1, columnspan=2, sticky="w", padx=(0, 12)
+            row=7, column=1, columnspan=2, sticky="w", padx=(0, 12)
         )
 
         ttk.Checkbutton(dialog, text="现货（取消勾选显示“无货”）", variable=stock_var).grid(
-            row=5, column=1, sticky="w", padx=(0, 12), pady=6
+            row=8, column=1, sticky="w", padx=(0, 12), pady=6
         )
         ttk.Checkbutton(dialog, text="在卡片显示 HOT 角标", variable=hot_var).grid(
-            row=6, column=1, sticky="w", padx=(0, 12), pady=6
+            row=9, column=1, sticky="w", padx=(0, 12), pady=6
         )
 
-        ttk.Label(dialog, text="口味 / 规格").grid(row=7, column=0, sticky="nw", padx=12, pady=6)
-        options_text = tk.Text(dialog, height=7, wrap="word", relief="solid", borderwidth=1)
-        options_text.grid(row=7, column=1, columnspan=2, sticky="nsew", padx=(0, 12), pady=6)
+        ttk.Label(dialog, text="口味 / 规格").grid(row=10, column=0, sticky="nw", padx=12, pady=6)
+        options_text = tk.Text(dialog, height=6, wrap="word", relief="solid", borderwidth=1)
+        options_text.grid(row=10, column=1, columnspan=2, sticky="nsew", padx=(0, 12), pady=6)
         options_text.insert("1.0", self._options_text(self.extra.get("options")))
         ttk.Label(dialog, text="每行一个口味；单独价格写：名称|价格；该口味无货写：名称|价格|无货", foreground="#777").grid(
-            row=8, column=1, columnspan=2, sticky="w", padx=(0, 12)
+            row=11, column=1, columnspan=2, sticky="w", padx=(0, 12)
         )
 
-        ttk.Label(dialog, text="参数").grid(row=9, column=0, sticky="nw", padx=12, pady=6)
-        specs_text = tk.Text(dialog, height=6, wrap="word", relief="solid", borderwidth=1)
-        specs_text.grid(row=9, column=1, columnspan=2, sticky="nsew", padx=(0, 12), pady=6)
+        ttk.Label(dialog, text="参数").grid(row=12, column=0, sticky="nw", padx=12, pady=6)
+        specs_text = tk.Text(dialog, height=5, wrap="word", relief="solid", borderwidth=1)
+        specs_text.grid(row=12, column=1, columnspan=2, sticky="nsew", padx=(0, 12), pady=6)
         specs_text.insert("1.0", self._specs_text(self.extra.get("specs")))
         ttk.Label(dialog, text="每行一个参数，格式：键|值，例如 口数|18000", foreground="#777").grid(
-            row=10, column=1, columnspan=2, sticky="w", padx=(0, 12)
+            row=13, column=1, columnspan=2, sticky="w", padx=(0, 12)
         )
 
-        dialog.rowconfigure(9, weight=1)
+        dialog.rowconfigure(12, weight=1)
 
         def save_extra():
             brand = brand_var.get().strip()
-            badges = [
-                item.strip()
-                for item in re.split(r"[,，]", badges_var.get())
-                if item.strip()
-            ]
+            if brand == "（无品牌）":
+                brand = ""
+            badges = [badge_list.get(index) for index in badge_list.curselection()]
+            for item in re.split(r"[,，]", extra_badges_var.get()):
+                item = item.strip()
+                if item and item not in badges:
+                    badges.append(item)
             price_max_raw = price_max_var.get().strip()
             try:
                 price_max = compact_price(price_max_raw) if price_max_raw else None
@@ -1270,7 +1348,7 @@ class ProductAdmin(tk.Tk):
             self.status_var.set("更多信息已更新，记得点“保存商品”")
 
         buttons = ttk.Frame(dialog)
-        buttons.grid(row=11, column=0, columnspan=3, sticky="e", padx=12, pady=12)
+        buttons.grid(row=14, column=0, columnspan=3, sticky="e", padx=12, pady=12)
         ttk.Button(buttons, text="保存", style="Accent.TButton", command=save_extra).pack(side="left")
         ttk.Button(buttons, text="取消", command=dialog.destroy).pack(side="left", padx=8)
 
@@ -1299,7 +1377,7 @@ class ProductAdmin(tk.Tk):
             self._refresh_sub_options(preferred=NO_SUB)
 
         self._clear_preview()
-        self.status_var.set("新建商品：填写信息后点击“保存商品”")
+        self.status_var.set("新建商品：填写信息，点“更多信息”选择品牌和标签后保存")
 
     def load_product(self, _event=None):
         selection = self.product_tree.selection()
