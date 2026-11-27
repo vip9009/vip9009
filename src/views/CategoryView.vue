@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { site, productsData } from '@/data'
 import VpProductCard from '@/components/VpProductCard.vue'
@@ -8,11 +8,11 @@ import { filterByBrand } from '@/utils/categories'
 import { decodeEntities } from '@/utils'
 
 const route = useRoute()
-const page = ref(1)
 const sort = ref('default')
 const keyword = ref('')
 const sidebarOpen = ref(false)
 const pageSize = 10
+const visibleCount = ref(pageSize)
 
 const categoryId = computed(() => String(route.params.id || ''))
 const category = computed(() => site.categories[categoryId.value] || null)
@@ -66,10 +66,20 @@ const sortedItems = computed(() => {
 })
 
 const total = computed(() => sortedItems.value.length)
-const totalPages = computed(() => Math.max(1, Math.ceil(total.value / pageSize)))
-const pageItems = computed(() =>
-  sortedItems.value.slice((page.value - 1) * pageSize, page.value * pageSize)
-)
+const pageItems = computed(() => sortedItems.value.slice(0, visibleCount.value))
+
+function loadMore() {
+  visibleCount.value = Math.min(total.value, visibleCount.value + pageSize)
+}
+
+function onScroll() {
+  if (visibleCount.value >= total.value) return
+  const doc = document.documentElement
+  if (window.innerHeight + window.scrollY >= doc.scrollHeight - 500) loadMore()
+}
+
+onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }))
+onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 
 const topCategories = computed(() =>
   Object.entries(site.categories)
@@ -103,22 +113,14 @@ const description = computed(
 
 const rangeText = computed(() => {
   if (!total.value) return '共 0 个结果'
-  const start = (page.value - 1) * pageSize + 1
-  const end = Math.min(page.value * pageSize, total.value)
-  return `显示 ${start}-${end} 个结果（共 ${total.value} 个结果）`
-})
-
-const pageNumbers = computed(() => {
-  const count = totalPages.value
-  if (count <= 7) return Array.from({ length: count }, (_, index) => index + 1)
-  const start = Math.max(1, Math.min(page.value - 3, count - 6))
-  return Array.from({ length: 7 }, (_, index) => start + index)
+  const end = Math.min(visibleCount.value, total.value)
+  return `显示 1-${end} 个结果（共 ${total.value} 个结果）`
 })
 
 watch(
   () => [route.fullPath, sort.value, keyword.value],
   () => {
-    page.value = 1
+    visibleCount.value = pageSize
   }
 )
 
@@ -203,19 +205,7 @@ watch(
           <RouterLink class="black-btn" to="/contact">联系客服</RouterLink>
         </div>
 
-        <nav v-if="totalPages > 1" class="pagination" aria-label="分页">
-          <button type="button" :disabled="page === 1" @click="page -= 1">上一页</button>
-          <button
-            v-for="number in pageNumbers"
-            :key="number"
-            type="button"
-            :class="{ active: page === number }"
-            @click="page = number"
-          >
-            {{ number }}
-          </button>
-          <button type="button" :disabled="page === totalPages" @click="page += 1">下一页</button>
-        </nav>
+        <div v-if="visibleCount < total" class="load-sentinel" aria-hidden="true" />
       </section>
     </div>
   </div>
