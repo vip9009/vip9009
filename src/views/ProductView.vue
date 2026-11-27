@@ -392,6 +392,7 @@ watch(
             :section-id="item.sectionId"
             :section-title="item.sectionTitle"
             :index="item.index"
+            bordered
           />
         </div>
       </section>
@@ -975,7 +976,7 @@ watch(
 .product-grid-3 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  gap: 0;
 }
 
 .empty-state {
@@ -1149,7 +1150,8 @@ watch(
 
   .product-grid-3 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    gap: 0;
+    margin: 0 -10px;
   }
 
   .tab-head button {
