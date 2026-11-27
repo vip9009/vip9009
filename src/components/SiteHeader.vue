@@ -171,7 +171,7 @@ onBeforeUnmount(() => {
         </RouterLink>
 
         <RouterLink class="mobile-cart" to="/cart" aria-label="购物车">
-          <AppIcon name="cart" :size="17" />
+          <AppIcon name="cart" :size="18" />
           <span v-if="count" class="cart-badge">{{ count }}</span>
         </RouterLink>
       </div>
@@ -288,7 +288,7 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: space-between;
   height: 100px;
-  padding: 0;
+  padding: 0 15px;
 }
 
 .desktop-nav {
@@ -744,7 +744,7 @@ onBeforeUnmount(() => {
 
   .header-main {
     height: 70px;
-    padding: 0;
+    padding: 0 15px;
   }
 
   .desktop-nav,

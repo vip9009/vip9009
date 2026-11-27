@@ -156,7 +156,7 @@ function setPage(index) {
       <form class="home-search-form" role="search" @submit.prevent="submitHomeSearch">
         <input v-model="homeKeyword" type="search" placeholder="搜索..." aria-label="搜索产品" />
         <button type="submit" aria-label="搜索">
-          <AppIcon name="search" :size="20" />
+          <AppIcon name="search" :size="22" />
         </button>
       </form>
     </div>
@@ -318,9 +318,10 @@ function setPage(index) {
   align-items: center;
   height: 40px;
   overflow: hidden;
-  background: #ffffff;
-  border: 1px solid #dddddd;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  border-radius: 99px;
+  box-shadow: none;
 }
 
 .home-search-form input {
@@ -329,7 +330,7 @@ function setPage(index) {
   height: 100%;
   padding: 0 12px;
   font-size: 16px;
-  color: #333333;
+  color: #777777;
   background: transparent;
   border: 0;
   outline: none;
@@ -343,9 +344,10 @@ function setPage(index) {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
+  width: 44px;
   height: 100%;
   color: #777777;
+  background: transparent;
 }
 
 .home-top {
