@@ -338,16 +338,19 @@ const total = computed(() => cart.subtotal.value + shippingFee.value)
 
   .cart-table tr {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    gap: 10px 12px;
-    padding: 16px 0;
-    border-top: 1px solid #eeeeee;
-    border-bottom: 1px solid #eeeeee;
+    gap: 6px 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+    background: #ffffff;
+    border: 1px solid #eeeeee;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   }
 
-  .cart-table tr + tr {
-    border-top: 0;
+  .cart-table tr:last-child {
+    margin-bottom: 0;
   }
 
   .cart-table td {
@@ -364,13 +367,15 @@ const total = computed(() => cart.subtotal.value + shippingFee.value)
     grid-column: 1 / -1;
     align-items: center;
     gap: 12px;
-    padding: 0 30px 0 0;
+    padding: 0 28px 0 0;
   }
 
   .product-cell img {
     flex: 0 0 auto;
     width: 64px;
     height: 64px;
+    background: #fafafa;
+    border-radius: 6px;
   }
 
   .product-cell > div {
@@ -401,30 +406,44 @@ const total = computed(() => cart.subtotal.value + shippingFee.value)
   }
 
   .cart-table td[data-label]::before {
-    content: attr(data-label);
-    display: inline;
-    width: auto;
-    margin-right: 4px;
-    font-size: 11px;
-    color: #999999;
+    display: none;
   }
 
   .cart-table td[data-label='价格'] {
-    grid-row: 2;
+    grid-row: 2 / span 2;
     grid-column: 1;
+    align-self: center;
+    font-size: 13px;
+    color: #666666;
     white-space: nowrap;
   }
 
   .cart-table td[data-label='数量'] {
     grid-row: 2;
     grid-column: 2;
+    align-self: center;
+    justify-self: end;
     white-space: nowrap;
   }
 
   .cart-table td[data-label='小计'] {
-    grid-row: 2;
-    grid-column: 3;
+    grid-row: 3;
+    grid-column: 2;
+    align-self: center;
+    justify-self: end;
+    font-size: 15px;
+    font-weight: 700;
+    color: #242125;
     white-space: nowrap;
+  }
+
+  .cart-table td[data-label='小计']::before {
+    content: '小计';
+    display: inline;
+    margin-right: 4px;
+    font-size: 10px;
+    font-weight: 400;
+    color: #999999;
   }
 
   .qty {
@@ -450,6 +469,8 @@ const total = computed(() => cart.subtotal.value + shippingFee.value)
 
   .summary {
     padding: 18px;
+    border-color: #e5e5e5;
+    border-radius: 10px;
   }
 
   .summary h2 {
