@@ -98,9 +98,8 @@ function addToCart() {
         <span v-for="badge in badges" :key="badge" class="card-badge">{{ badge }}</span>
       </div>
       <span v-if="isHot" class="card-hot">HOT</span>
+      <span v-if="!stock" class="card-sold">无货</span>
     </RouterLink>
-
-    <span v-if="!stock" class="card-sold">无货</span>
 
     <div class="card-body">
       <span class="card-cat">{{ sectionTitle }}</span>
@@ -257,15 +256,18 @@ function addToCart() {
 
 .card-sold {
   position: absolute;
-  top: 44%;
-  left: 50%;
-  z-index: 2;
-  padding: 2px 10px;
-  font-size: 14px;
-  color: #999999;
-  background: rgba(255, 255, 255, 0.86);
-  border: 1px solid #dddddd;
-  transform: translate(-50%, -50%) rotate(-8deg);
+  top: 40%;
+  right: 0;
+  left: 0;
+  z-index: 3;
+  padding: 20px 0;
+  font-weight: 700;
+  color: #333333;
+  text-align: center;
+  text-transform: uppercase;
+  background: #ffffff;
+  background: hsla(0, 0%, 100%, 0.9);
+  opacity: 0.9;
 }
 
 .card-hot {
