@@ -740,6 +740,7 @@ onBeforeUnmount(() => {
     background-repeat: no-repeat;
     background-position: 50% 50%;
     background-size: cover;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   }
 
   .header-main {
@@ -796,6 +797,12 @@ onBeforeUnmount(() => {
   .logo-en {
     font-size: 7px;
     letter-spacing: 0.3em;
+  }
+}
+
+@media (min-width: 550px) and (max-width: 900px) {
+  .header-main {
+    height: 100px;
   }
 }
 </style>
