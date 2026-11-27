@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useCart } from '@/stores/cart'
 import { site } from '@/data'
@@ -18,6 +18,15 @@ const cart = useCart()
 const option = ref('')
 const added = ref(false)
 let addedTimer = null
+
+watch(
+  () => props.product,
+  () => {
+    option.value = ''
+    added.value = false
+    clearTimeout(addedTimer)
+  }
+)
 
 const title = computed(() => decodeEntities(props.product.title))
 const brand = computed(() => detectBrand(props.product))
