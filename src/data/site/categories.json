@@ -11,10 +11,7 @@
     "desc": "一次性系列现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
     "section": "disposables",
     "sort": 1,
-    "nav": true,
-    "children": [
-      "dd"
-    ]
+    "nav": true
   },
   "pods": {
     "title": "换弹系列",
@@ -71,11 +68,5 @@
     "section": "recommend",
     "sort": 3,
     "nav": true
-  },
-  "dd": {
-    "title": "ddddd",
-    "desc": "dssssd",
-    "parent": "disposables",
-    "sort": 1
   }
 }

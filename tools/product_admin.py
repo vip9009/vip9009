@@ -700,20 +700,7 @@ class ProductAdmin(tk.Tk):
         self.announce_right_var = tk.StringVar(value=general.get("announcementRight", ""))
         ttk.Entry(tab, textvariable=self.announce_right_var).grid(row=1, column=1, columnspan=2, sticky="ew", pady=5)
 
-        ttk.Label(tab, text="首页主标题").grid(row=2, column=0, sticky="w", pady=5)
-        self.hero_title_var = tk.StringVar(value=hero.get("title", ""))
-        ttk.Entry(tab, textvariable=self.hero_title_var).grid(row=2, column=1, columnspan=2, sticky="ew", pady=5)
-
-        ttk.Label(tab, text="首页副标题").grid(row=3, column=0, sticky="nw", pady=5)
-        self.hero_subtitle_text = tk.Text(tab, height=3, wrap="word", relief="solid", borderwidth=1)
-        self.hero_subtitle_text.grid(row=3, column=1, columnspan=2, sticky="ew", pady=5)
-        self.hero_subtitle_text.insert("1.0", hero.get("subtitle", ""))
-
-        ttk.Label(tab, text="首页按钮文字").grid(row=4, column=0, sticky="w", pady=5)
-        self.hero_cta_var = tk.StringVar(value=hero.get("cta", ""))
-        ttk.Entry(tab, textvariable=self.hero_cta_var).grid(row=4, column=1, columnspan=2, sticky="ew", pady=5)
-
-        ttk.Label(tab, text="首页按钮链接").grid(row=5, column=0, sticky="w", pady=5)
+        ttk.Label(tab, text="首页 Banner 链接").grid(row=5, column=0, sticky="w", pady=5)
         self.hero_link_var = tk.StringVar(value=hero.get("link", ""))
         ttk.Entry(tab, textvariable=self.hero_link_var).grid(row=5, column=1, columnspan=2, sticky="ew", pady=5)
 
@@ -845,9 +832,6 @@ class ProductAdmin(tk.Tk):
         self.general["announcement"] = self.announce_var.get().strip()
         self.general["announcementRight"] = self.announce_right_var.get().strip()
         hero = self.general.setdefault("hero", {})
-        hero["title"] = self.hero_title_var.get().strip()
-        hero["subtitle"] = self.hero_subtitle_text.get("1.0", "end").strip()
-        hero["cta"] = self.hero_cta_var.get().strip()
         hero["link"] = self.hero_link_var.get().strip()
         self.general.setdefault("shipping", {})["freeOver"] = free_over
         self.general["shipping"]["fee"] = ship_fee
