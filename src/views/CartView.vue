@@ -61,8 +61,8 @@
         </div>
         <p class="summary-note">满 {{ formatPrice(freeOver) }} 包邮</p>
         <div class="summary-total"><span>合计</span><b>{{ formatPrice(total) }}</b></div>
-        <RouterLink class="checkout-btn" to="/checkout">去结算</RouterLink>
-        <p class="summary-tip">支持扫码支付，付款后把截图发给泡泡哥。</p>
+        <RouterLink class="checkout-btn" to="/checkout">填写收货信息</RouterLink>
+        <p class="summary-tip">下一步填写收货信息，可一键复制商品、价格和地址发给客服。</p>
       </aside>
     </div>
   </div>

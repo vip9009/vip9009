@@ -9,7 +9,7 @@ const route = useRoute()
 const menuOpen = ref(false)
 const contactOpen = ref(false)
 const copied = ref(false)
-const isCheckout = computed(() => ['/checkout', '/cart', '/order-query'].includes(route.path))
+const isCheckout = computed(() => ['/checkout', '/cart'].includes(route.path))
 
 let copyTimer = null
 
@@ -57,8 +57,7 @@ onBeforeUnmount(() => {
     <Transition name="menu">
       <div v-if="menuOpen" class="dock-menu">
         <button type="button" @click="contactOpen = true; menuOpen = false">在线客服</button>
-        <RouterLink to="/order-query" @click="closeAll">订单查询</RouterLink>
-        <RouterLink to="/wishlist" @click="closeAll">我的收藏</RouterLink>
+        <RouterLink to="/contact" @click="closeAll">联系方式</RouterLink>
       </div>
     </Transition>
 
@@ -110,10 +109,6 @@ onBeforeUnmount(() => {
             <b>{{ site.contacts.qq?.number }}</b>
             <em>{{ copied ? '已复制' : '点击复制' }}</em>
           </button>
-
-          <RouterLink class="contact-order" to="/order-query" @click="contactOpen = false">
-            查询我的订单
-          </RouterLink>
         </div>
       </div>
     </Transition>

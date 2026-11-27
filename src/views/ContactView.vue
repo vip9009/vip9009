@@ -80,8 +80,8 @@ async function copyQQ() {
         <span>不合适帮你调整方案</span>
       </div>
       <div>
-        <b>订单可查</b>
-        <span>右下角菜单 → 我的订单</span>
+        <b>订单发送</b>
+        <span>复制信息发给客服确认</span>
       </div>
     </section>
 

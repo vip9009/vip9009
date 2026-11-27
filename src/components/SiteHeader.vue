@@ -62,7 +62,7 @@ const navItems = [
   { label: '首页', to: '/' },
   { label: '电子雾化', to: '/category/disposables', mega: true },
   { label: '关于我们', to: '/info/about' },
-  { label: '我的订单', to: '/order-query' }
+  { label: '联系客服', to: '/contact' }
 ]
 
 function submitSearch() {
@@ -227,7 +227,7 @@ onBeforeUnmount(() => {
           </div>
 
           <RouterLink class="drawer-link" to="/info/about" @click="drawerOpen = false">关于我们</RouterLink>
-          <RouterLink class="drawer-link" to="/order-query" @click="drawerOpen = false">我的订单</RouterLink>
+          <RouterLink class="drawer-link" to="/contact" @click="drawerOpen = false">联系客服</RouterLink>
         </div>
       </aside>
     </Teleport>

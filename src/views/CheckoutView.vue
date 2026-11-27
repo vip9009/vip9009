@@ -1,16 +1,15 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import { site } from '@/data'
 import { useCart } from '@/stores/cart'
-import { createOrder } from '@/stores/orders'
 import { asset, formatPrice } from '@/utils'
+import { buildOrderText, copyToClipboard } from '@/utils/orderText'
 
 const cart = useCart()
 const address = ref('')
-const agree = ref(false)
+const copied = ref(false)
 const error = ref('')
-const order = ref(null)
 
 const freeOver = computed(() => Number(site.shipping?.freeOver ?? 138))
 const fee = computed(() => Number(site.shipping?.fee ?? 8))
@@ -19,30 +18,39 @@ const shippingFee = computed(() =>
 )
 const total = computed(() => cart.subtotal.value + shippingFee.value)
 const paymentQr = computed(() => site.payment?.qr || '')
+const orderText = computed(() =>
+  buildOrderText({
+    items: cart.items,
+    subtotal: cart.subtotal.value,
+    shippingFee: shippingFee.value,
+    total: total.value,
+    address: address.value
+  })
+)
 
-function placeOrder() {
+watch(address, (value) => {
+  if (value.trim()) error.value = ''
+})
+
+async function copyOrder() {
   error.value = ''
   if (!cart.items.length) {
     error.value = '购物车是空的。'
     return
   }
   if (!address.value.trim()) {
-    error.value = '请填写收件人、手机号和完整地址。'
+    error.value = '请先填写收货信息（收件人、手机号和完整地址）。'
     return
   }
-  if (!agree.value) {
-    error.value = '请先阅读并同意条款和条件。'
+  const ok = await copyToClipboard(orderText.value)
+  if (!ok) {
+    error.value = '复制失败，请展开下方订单信息手动复制。'
     return
   }
-  order.value = createOrder({
-    items: cart.items.map((item) => ({ ...item })),
-    subtotal: cart.subtotal.value,
-    shippingFee: shippingFee.value,
-    total: total.value,
-    address: address.value.trim(),
-    payment: '扫码支付'
-  })
-  cart.clear()
+  copied.value = true
+  window.setTimeout(() => {
+    copied.value = false
+  }, 4000)
 }
 </script>
 
@@ -51,38 +59,19 @@ function placeOrder() {
     <nav class="steps" aria-label="购物流程">
       <RouterLink to="/cart">购物车</RouterLink>
       <i>›</i>
-      <span class="active">付款详情</span>
+      <span class="active">填写信息</span>
       <i>›</i>
-      <span>订单完成</span>
+      <span>发给客服</span>
     </nav>
 
-    <div v-if="order" class="success">
-      <span class="success-mark">✓</span>
-      <h1>订单已提交</h1>
-      <p>订单号：<b>{{ order.id }}</b></p>
-      <p class="success-note">{{ site.payment?.note }}</p>
-      <div class="success-qr">
-        <img v-if="paymentQr" :src="asset(paymentQr)" alt="收款二维码" />
-        <span v-else>收款二维码待上传</span>
-      </div>
-      <p class="success-qq">
-        付款后把截图发给 {{ site.contacts.qq?.label || '客服' }}：
-        <b>{{ site.contacts.qq?.number }}</b>
-      </p>
-      <div class="success-actions">
-        <RouterLink class="black-btn" to="/order-query">查询订单</RouterLink>
-        <RouterLink class="ghost-btn" to="/category/hot">继续购物</RouterLink>
-      </div>
-    </div>
-
-    <div v-else-if="!cart.items.length" class="empty-cart">
+    <div v-if="!cart.items.length" class="empty-cart">
       <p>您的购物车目前是空的。</p>
       <RouterLink class="black-btn" to="/category/hot">返回商店</RouterLink>
     </div>
 
     <div v-else class="checkout-layout">
       <div class="checkout-main">
-        <p class="checkout-tip">※ 订单查询 → 右下角菜单 → 我的订单</p>
+        <p class="checkout-tip">填写收货信息 → 复制订单信息 → 加客服微信 / QQ，把信息和付款截图一起发过去。</p>
 
         <h2>收货信息</h2>
         <textarea
@@ -92,7 +81,12 @@ function placeOrder() {
           placeholder="收件人 + 手机号 + 省 + 市 + 街道 + 备注（可选）"
         />
 
-        <p class="checkout-tip">※ 「扫码支付」需提供付款截图</p>
+        <details class="order-preview">
+          <summary>查看要发送的订单信息</summary>
+          <pre>{{ orderText }}</pre>
+        </details>
+
+        <p class="checkout-tip">※ 「扫码支付」或微信 / QQ 转账后，请提供付款截图</p>
       </div>
 
       <aside class="order-box">
@@ -124,16 +118,17 @@ function placeOrder() {
         </div>
         <p class="method-note">{{ site.payment?.note }}</p>
         <p class="method-qq">
-          客服 QQ：{{ site.contacts.qq?.number }}
+          客服 QQ：{{ site.contacts.qq?.number }}（微信 / QQ 转账均可）
         </p>
 
-        <label class="agree">
-          <input v-model="agree" type="checkbox" />
-          <span>我已经读了并同意本网站的 <RouterLink to="/info/returns">条款和条件</RouterLink> *</span>
-        </label>
-
+        <button class="place-order" type="button" @click="copyOrder">
+          {{ copied ? '已复制，请发给客服' : '复制订单信息发给客服' }}
+        </button>
         <p v-if="error" class="error">{{ error }}</p>
-        <button class="place-order" type="button" @click="placeOrder">下单</button>
+        <p v-if="copied" class="copy-success">
+          订单信息已复制。请加客服微信 / QQ，把信息和付款截图一起发过去。
+        </p>
+        <RouterLink class="checkout-contact" to="/contact">查看客服微信 / QQ 联系方式 →</RouterLink>
       </aside>
     </div>
   </div>
@@ -200,10 +195,36 @@ function placeOrder() {
   border-color: var(--color-primary);
 }
 
+.order-preview {
+  margin-top: 12px;
+}
+
+.order-preview summary {
+  font-size: 12px;
+  color: #3372a2;
+  cursor: pointer;
+}
+
+.order-preview pre {
+  max-height: 320px;
+  padding: 12px;
+  margin-top: 8px;
+  overflow: auto;
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 1.7;
+  color: #555555;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #fafafa;
+  border: 1px solid #eeeeee;
+}
+
 .order-box {
   align-self: start;
   padding: 22px;
   border: 1px solid #242125;
+  border-radius: 10px;
 }
 
 .order-box h2 {
@@ -342,9 +363,27 @@ function placeOrder() {
 }
 
 .error {
-  margin-bottom: 8px;
-  font-size: 11px;
+  margin: 8px 0;
+  font-size: 12px;
   color: #c0392b;
+}
+
+.copy-success {
+  margin-top: 10px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #008000;
+}
+
+.checkout-contact {
+  display: inline-flex;
+  margin-top: 10px;
+  font-size: 12px;
+  color: #3372a2;
+}
+
+.checkout-contact:hover {
+  color: var(--color-primary);
 }
 
 .place-order {

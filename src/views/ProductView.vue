@@ -5,13 +5,11 @@ import { site, productsData } from '@/data'
 import VpProductCard from '@/components/VpProductCard.vue'
 import AppIcon from '@/components/AppIcon.vue'
 import { useCart } from '@/stores/cart'
-import { useWishlist } from '@/stores/wishlist'
 import { asset, decodeEntities, detectBrand, formatPrice } from '@/utils'
 import { isFeatureTag } from '@/utils/tags'
 
 const route = useRoute()
 const cart = useCart()
-const wishlist = useWishlist()
 
 const sectionId = computed(() => String(route.params.section || ''))
 const productIndex = computed(() => Number(route.params.index ?? -1))
@@ -172,16 +170,6 @@ onBeforeUnmount(() => {
   clearTimeout(addedTimer)
 })
 
-function toggleWishlist() {
-  if (!product.value) return
-  wishlist.toggle({
-    sectionId: sectionId.value,
-    index: productIndex.value,
-    title: title.value,
-    price: product.value.price,
-    image: image.value
-  })
-}
 
 function changeQty(delta) {
   quantity.value = Math.max(1, Math.min(99, quantity.value + delta))
@@ -309,13 +297,6 @@ watch(
           </div>
 
           <p v-if="error" class="form-error">{{ error }}</p>
-
-          <div class="sub-actions">
-            <button class="wish-btn" type="button" :class="{ active: wishlist.has(sectionId, productIndex) }" @click="toggleWishlist">
-              <AppIcon name="heart" :size="18" />
-              {{ wishlist.has(sectionId, productIndex) ? '从收藏中删除' : '加入收藏' }}
-            </button>
-          </div>
 
           <div class="meta">
             <p>
@@ -847,33 +828,6 @@ watch(
   font-size: 12.8px;
   font-weight: 600;
   color: #b20000;
-}
-
-.sub-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 19px 0 14px;
-}
-
-.wish-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 16px;
-  color: #333333;
-}
-
-.wish-btn:hover {
-  color: #000000;
-}
-
-.wish-btn.active {
-  color: #000000;
-}
-
-.wish-btn.active svg {
-  fill: currentColor;
 }
 
 .meta {
