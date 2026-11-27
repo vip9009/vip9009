@@ -272,25 +272,39 @@ function addToCart() {
   top: 50%;
   right: 12px;
   z-index: 2;
-  padding: 2px 7px;
+  padding: 0.3em 0.6em;
   font-family: var(--font-heading);
-  font-size: 9px;
-  font-weight: 900;
+  font-size: 10px;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1;
   color: #ffffff;
-  background: #242125;
+  background: #0a0002;
+  border-radius: 2px;
   transform: translateY(-50%);
-  animation: hot-blink 1.8s ease-in-out infinite;
+  animation: awl-heartbeat 2000ms ease-in-out 0ms infinite;
 }
 
-@keyframes hot-blink {
-  0%,
-  100% {
-    opacity: 1;
+@keyframes awl-heartbeat {
+  0% {
     transform: translateY(-50%) scale(1);
+    animation-timing-function: ease-out;
   }
-  50% {
-    opacity: 0.42;
-    transform: translateY(-50%) scale(1.07);
+  10% {
+    transform: translateY(-50%) scale(0.91);
+    animation-timing-function: ease-in;
+  }
+  17% {
+    transform: translateY(-50%) scale(0.98);
+    animation-timing-function: ease-out;
+  }
+  33% {
+    transform: translateY(-50%) scale(0.87);
+    animation-timing-function: ease-in;
+  }
+  45% {
+    transform: translateY(-50%) scale(1);
+    animation-timing-function: ease-out;
   }
 }
 
