@@ -450,8 +450,8 @@ function setPage(index) {
 }
 
 .category-glyph.is-lottie {
-  width: 150px;
-  height: 150px;
+  width: 220px;
+  height: 220px;
 }
 
 .category-tile b {
