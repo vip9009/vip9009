@@ -328,13 +328,6 @@ watch(
             <p><span>分类：</span>{{ section?.title }}<template v-if="product.subcategory && site.categories[product.subcategory]">，{{ site.categories[product.subcategory].title }}</template></p>
             <p v-if="allBadges.length"><span>标签：</span>{{ allBadges.join('，') }}</p>
             <p v-if="brand"><span>品牌：</span>{{ brand }}</p>
-            <p>
-              <span>库存：</span>
-              <template v-if="selectedOption">
-                {{ selectedOption.stock ? '现货，确认后发出' : '该口味暂时无货，请选择其他口味' }}
-              </template>
-              <template v-else>{{ stock ? '现货，确认后发出' : '暂时无货，可联系客服' }}</template>
-            </p>
           </div>
 
         </div>
@@ -517,7 +510,6 @@ watch(
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 30px 24px rgba(0, 0, 0, 0.12));
 }
 
 .gallery-badges {
@@ -683,8 +675,9 @@ watch(
 }
 
 .info h1 {
-  margin-bottom: 10px;
-  font-size: 27px;
+  margin-bottom: 11px;
+  font-size: 27.2px;
+  font-weight: 700;
   line-height: 1.3;
   color: #555555;
 }
@@ -708,6 +701,7 @@ watch(
 .price {
   font-size: 24px;
   font-weight: 700;
+  line-height: 24px;
   color: #777777;
 }
 
@@ -737,9 +731,9 @@ watch(
 .option-row select {
   flex: 1;
   height: 40px;
-  padding: 0 15px;
-  margin: 7px 0 15px;
-  font-size: 14px;
+  padding: 10px 15px;
+  margin: 8px 0 15px;
+  font-size: 16px;
   color: #333333;
   background: #ffffff;
   border: 1px solid #dddddd;
@@ -842,14 +836,14 @@ watch(
   display: flex;
   align-items: center;
   gap: 12px;
-  padding-bottom: 14px;
+  padding: 19px 0 14px;
 }
 
 .wish-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-size: 16px;
   color: #777777;
 }
 
@@ -858,12 +852,12 @@ watch(
 }
 
 .meta {
-  padding: 12px 0;
-  font-size: 11px;
-  line-height: 1.9;
+  padding: 15px 0;
+  font-size: 12.8px;
+  line-height: 1.6;
   color: #777777;
-  border-top: 1px solid #eeeeee;
-  border-bottom: 1px solid #eeeeee;
+  border-top: 1px dashed #e0e0e0;
+  border-bottom: 1px dashed #e0e0e0;
 }
 
 .meta span {
@@ -873,7 +867,7 @@ watch(
 
 
 .product-tabs {
-  padding: 10px 15px 0;
+  padding: 23px 15px 0;
 }
 
 .tab-head {
@@ -885,8 +879,9 @@ watch(
 
 .tab-head button {
   height: 34px;
-  padding: 0 18px;
-  font-size: 11px;
+  padding: 0 20px;
+  font-size: 12px;
+  font-weight: 600;
   color: #666666;
   background: #f5f5f5;
   border-radius: 999px;
@@ -899,8 +894,9 @@ watch(
 
 .tab-body {
   min-height: 160px;
-  padding: 26px;
+  padding: 20px;
   border: 1px solid #eeeeee;
+  border-radius: 10px;
 }
 
 .description p,
@@ -1089,7 +1085,7 @@ watch(
   }
 
   .product-tabs {
-    padding: 10px 0 0;
+    padding: 23px 0 0;
   }
 
   .related {
@@ -1112,10 +1108,7 @@ watch(
   }
 
   .zoom-button {
-    width: 34px;
-    height: 34px;
-    bottom: 8px;
-    left: 8px;
+    display: none;
   }
 
   .gallery-brand-logo {
@@ -1123,22 +1116,26 @@ watch(
   }
 
   .info h1 {
-    font-size: 22px;
+    font-size: 22.4px;
+    font-weight: 700;
+    line-height: 29.12px;
+    margin-bottom: 11px;
   }
 
   .price,
   .variation-price {
-    font-size: 20px;
+    font-size: 24px;
+    line-height: 24px;
   }
 
   .option-row label {
-    padding-right: 12px;
-    font-size: 13px;
+    padding-right: 18px;
+    font-size: 14px;
   }
 
   .option-row select {
-    padding: 0 10px;
-    font-size: 13px;
+    padding: 10px 15px;
+    font-size: 16px;
   }
 
   .qty {
@@ -1162,7 +1159,8 @@ watch(
   }
 
   .tab-body {
-    padding: 16px;
+    padding: 20px;
+    border-radius: 10px;
   }
 
   .product-grid-3 {
