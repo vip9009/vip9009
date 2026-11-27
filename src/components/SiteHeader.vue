@@ -43,7 +43,7 @@ const drawerCategories = computed(() =>
     }))
 )
 
-const drawerGroups = ref({ electronic: true })
+const drawerGroups = ref({ electronic: false, brand: false, about: false })
 
 function toggleDrawerGroup(name) {
   drawerGroups.value[name] = !drawerGroups.value[name]
@@ -57,6 +57,15 @@ function submitDrawerSearch() {
 }
 
 const brands = computed(() => site.brands || [])
+const aboutLinks = [
+  { label: '关于我们', to: '/info/about' },
+  { label: '常见问题', to: '/info/faq' },
+  { label: '付款方式', to: '/info/payment' },
+  { label: '配送说明', to: '/info/delivery' },
+  { label: '退换政策', to: '/info/returns' },
+  { label: '真假验证', to: '/info/verification' },
+  { label: '隐私政策', to: '/info/privacy' }
+]
 
 const navItems = [
   { label: '首页', to: '/' },
@@ -187,9 +196,6 @@ onBeforeUnmount(() => {
               <AppIcon name="search" :size="18" />
             </button>
           </form>
-          <button class="drawer-close" type="button" aria-label="关闭菜单" @click="drawerOpen = false">
-            <AppIcon name="close" :size="20" />
-          </button>
         </div>
 
         <div class="drawer-body">
@@ -198,10 +204,11 @@ onBeforeUnmount(() => {
           <div class="drawer-group">
             <button class="drawer-group-toggle" type="button" @click="toggleDrawerGroup('electronic')">
               <span>电子雾化</span>
-              <AppIcon :name="drawerGroups.electronic ? 'chevron-down' : 'chevron-right'" :size="14" />
+              <span class="drawer-chevron" :class="{ open: drawerGroups.electronic }">
+                <AppIcon name="chevron-down" :size="16" />
+              </span>
             </button>
             <div v-if="drawerGroups.electronic" class="drawer-sub">
-              <b class="drawer-sub-title">电子雾化系列</b>
               <RouterLink
                 v-for="item in drawerCategories"
                 :key="item.id"
@@ -210,7 +217,17 @@ onBeforeUnmount(() => {
               >
                 {{ item.label }}
               </RouterLink>
-              <b class="drawer-sub-title">品牌分类</b>
+            </div>
+          </div>
+
+          <div class="drawer-group">
+            <button class="drawer-group-toggle" type="button" @click="toggleDrawerGroup('brand')">
+              <span>品牌分类</span>
+              <span class="drawer-chevron" :class="{ open: drawerGroups.brand }">
+                <AppIcon name="chevron-down" :size="16" />
+              </span>
+            </button>
+            <div v-if="drawerGroups.brand" class="drawer-sub">
               <RouterLink
                 v-for="brand in brands"
                 :key="brand"
@@ -222,7 +239,25 @@ onBeforeUnmount(() => {
             </div>
           </div>
 
-          <RouterLink class="drawer-link" to="/info/about" @click="drawerOpen = false">关于我们</RouterLink>
+          <div class="drawer-group">
+            <button class="drawer-group-toggle" type="button" @click="toggleDrawerGroup('about')">
+              <span>关于我们</span>
+              <span class="drawer-chevron" :class="{ open: drawerGroups.about }">
+                <AppIcon name="chevron-down" :size="16" />
+              </span>
+            </button>
+            <div v-if="drawerGroups.about" class="drawer-sub">
+              <RouterLink
+                v-for="item in aboutLinks"
+                :key="item.to"
+                :to="item.to"
+                @click="drawerOpen = false"
+              >
+                {{ item.label }}
+              </RouterLink>
+            </div>
+          </div>
+
           <RouterLink class="drawer-link" to="/contact" @click="drawerOpen = false">联系客服</RouterLink>
         </div>
       </aside>
@@ -560,8 +595,9 @@ onBeforeUnmount(() => {
   z-index: 201;
   display: flex;
   flex-direction: column;
-  width: min(84vw, 340px);
-  background: #ffffff;
+  width: 300px;
+  max-width: 84vw;
+  background: #f7f7f7;
   transform: translateX(-101%);
   transition: transform 0.25s ease;
   overflow-y: auto;
@@ -571,68 +607,37 @@ onBeforeUnmount(() => {
   transform: translateX(0);
 }
 
-.drawer-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex: 0 0 auto;
-  height: 68px;
-  padding: 0 16px;
-  border-bottom: 1px solid #eeeeee;
-}
-
-.drawer-head .logo {
-  position: static;
-  transform: none;
-  align-items: flex-start;
-}
-
-.drawer-head .logo-cn {
-  font-size: 22px;
-}
-
-.drawer-head button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-}
-
 .drawer-body {
-  padding: 0 16px 16px;
+  padding: 0 0 16px;
 }
 
 .drawer-top {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   flex: 0 0 auto;
-  padding: 12px 16px;
+  padding: 12px 15px;
+  background: #f7f7f7;
   border-bottom: 1px solid #eeeeee;
 }
 
 .drawer-search {
   display: flex;
-  flex: 1;
   height: 40px;
   overflow: hidden;
+  background: #ffffff;
   border: 1px solid #dddddd;
-  transform: skewX(-8deg);
-}
-
-.drawer-search input,
-.drawer-search button {
-  transform: skewX(8deg);
 }
 
 .drawer-search input {
   flex: 1;
   min-width: 0;
-  padding: 0 10px;
-  font-size: 13px;
+  padding: 0 12px;
+  font-size: 16px;
+  color: #333333;
   border: 0;
   outline: none;
+}
+
+.drawer-search input::placeholder {
+  color: #999999;
 }
 
 .drawer-search button {
@@ -640,83 +645,61 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   width: 44px;
-  color: #242125;
-  background: #ffffff;
+  color: #222222;
+  background: #e9e9e9;
   border-left: 1px solid #dddddd;
-}
-
-.drawer-close {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 36px;
-  width: 36px;
-  height: 36px;
-  color: #242125;
-  background: #f5f5f5;
 }
 
 .drawer-group {
   margin: 0;
 }
 
+.drawer-link,
 .drawer-group-toggle {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 14px 0;
-  font-size: 15px;
+  padding: 18px 20px;
+  font-size: 16px;
+  font-weight: 600;
   color: #242125;
-  border-bottom: 1px solid #f2f2f2;
+  text-align: left;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.drawer-link {
+  display: block;
+}
+
+.drawer-chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #777777;
+  transition: transform 0.2s ease;
+}
+
+.drawer-chevron.open {
+  transform: rotate(180deg);
 }
 
 .drawer-sub {
   display: flex;
   flex-direction: column;
-  padding: 2px 0 10px 12px;
+  padding: 2px 20px 10px;
+  background: #fafafa;
 }
 
 .drawer-sub a {
-  padding: 9px 0;
-  font-size: 13px;
+  padding: 9px 0 9px 12px;
+  font-size: 14px;
   color: #555555;
 }
 
-.drawer-sub-title {
-  display: block;
-  margin: 12px 0 2px;
-  font-size: 11px;
-  font-weight: 700;
-  color: #999999;
-}
-
-.drawer-link {
-  display: block;
-  padding: 12px 0;
-  font-size: 16px;
-  font-weight: 700;
-  color: #242125;
-  border-bottom: 1px solid #f2f2f2;
-}
-
-.drawer-group {
-  margin-top: 20px;
-}
-
-.drawer-group b {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  color: #999999;
-}
-
-.drawer-group a {
-  display: block;
-  padding: 8px 0;
-  font-size: 14px;
-  color: #666666;
+.drawer-sub a:hover {
+  color: var(--color-primary);
 }
 
 .fade-enter-active,
