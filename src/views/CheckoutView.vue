@@ -8,7 +8,6 @@ import { asset, formatPrice } from '@/utils'
 
 const cart = useCart()
 const address = ref('')
-const altFlavor = ref('')
 const agree = ref(false)
 const error = ref('')
 const order = ref(null)
@@ -41,7 +40,6 @@ function placeOrder() {
     shippingFee: shippingFee.value,
     total: total.value,
     address: address.value.trim(),
-    note: altFlavor.value.trim(),
     payment: '扫码支付'
   })
   cart.clear()
@@ -90,16 +88,8 @@ function placeOrder() {
         <textarea
           v-model="address"
           class="field"
-          rows="6"
-          placeholder="收件人 + 手机号 + 省 + 市 + 街道 + 备注（可选）"
-        />
-
-        <h2>备选口味</h2>
-        <textarea
-          v-model="altFlavor"
-          class="field"
           rows="3"
-          placeholder="此处填写备选口味，未填写默认缺货发随机口味。例如：西瓜、葡萄、薄荷、颜色、留言"
+          placeholder="收件人 + 手机号 + 省 + 市 + 街道 + 备注（可选）"
         />
 
         <p class="checkout-tip">※ 「扫码支付」需提供付款截图</p>
