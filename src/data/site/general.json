@@ -122,50 +122,6 @@
       "tone": "gray"
     }
   ],
-  "news": [
-    {
-      "title": "韩国 2026 年 4 月 24 日起将合成尼古丁电子烟界定为烟草",
-      "date": "2026-01-07",
-      "comments": 2917,
-      "image": "/images/news/korea-synthetic-nicotine.webp",
-      "to": "/info/news"
-    },
-    {
-      "title": "国家烟草专卖局电子烟监督管理司发布《电子烟监督管理状况》",
-      "date": "2026-01-07",
-      "comments": 0,
-      "image": "/images/news/china-vape-regulation.webp",
-      "to": "/info/news"
-    },
-    {
-      "title": "国家烟草专卖局关于实施电子烟行业政策并进一步促进供需动态平衡的通知（征求意见稿）",
-      "date": "2025-12-26",
-      "comments": 0,
-      "image": "/images/news/supply-demand-notice.webp",
-      "to": "/info/news"
-    },
-    {
-      "title": "多国表现亮眼！2025 年 11 月中国电子烟出口数据出炉",
-      "date": "2025-12-24",
-      "comments": 0,
-      "image": "/images/news/november-export.webp",
-      "to": "/info/news"
-    },
-    {
-      "title": "韩国发布烟草有害成分检测标准、KT&G 修订与菲莫国际长期合作条款",
-      "date": "2025-12-19",
-      "comments": 0,
-      "image": "/images/news/korea-testing-standard.webp",
-      "to": "/info/news"
-    },
-    {
-      "title": "爱奇迹公布 2025 年研发进展，全面升级安全检测体系",
-      "date": "2025-12-19",
-      "comments": 0,
-      "image": "/images/news/elfbar-rd-2025.webp",
-      "to": "/info/news"
-    }
-  ],
   "topLinks": [
     {
       "label": "网站地图",

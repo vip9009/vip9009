@@ -151,8 +151,6 @@ onBeforeUnmount(() => {
                 </div>
                 <div class="mega-links">
                   <RouterLink v-if="site.categories.recommend" to="/category/recommend">店长推荐 🔥</RouterLink>
-                  <RouterLink to="/info/news">新闻资讯</RouterLink>
-                  <RouterLink to="/activity">优惠活动 🔥</RouterLink>
                 </div>
                 <RouterLink class="mega-all" to="/category/hot">查看全部商品 →</RouterLink>
               </div>
@@ -203,8 +201,6 @@ onBeforeUnmount(() => {
               <AppIcon :name="drawerGroups.electronic ? 'chevron-down' : 'chevron-right'" :size="14" />
             </button>
             <div v-if="drawerGroups.electronic" class="drawer-sub">
-              <RouterLink to="/info/news" @click="drawerOpen = false">新闻资讯</RouterLink>
-              <RouterLink to="/activity" @click="drawerOpen = false">优惠活动 🔥</RouterLink>
               <b class="drawer-sub-title">电子雾化系列</b>
               <RouterLink
                 v-for="item in drawerCategories"

@@ -70,10 +70,7 @@ const tiles = computed(() => {
       }
     })
     .filter(Boolean)
-  return [
-    ...fromCategories,
-    { title: '优惠活动', to: '/activity', image: '', lottie: '/animations/rocket.json' }
-  ]
+  return fromCategories
 })
 
 const newProducts = computed(() => {
@@ -129,22 +126,6 @@ const brands = computed(() => site.brands || [])
 const brandItems = computed(() =>
   brands.value.map((name) => ({ name, logo: site.brandLogos?.[name] || '' }))
 )
-const news = computed(() => site.news || [])
-const newsPage = ref(0)
-const newsPerPage = 2
-const newsPages = computed(() => Math.max(1, Math.ceil(news.value.length / newsPerPage)))
-const visibleNews = computed(() =>
-  news.value.slice(newsPage.value * newsPerPage, (newsPage.value + 1) * newsPerPage)
-)
-
-function prevNews() {
-  newsPage.value = (newsPage.value - 1 + newsPages.value) % newsPages.value
-}
-
-function nextNews() {
-  newsPage.value = (newsPage.value + 1) % newsPages.value
-}
-
 function setPage(index) {
   page.value = index
 }
@@ -230,7 +211,6 @@ function setPage(index) {
         <div class="tag-bar">
           <button type="button" :class="{ active: activeTab === 'tag' }" @click="activeTab = 'tag'">TAG</button>
           <button type="button" :class="{ active: activeTab === 'brand' }" @click="activeTab = 'brand'">BRAND</button>
-          <button type="button" :class="{ active: activeTab === 'news' }" @click="activeTab = 'news'">NEWS</button>
         </div>
 
         <img class="tag-arrow-down" :src="arrowDownImg" alt="" aria-hidden="true" />
@@ -260,37 +240,6 @@ function setPage(index) {
             <img v-if="item.logo" :src="asset(item.logo)" :alt="item.name" />
             <span v-else>{{ item.name }}</span>
           </RouterLink>
-        </div>
-
-        <div v-else class="news-carousel">
-          <button class="news-arrow prev" type="button" aria-label="上一组新闻" @click="prevNews">‹</button>
-          <div class="news-track">
-            <RouterLink v-for="item in visibleNews" :key="item.title" class="news-card" :to="item.to || '/info/news'">
-              <span class="news-thumb">
-                <img v-if="item.image" :src="asset(item.image)" :alt="item.title" />
-                <template v-else>
-                  <b>PAOPAO</b>
-                  <small>NEWS</small>
-                </template>
-              </span>
-              <h3>{{ item.title }}</h3>
-              <div class="news-meta">
-                <time>{{ item.date }}</time>
-                <span v-if="item.comments">{{ item.comments }} 评论</span>
-              </div>
-            </RouterLink>
-          </div>
-          <button class="news-arrow next" type="button" aria-label="下一组新闻" @click="nextNews">›</button>
-        </div>
-        <div v-if="activeTab === 'news' && newsPages > 1" class="news-dots">
-          <button
-            v-for="index in newsPages"
-            :key="index"
-            type="button"
-            :class="{ active: newsPage === index - 1 }"
-            :aria-label="`第 ${index} 页新闻`"
-            @click="newsPage = index - 1"
-          />
         </div>
       </div>
     </section>
