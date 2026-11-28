@@ -8,10 +8,11 @@ import { asset, formatPrice } from '@/utils'
 
 const route = useRoute()
 const router = useRouter()
-const { count, subtotal } = useCart()
+const { count, subtotal, items, remove } = useCart()
 
 const keyword = ref('')
 const drawerOpen = ref(false)
+const cartOpen = ref(false)
 const scrolled = ref(false)
 const searchInput = ref(null)
 
@@ -87,6 +88,7 @@ function onScroll() {
 function onKeydown(event) {
   if (event.key === 'Escape') {
     drawerOpen.value = false
+    cartOpen.value = false
   }
 }
 
@@ -94,11 +96,12 @@ watch(
   () => route.fullPath,
   () => {
     drawerOpen.value = false
+    cartOpen.value = false
   }
 )
 
-watch(drawerOpen, (open) => {
-  document.body.style.overflow = open ? 'hidden' : ''
+watch([drawerOpen, cartOpen], ([drawer, cart]) => {
+  document.body.style.overflow = drawer || cart ? 'hidden' : ''
 })
 
 onMounted(() => {
@@ -171,16 +174,16 @@ onBeforeUnmount(() => {
           <img class="logo-img" :src="asset('/images/ui/logo-vapepu.webp')" alt="VAPEPU" />
         </RouterLink>
 
-        <RouterLink class="cart-pill" to="/cart" aria-label="购物车">
+        <button class="cart-pill" type="button" aria-label="查看购物车" @click="cartOpen = true">
           <span class="cart-pill-text">购物车 / {{ formatPrice(subtotal) }}</span>
           <AppIcon name="cart" :size="18" />
           <span v-if="count" class="cart-badge">{{ count }}</span>
-        </RouterLink>
+        </button>
 
-        <RouterLink class="mobile-cart" to="/cart" aria-label="购物车">
+        <button class="mobile-cart" type="button" aria-label="查看购物车" @click="cartOpen = true">
           <AppIcon name="cart" :size="18" />
           <span v-if="count" class="cart-badge">{{ count }}</span>
-        </RouterLink>
+        </button>
       </div>
     </header>
 
@@ -262,10 +265,60 @@ onBeforeUnmount(() => {
         </div>
       </aside>
     </Teleport>
+
+    <Teleport to="body">
+      <Transition name="cart-pop">
+        <div v-if="cartOpen" class="cart-pop" role="dialog" aria-modal="true" aria-label="购物车">
+          <div class="cart-pop-shell">
+            <header class="cart-pop-head">
+              <h2>购物车</h2>
+              <button class="cart-pop-close" type="button" aria-label="关闭购物车" @click="cartOpen = false">
+                <AppIcon name="close" :size="24" />
+              </button>
+            </header>
+
+            <div class="cart-pop-body">
+              <div v-if="!items.length" class="cart-pop-empty">
+                <AppIcon name="cart" :size="36" />
+                <p>购物车还是空的</p>
+                <RouterLink class="cart-pop-btn black" to="/category/hot" @click="cartOpen = false">去逛逛</RouterLink>
+              </div>
+
+              <div v-else class="cart-pop-list">
+                <div v-for="item in items" :key="item.key" class="cart-pop-item">
+                  <img :src="item.image" :alt="item.title" />
+                  <div class="cart-pop-info">
+                    <b>{{ item.title }}</b>
+                    <small v-if="item.option">{{ item.option }}</small>
+                    <span>{{ item.qty }} × {{ formatPrice(item.price) }}</span>
+                  </div>
+                  <button class="cart-pop-remove" type="button" aria-label="删除" @click="remove(item.key)">
+                    <AppIcon name="close" :size="14" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <footer v-if="items.length" class="cart-pop-foot">
+              <div class="cart-pop-total">
+                <span>购物车小计</span>
+                <b>{{ formatPrice(subtotal) }}</b>
+              </div>
+              <RouterLink class="cart-pop-btn dark" to="/cart" @click="cartOpen = false">查看购物车</RouterLink>
+              <RouterLink class="cart-pop-btn black" to="/checkout" @click="cartOpen = false">结算</RouterLink>
+            </footer>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
 <style scoped>
+.header-wrap {
+  display: contents;
+}
+
 .announce {
   overflow: hidden;
   padding: 10px 0;
@@ -709,6 +762,215 @@ onBeforeUnmount(() => {
 
 .fade-enter-from,
 .fade-leave-to {
+  opacity: 0;
+}
+
+/* Full-screen cart */
+.cart-pop {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(2px);
+}
+
+.cart-pop-shell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 720px;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.cart-pop-head {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  height: 76px;
+  padding: 0 20px;
+}
+
+.cart-pop-head h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #242125;
+}
+
+.cart-pop-head h2::after {
+  content: '';
+  display: block;
+  width: 56px;
+  height: 2px;
+  margin: 8px auto 0;
+  background: #e5e5e5;
+}
+
+.cart-pop-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  color: #555555;
+}
+
+.cart-pop-body {
+  flex: 1;
+  min-height: 0;
+  padding: 0 20px;
+  overflow-y: auto;
+}
+
+.cart-pop-list {
+  padding-bottom: 8px;
+}
+
+.cart-pop-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.cart-pop-item img {
+  flex: 0 0 auto;
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  background: #ffffff;
+  border-radius: 6px;
+}
+
+.cart-pop-info {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 30px;
+  text-align: left;
+}
+
+.cart-pop-info b {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #242125;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.cart-pop-info small {
+  font-size: 12px;
+  color: #999999;
+}
+
+.cart-pop-info span {
+  margin-top: 2px;
+  font-size: 14px;
+  color: #555555;
+}
+
+.cart-pop-remove {
+  position: absolute;
+  top: 14px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: #999999;
+  background: #f5f5f5;
+  border-radius: 50%;
+}
+
+.cart-pop-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 100%;
+  color: #bbbbbb;
+}
+
+.cart-pop-empty p {
+  font-size: 14px;
+  color: #888888;
+}
+
+.cart-pop-empty .cart-pop-btn {
+  width: 160px;
+  margin-top: 6px;
+}
+
+.cart-pop-foot {
+  flex: 0 0 auto;
+  padding: 14px 20px calc(18px + env(safe-area-inset-bottom));
+  background: #ffffff;
+  border-top: 1px solid #eeeeee;
+}
+
+.cart-pop-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  font-size: 15px;
+  color: #555555;
+}
+
+.cart-pop-total b {
+  font-size: 20px;
+  color: #111111;
+}
+
+.cart-pop-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 46px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  border-radius: 4px;
+}
+
+.cart-pop-btn + .cart-pop-btn {
+  margin-top: 8px;
+}
+
+.cart-pop-btn.dark {
+  background: #1c1c1c;
+}
+
+.cart-pop-btn.black {
+  background: #000000;
+}
+
+.cart-pop-btn:hover {
+  opacity: 0.86;
+}
+
+.cart-pop-enter-active,
+.cart-pop-leave-active {
+  transition: opacity 0.22s ease;
+}
+
+.cart-pop-enter-from,
+.cart-pop-leave-to {
   opacity: 0;
 }
 

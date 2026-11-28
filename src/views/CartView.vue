@@ -3,9 +3,9 @@
     <nav class="steps" aria-label="购物流程">
       <span class="active">购物车</span>
       <i>›</i>
-      <span>付款详情</span>
+      <span>填写信息</span>
       <i>›</i>
-      <span>订单完成</span>
+      <span>发给客服</span>
     </nav>
 
     <div v-if="!cart.items.length" class="empty-cart">
@@ -338,11 +338,11 @@ const total = computed(() => cart.subtotal.value + shippingFee.value)
 
   .cart-table tr {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     align-items: center;
-    gap: 6px 10px;
-    padding: 12px;
-    margin-bottom: 12px;
+    gap: 4px 8px;
+    padding: 10px;
+    margin-bottom: 8px;
     background: #ffffff;
     border: 1px solid #eeeeee;
     border-radius: 10px;
@@ -366,14 +366,14 @@ const total = computed(() => cart.subtotal.value + shippingFee.value)
     display: flex;
     grid-column: 1 / -1;
     align-items: center;
-    gap: 12px;
-    padding: 0 28px 0 0;
+    gap: 10px;
+    padding: 0 24px 0 0;
   }
 
   .product-cell img {
     flex: 0 0 auto;
-    width: 64px;
-    height: 64px;
+    width: 56px;
+    height: 56px;
     background: #fafafa;
     border-radius: 6px;
   }
@@ -385,23 +385,24 @@ const total = computed(() => cart.subtotal.value + shippingFee.value)
   .product-cell a {
     display: -webkit-box;
     overflow: hidden;
-    font-size: 13px;
-    line-height: 1.45;
+    font-size: 12.5px;
+    line-height: 1.35;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
   }
 
   .product-cell small {
-    margin-top: 4px;
+    margin-top: 2px;
+    font-size: 10.5px;
   }
 
   .remove {
     position: absolute;
     top: 0;
     right: 0;
-    width: 24px;
-    height: 24px;
-    font-size: 18px;
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
     line-height: 1;
   }
 
@@ -410,10 +411,10 @@ const total = computed(() => cart.subtotal.value + shippingFee.value)
   }
 
   .cart-table td[data-label='价格'] {
-    grid-row: 2 / span 2;
+    grid-row: 2;
     grid-column: 1;
     align-self: center;
-    font-size: 13px;
+    font-size: 12.5px;
     color: #666666;
     white-space: nowrap;
   }
@@ -427,11 +428,11 @@ const total = computed(() => cart.subtotal.value + shippingFee.value)
   }
 
   .cart-table td[data-label='小计'] {
-    grid-row: 3;
-    grid-column: 2;
+    grid-row: 2;
+    grid-column: 3;
     align-self: center;
     justify-self: end;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     color: #242125;
     white-space: nowrap;
@@ -447,15 +448,15 @@ const total = computed(() => cart.subtotal.value + shippingFee.value)
   }
 
   .qty {
-    height: 30px;
+    height: 27px;
   }
 
   .qty button {
-    width: 28px;
+    width: 26px;
   }
 
   .qty input {
-    width: 30px;
+    width: 28px;
   }
 
   .cart-actions {
