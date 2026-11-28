@@ -220,7 +220,11 @@ function setPage(index) {
     <section class="new-section">
       <div class="wrapper">
         <div class="new-head">
-          <img class="new-divider-img" :src="newDividerImg" alt="NEW 上新专区" />
+          <div class="new-divider">
+            <div class="new-divider-art">
+              <img class="new-divider-img" :src="newDividerImg" alt="NEW 上新专区" />
+            </div>
+          </div>
           <img class="new-arrow-down" :src="arrowDownImg" alt="" aria-hidden="true" />
         </div>
 
@@ -609,10 +613,48 @@ function setPage(index) {
   text-align: center;
 }
 
+.new-divider {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  overflow: hidden;
+  background:
+    linear-gradient(
+        90deg,
+        rgba(255, 0, 119, 0) 0%,
+        rgba(255, 0, 119, 0.35) 18%,
+        rgba(255, 0, 119, 0.35) 82%,
+        rgba(255, 0, 119, 0) 100%
+      )
+      center / 100% 8px no-repeat,
+    linear-gradient(
+        90deg,
+        rgba(255, 0, 119, 0) 0%,
+        rgba(255, 45, 154, 0.95) 18%,
+        rgba(255, 45, 154, 0.95) 82%,
+        rgba(255, 0, 119, 0) 100%
+      )
+      center / 100% 2px no-repeat;
+}
+
+.new-divider-art {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 40px;
+  aspect-ratio: 2012 / 294;
+  overflow: hidden;
+  transform: translateX(-50%);
+}
+
 .new-divider-img {
+  position: absolute;
+  top: 0;
+  left: 0;
   display: block;
   width: 100%;
   height: auto;
+  transform: translateY(-28.3%);
 }
 
 .new-arrow-down {
