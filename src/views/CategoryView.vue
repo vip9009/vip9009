@@ -111,6 +111,7 @@ const topCategories = computed(() =>
 )
 
 const activeParentId = computed(() => parentId.value)
+const activeChildId = computed(() => (isChild.value ? categoryId.value : sub.value))
 
 const siblings = computed(() => {
   const parent = site.categories[activeParentId.value]
@@ -128,10 +129,6 @@ const title = computed(() => {
   if (sub.value) return site.categories[sub.value]?.title || category.value.title
   return category.value.title
 })
-
-const description = computed(
-  () => category.value?.desc || parentCategory.value?.desc || ''
-)
 
 const rangeText = computed(() => {
   if (!total.value) return '共 0 个结果'
@@ -210,15 +207,25 @@ watch(
           <AppIcon name="chevron-down" :size="14" />
         </div>
         <div class="side-cats">
-          <RouterLink
-            v-for="item in topCategories"
-            :key="item.id"
-            class="side-link side-link-child"
-            :class="{ active: item.id === activeParentId }"
-            :to="`/category/${item.id}`"
-          >
-            {{ item.title }}
-          </RouterLink>
+          <div v-for="item in topCategories" :key="item.id" class="side-cat-block">
+            <RouterLink
+              class="side-link side-link-child"
+              :class="{ active: item.id === activeParentId }"
+              :to="`/category/${item.id}`"
+            >
+              {{ item.title }}
+            </RouterLink>
+            <div v-if="item.id === activeParentId && siblings.length" class="side-children">
+              <RouterLink
+                v-for="child in siblings"
+                :key="child.id"
+                :class="{ active: child.id === activeChildId }"
+                :to="`/category/${activeParentId}?sub=${child.id}`"
+              >
+                {{ child.title }}
+              </RouterLink>
+            </div>
+          </div>
         </div>
       </aside>
 
@@ -436,6 +443,10 @@ watch(
 .side-link.active {
   font-weight: 700;
   color: #242125;
+}
+
+.side-cat-block {
+  padding: 2px 0;
 }
 
 .side-children {

@@ -1,49 +1,46 @@
 {
   "disposables": {
     "title": "一次性系列",
-    "desc": "一次性系列现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
     "section": "disposables",
     "sort": 1,
-    "nav": true
+    "nav": true,
+    "children": [
+      "bingxiong",
+      "yueke"
+    ]
   },
   "pods": {
     "title": "换弹系列",
-    "desc": "换弹系列现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
     "section": "pods",
     "sort": 4,
     "nav": true
   },
   "jimu": {
     "title": "积木系列",
-    "desc": "积木系列现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
     "section": "jimu",
     "sort": 6,
     "nav": true
   },
   "gbxl": {
     "title": "国标系列",
-    "desc": "国标系列现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
     "section": "gbxl",
     "sort": 2,
     "nav": true
   },
   "shisha": {
     "title": "水烟系列",
-    "desc": "水烟系列现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
     "section": "shisha",
     "sort": 5,
     "nav": true
   },
   "wanghong": {
     "title": "网红系列",
-    "desc": "网红系列现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
     "section": "wanghong",
     "sort": 8,
     "nav": true
   },
   "combo": {
     "title": "组合专区",
-    "desc": "组合专区现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
     "section": "combo",
     "sort": 7,
     "nav": true
@@ -52,14 +49,22 @@
     "title": "联系客服",
     "to": "/contact",
     "nav": true,
-    "sort": 99,
-    "desc": ""
+    "sort": 99
   },
   "recommend": {
     "title": "店长推荐",
-    "desc": "店长推荐现货，加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。",
     "section": "recommend",
     "sort": 3,
     "nav": true
+  },
+  "bingxiong": {
+    "title": "冰熊",
+    "parent": "disposables",
+    "sort": 1
+  },
+  "yueke": {
+    "title": "悦刻",
+    "parent": "disposables",
+    "sort": 2
   }
 }

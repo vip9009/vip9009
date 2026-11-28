@@ -29,21 +29,32 @@ const categories = computed(() =>
   Object.entries(site.categories)
     .filter(([id, item]) => !item.parent && id !== 'contact' && item.section)
     .sort((a, b) => (a[1].sort ?? 999) - (b[1].sort ?? 999))
-    .map(([id, item]) => ({ id, title: item.title }))
-)
-
-const drawerOrder = ['disposables', 'jimu', 'pods', 'gbxl', 'recommend', 'combo', 'wanghong', 'shisha']
-const drawerCategories = computed(() =>
-  drawerOrder
-    .map((id) => site.categories[id] && { id, title: site.categories[id].title })
-    .filter(Boolean)
-    .map((item) => ({
-      ...item,
-      label: ['combo', 'wanghong', 'recommend'].includes(item.id)
-        ? `${item.title} 🔥`
-        : item.title
+    .map(([id, item]) => ({
+      id,
+      title: item.title,
+      children: (item.children || [])
+        .map((childId) => ({ id: childId, title: site.categories[childId]?.title || '' }))
+        .filter((child) => child.title)
+        .sort(
+          (a, b) =>
+            (site.categories[a.id]?.sort ?? 999) - (site.categories[b.id]?.sort ?? 999)
+        )
     }))
 )
+
+const drawerCategories = computed(() =>
+  categories.value.map((category) => ({
+    ...category,
+    label: ['combo', 'wanghong', 'recommend'].includes(category.id)
+      ? `${category.title} 🔥`
+      : category.title,
+  }))
+)
+const drawerOpenCategories = ref({})
+
+function toggleDrawerCategory(id) {
+  drawerOpenCategories.value[id] = !drawerOpenCategories.value[id]
+}
 
 const drawerGroups = ref({ electronic: false, brand: false, about: false })
 
@@ -146,9 +157,18 @@ onBeforeUnmount(() => {
               <div v-if="item.mega" class="mega">
                 <div class="mega-col">
                   <b>系列</b>
-                  <RouterLink v-for="category in categories" :key="category.id" :to="`/category/${category.id}`">
-                    {{ category.title }}
-                  </RouterLink>
+                  <div v-for="category in categories" :key="category.id" class="mega-cat">
+                    <RouterLink :to="`/category/${category.id}`">{{ category.title }}</RouterLink>
+                    <div v-if="category.children.length" class="mega-sub">
+                      <RouterLink
+                        v-for="child in category.children"
+                        :key="child.id"
+                        :to="`/category/${category.id}?sub=${child.id}`"
+                      >
+                        {{ child.title }}
+                      </RouterLink>
+                    </div>
+                  </div>
                 </div>
                 <div class="mega-col mega-brands">
                   <b>品牌</b>
@@ -213,14 +233,40 @@ onBeforeUnmount(() => {
               </span>
             </button>
             <div v-if="drawerGroups.electronic" class="drawer-sub">
-              <RouterLink
-                v-for="item in drawerCategories"
-                :key="item.id"
-                :to="`/category/${item.id}`"
-                @click="drawerOpen = false"
-              >
-                {{ item.label }}
-              </RouterLink>
+              <div v-for="item in drawerCategories" :key="item.id" class="drawer-cat">
+                <div class="drawer-cat-row">
+                  <RouterLink :to="`/category/${item.id}`" @click="drawerOpen = false">
+                    {{ item.label }}
+                  </RouterLink>
+                  <button
+                    v-if="item.children.length"
+                    type="button"
+                    class="drawer-cat-toggle"
+                    :aria-label="`展开${item.title}二级分类`"
+                    @click="toggleDrawerCategory(item.id)"
+                  >
+                    <span
+                      class="drawer-chevron"
+                      :class="{ open: drawerOpenCategories[item.id] }"
+                    >
+                      <AppIcon name="chevron-down" :size="15" />
+                    </span>
+                  </button>
+                </div>
+                <div
+                  v-if="item.children.length && drawerOpenCategories[item.id]"
+                  class="drawer-sub-child"
+                >
+                  <RouterLink
+                    v-for="child in item.children"
+                    :key="child.id"
+                    :to="`/category/${item.id}?sub=${child.id}`"
+                    @click="drawerOpen = false"
+                  >
+                    {{ child.title }}
+                  </RouterLink>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -594,6 +640,29 @@ onBeforeUnmount(() => {
   color: var(--color-primary);
 }
 
+.mega-cat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mega-sub {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding-left: 10px;
+  border-left: 1px solid #eeeeee;
+}
+
+.mega-sub a {
+  font-size: 12px;
+  color: #888888;
+}
+
+.mega-sub a:hover {
+  color: var(--color-primary);
+}
+
 .mega-brand-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -753,6 +822,59 @@ onBeforeUnmount(() => {
 }
 
 .drawer-sub a:hover {
+  color: var(--color-primary);
+}
+
+.drawer-cat {
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-cat-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.drawer-cat-row > a {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 0 10px 12px;
+  font-size: 14px;
+  color: #555555;
+}
+
+.drawer-cat-row > a:hover {
+  color: var(--color-primary);
+}
+
+.drawer-cat-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex: none;
+  color: #999999;
+  background: transparent;
+  border: 0;
+}
+
+.drawer-sub-child {
+  display: flex;
+  flex-direction: column;
+  padding: 2px 0 6px 22px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.drawer-sub-child a {
+  padding: 7px 0 7px 10px;
+  font-size: 13px;
+  color: #777777;
+  border-left: 1px solid #eeeeee;
+}
+
+.drawer-sub-child a:hover {
   color: var(--color-primary);
 }
 

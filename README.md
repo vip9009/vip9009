@@ -123,7 +123,7 @@ python tools/product_admin.py
 
 | 功能 | 说明 |
 | --- | --- |
-| 新增 / 修改商品 | 商品名称、参考价、一级分类、二级分类、商品描述 |
+| 新增 / 修改商品 | 商品名称、参考价、一级分类、二级分类、图片 |
 | 分类 / 导航 | 新增一级分类、二级分类，自动生成顶部导航和下拉菜单 |
 | 商品归类 | 保存商品时可直接选到末级分类，例如「一次性电子烟 / 悦刻一次性电子烟」 |
 | 移动商品 | 改商品的一级 / 二级分类后保存，前台立即归到新分类 |
@@ -212,7 +212,6 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
       "imageAlt": "图片描述",
       "localImage": "/images/products/disposables-1-800.webp",
       "subcategory": "relx-disposable",
-      "description": "可选：商品详情里的介绍文案，支持换行",
       "detailBlocks": [
         { "type": "heading", "text": "产品细节" },
         { "type": "text", "text": "支持换行的文字段落" },
@@ -228,8 +227,6 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
 - 现有分区：`disposables`（1，一次性系列）、`gbxl`（2，国标系列）、`pods`（4，换弹系列）、`shisha`（5，水烟系列）、`jimu`（6，积木系列）、`combo`（7，组合专区）、`wanghong`（8，网红系列）、`recommend`（3，店长推荐）。
 - `localImage` 填 `public` 下的相对路径，建议使用 800px 宽的 WebP。
 - `subcategory` 是二级分类 ID，对应 `categories.json` 里的子分类；留空表示只归到一级分类。
-- `description` 可选，留空时商品详情使用默认介绍文案：
-  「加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。泡泡哥只做正品，支持扫码验证，不同国家与地区的配送方式由泡泡哥一对一确认。」
 - 商品详情路由为 `/product/:sectionId/:index`，`index` 是商品在分区中的下标（从 0 开始）。
 - 可选字段：
   - `brand`：品牌，建议使用站点固定品牌名，确保前台 Logo 与品牌链接匹配；留空时自动从标题识别。工具下拉会同时列出固定品牌和现有商品已在用的品牌
@@ -242,20 +239,19 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
   - `options`：口味/规格，字符串数组或 `{label, price, stock}` 数组；有值时商品卡显示 SELECT 下拉。选中后显示对应口味价格；该口味 `stock: false` 时购买按钮置灰
   - `specs`：参数对象，显示在商品页“参数”Tab
   - `gallery`：详情图数组，留空使用 `localImage`
-  - `detailBlocks`：图文/视频详情块数组，按顺序显示在详情页「商品详情」Tab。类型支持 `text`、`heading`、`image`、`video`；有该字段时优先于 `description` 显示
+  - `detailBlocks`：图文/视频详情块数组，按顺序显示在详情页「商品详情」Tab。类型支持 `text`、`heading`、`image`、`video`；没有内容块时显示默认说明
 - 工具里的「更多信息」和「图文/视频详情」可以编辑以上字段，不需要手改 JSON。
 
 ### 分类与导航
 
 文件：`src/data/site/categories.json`
 
-导航不再手写在 `general.json` 里，而是从分类结构自动生成：一级分类 = 顶部菜单，二级分类 = 下拉项。
+导航不再手写在 `general.json` 里，而是从分类结构自动生成：一级分类 = 顶部菜单，二级分类 = 可展开子项，PC 菜单、手机侧边栏和分类页都支持点击进入。
 
 ```json
 {
   "disposables": {
     "title": "一次性电子烟",
-    "desc": "分类页描述",
     "section": "disposables",
     "sort": 1,
     "nav": true,
@@ -263,7 +259,6 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
   },
   "relx-disposable": {
     "title": "悦刻一次性电子烟",
-    "desc": "二级分类描述",
     "parent": "disposables",
     "sort": 1
   },

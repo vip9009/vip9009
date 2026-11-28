@@ -644,22 +644,8 @@ class ProductAdmin(tk.Tk):
         )
         self.preview_label.pack(fill="both", expand=True)
 
-        ttk.Label(right, text="商品描述\n（显示在详情页）", justify="left").grid(
-            row=6, column=0, sticky="nw", pady=4
-        )
-        self.description_text = tk.Text(
-            right,
-            height=7,
-            wrap="word",
-            relief="solid",
-            borderwidth=1,
-            font=("Microsoft YaHei UI", 10),
-        )
-        self.description_text.grid(row=6, column=1, columnspan=2, sticky="nsew", pady=4)
-        right.rowconfigure(6, weight=1)
-
         buttons = ttk.Frame(right)
-        buttons.grid(row=7, column=0, columnspan=3, sticky="ew", pady=(12, 0))
+        buttons.grid(row=6, column=0, columnspan=3, sticky="ew", pady=(12, 0))
         ttk.Button(buttons, text="保存商品", style="Accent.TButton", command=self.save_product).pack(
             side="left"
         )
@@ -740,35 +726,23 @@ class ProductAdmin(tk.Tk):
             row=2, column=1, sticky="ew", pady=4
         )
 
-        ttk.Label(right, text="分类描述").grid(row=3, column=0, sticky="nw", pady=4)
-        self.category_desc_text = tk.Text(
-            right,
-            height=5,
-            wrap="word",
-            relief="solid",
-            borderwidth=1,
-            font=("Microsoft YaHei UI", 10),
-        )
-        self.category_desc_text.grid(row=3, column=1, sticky="nsew", pady=4)
-        right.rowconfigure(3, weight=1)
-
-        ttk.Label(right, text="上级分类").grid(row=4, column=0, sticky="w", pady=4)
+        ttk.Label(right, text="上级分类").grid(row=3, column=0, sticky="w", pady=4)
         self.category_parent_var = tk.StringVar()
         self.category_parent_combo = ttk.Combobox(
             right, textvariable=self.category_parent_var, state="readonly"
         )
-        self.category_parent_combo.grid(row=4, column=1, sticky="ew", pady=4)
+        self.category_parent_combo.grid(row=3, column=1, sticky="ew", pady=4)
 
-        ttk.Label(right, text="排序").grid(row=5, column=0, sticky="w", pady=4)
+        ttk.Label(right, text="排序").grid(row=4, column=0, sticky="w", pady=4)
         self.category_sort_var = tk.StringVar(value="10")
         ttk.Spinbox(right, from_=1, to=999, textvariable=self.category_sort_var, width=8).grid(
-            row=5, column=1, sticky="w", pady=4
+            row=4, column=1, sticky="w", pady=4
         )
 
-        ttk.Label(right, text="顶部导航").grid(row=6, column=0, sticky="w", pady=4)
+        ttk.Label(right, text="顶部导航").grid(row=5, column=0, sticky="w", pady=4)
         self.category_nav_var = tk.BooleanVar(value=True)
         nav_frame = ttk.Frame(right)
-        nav_frame.grid(row=6, column=1, sticky="w", pady=4)
+        nav_frame.grid(row=5, column=1, sticky="w", pady=4)
         self.category_nav_on = ttk.Radiobutton(
             nav_frame, text="显示", variable=self.category_nav_var, value=True
         )
@@ -778,16 +752,16 @@ class ProductAdmin(tk.Tk):
         self.category_nav_on.pack(side="left")
         self.category_nav_off.pack(side="left", padx=(16, 0))
 
-        ttk.Label(right, text="自定义链接").grid(row=7, column=0, sticky="w", pady=4)
+        ttk.Label(right, text="自定义链接").grid(row=6, column=0, sticky="w", pady=4)
         self.category_link_var = tk.StringVar()
         ttk.Entry(right, textvariable=self.category_link_var).grid(
-            row=7, column=1, sticky="ew", pady=4
+            row=6, column=1, sticky="ew", pady=4
         )
         ttk.Label(
             right,
             text="一般留空。联系客服这类非商品菜单可填 /contact。",
             foreground="#777",
-        ).grid(row=8, column=1, sticky="w")
+        ).grid(row=7, column=1, sticky="w")
 
         ttk.Label(
             right,
@@ -795,10 +769,10 @@ class ProductAdmin(tk.Tk):
             foreground="#475569",
             wraplength=320,
             justify="left",
-        ).grid(row=9, column=0, columnspan=2, sticky="w", pady=(8, 0))
+        ).grid(row=8, column=0, columnspan=2, sticky="w", pady=(8, 0))
 
         buttons = ttk.Frame(right)
-        buttons.grid(row=10, column=0, columnspan=2, sticky="ew", pady=(14, 0))
+        buttons.grid(row=9, column=0, columnspan=2, sticky="ew", pady=(14, 0))
         ttk.Button(buttons, text="保存分类", style="Accent.TButton", command=self.save_category).pack(
             side="left"
         )
@@ -1880,7 +1854,6 @@ class ProductAdmin(tk.Tk):
         self.title_var.set("")
         self.price_var.set("")
         self.image_var.set("")
-        self.description_text.delete("1.0", "end")
 
         filter_section, filter_sub = self.filter_map.get(self.filter_var.get(), (None, None))
         top_id, _top = self._top_for_section(filter_section) if filter_section else (None, None)
@@ -1921,8 +1894,6 @@ class ProductAdmin(tk.Tk):
         self.title_var.set(product.get("title", ""))
         self.price_var.set(str(product.get("price", "")))
         self.image_var.set(product.get("localImage", ""))
-        self.description_text.delete("1.0", "end")
-        self.description_text.insert("1.0", product.get("description", ""))
 
         top_id, _top = self._top_for_section(section_id)
         if top_id:
@@ -2016,11 +1987,7 @@ class ProductAdmin(tk.Tk):
         else:
             product.pop("subcategory", None)
 
-        description = self.description_text.get("1.0", "end").strip()
-        if description:
-            product["description"] = description
-        else:
-            product.pop("description", None)
+        product.pop("description", None)
 
         if existing:
             if self.current_section == section_id:
@@ -2100,7 +2067,6 @@ class ProductAdmin(tk.Tk):
         self.category_tree.selection_remove(self.category_tree.selection())
         self.category_id_var.set("")
         self.category_name_var.set("")
-        self.category_desc_text.delete("1.0", "end")
         self.category_link_var.set("")
         self.category_id_entry.configure(state="normal")
         self._refresh_parent_options()
@@ -2134,7 +2100,6 @@ class ProductAdmin(tk.Tk):
         self.category_tree.selection_remove(self.category_tree.selection())
         self.category_id_var.set("")
         self.category_name_var.set("")
-        self.category_desc_text.delete("1.0", "end")
         self.category_link_var.set("")
         self.category_id_entry.configure(state="normal")
         self._refresh_parent_options()
@@ -2160,8 +2125,6 @@ class ProductAdmin(tk.Tk):
         self.category_id_var.set(category_id)
         self.category_id_entry.configure(state="disabled")
         self.category_name_var.set(category.get("title", ""))
-        self.category_desc_text.delete("1.0", "end")
-        self.category_desc_text.insert("1.0", category.get("desc", ""))
         self.category_link_var.set(category.get("to", ""))
         self.category_sort_var.set(str(category.get("sort", 10)))
         self.category_nav_var.set(bool(category.get("nav", True)))
@@ -2191,7 +2154,6 @@ class ProductAdmin(tk.Tk):
         if not name:
             messagebox.showwarning("缺少名称", "请填写分类名称。")
             return
-        desc = self.category_desc_text.get("1.0", "end").strip()
         try:
             sort = int(self.category_sort_var.get().strip())
         except (TypeError, ValueError):
@@ -2220,7 +2182,6 @@ class ProductAdmin(tk.Tk):
                     return
                 self.categories[category_id] = {
                     "title": name,
-                    "desc": desc,
                     "parent": parent_id,
                     "sort": sort,
                 }
@@ -2236,7 +2197,6 @@ class ProductAdmin(tk.Tk):
                     }
                 category = {
                     "title": name,
-                    "desc": desc,
                     "section": section,
                     "sort": sort,
                     "nav": bool(self.category_nav_var.get()),
@@ -2277,7 +2237,6 @@ class ProductAdmin(tk.Tk):
                 category["parent"] = parent_id
 
             category["title"] = name
-            category["desc"] = desc
             category["sort"] = sort
             if is_child:
                 category["nav"] = True
@@ -2378,9 +2337,8 @@ class ProductAdmin(tk.Tk):
     def _has_unsaved_changes(self):
         title = self.title_var.get().strip()
         price = self.price_var.get().strip()
-        description = self.description_text.get("1.0", "end").strip()
         image = self.image_var.get().strip()
-        if not any((title, price, description, image)) and not self._extra_has_data():
+        if not any((title, price, image)) and not self._extra_has_data():
             return False
         if not self.current_section or self.current_index is None:
             return True
@@ -2395,7 +2353,6 @@ class ProductAdmin(tk.Tk):
         return (
             title != str(product.get("title", ""))
             or price != str(product.get("price", ""))
-            or description != str(product.get("description", ""))
             or image != str(product.get("localImage", ""))
             or top_id != existing_top_id
             or sub_id != (product.get("subcategory") or None)
