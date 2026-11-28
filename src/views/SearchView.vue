@@ -153,7 +153,7 @@ watchEffect(() => {
 .product-grid-3 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0;
+  gap: 6px;
   width: calc(100% + 10px);
 }
 
@@ -213,7 +213,7 @@ watchEffect(() => {
 @media (max-width: 900px) {
   .product-grid-3 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0;
+    gap: 6px;
     width: auto;
     margin: 0 -10px;
   }
