@@ -2,5 +2,117 @@
   "id": "disposables",
   "title": "一次性系列",
   "sort": 1,
-  "products": []
+  "products": [
+    {
+      "title": "冰熊2w",
+      "price": 90,
+      "imageAlt": "冰熊2w",
+      "localImage": "/images/products/disposables-20261128163432341189.webp",
+      "brand": "BEARFBAR",
+      "badges": [
+        "上新口味",
+        "模式切换",
+        "凉度调节"
+      ],
+      "topTags": [
+        "买二赠一",
+        "网红款"
+      ],
+      "leftTags": [
+        "超级好抽"
+      ],
+      "priceMax": 190,
+      "hot": true,
+      "options": [
+        {
+          "label": "西瓜",
+          "price": 95
+        },
+        {
+          "label": "蜜桃",
+          "price": 100
+        },
+        {
+          "label": "百香果",
+          "price": 120
+        },
+        {
+          "label": "香蕉",
+          "price": 150,
+          "stock": false
+        }
+      ],
+      "specs": {
+        "口数": "20000",
+        "续航": "100小时",
+        "充电": "typec"
+      },
+      "detailBlocks": [
+        {
+          "type": "heading",
+          "text": "冰熊20000口口碑"
+        },
+        {
+          "type": "text",
+          "text": "无敌乐基限制太好了也\n真的\n大家抽一下就知道了"
+        },
+        {
+          "type": "heading",
+          "text": "冰熊系列图片"
+        },
+        {
+          "type": "image",
+          "src": "/images/details/detail-20261128163400500637.webp",
+          "alt": "disposables-9-800"
+        },
+        {
+          "type": "image",
+          "src": "/images/details/detail-20261128163403141098.webp",
+          "alt": "disposables-11-800"
+        },
+        {
+          "type": "heading",
+          "text": "反馈视频"
+        },
+        {
+          "type": "video",
+          "src": "/videos/products/video-20261128163418079020.mp4"
+        }
+      ],
+      "subcategory": "bingxiong",
+      "description": "哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈好商品描述有啥用呢"
+    },
+    {
+      "title": "悦刻",
+      "price": 60,
+      "imageAlt": "悦刻",
+      "localImage": "/images/products/disposables-20261128163616013971.webp",
+      "brand": "RELX",
+      "badges": [
+        "HOT",
+        "上新",
+        "上新口味"
+      ],
+      "topTags": [
+        "买三赠送一个"
+      ],
+      "leftTags": [
+        "无敌口味王"
+      ],
+      "options": [
+        {
+          "label": "西瓜",
+          "price": 60
+        },
+        "蜜桃",
+        "苹果"
+      ],
+      "specs": {
+        "等等": "200",
+        "不说": "dengdneg"
+      },
+      "subcategory": "yueke",
+      "description": "详情页悦刻"
+    }
+  ]
 }

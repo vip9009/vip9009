@@ -2,5 +2,35 @@
   "id": "pods",
   "title": "换弹系列",
   "sort": 4,
-  "products": []
+  "products": [
+    {
+      "title": "好的",
+      "price": 100,
+      "imageAlt": "好的",
+      "localImage": "/images/products/pods-20261128163844383200.webp",
+      "badges": [
+        "模式切换",
+        "凉度调节",
+        "自定义口感"
+      ],
+      "topTags": [
+        "123"
+      ],
+      "leftTags": [
+        "左侧"
+      ],
+      "stock": false,
+      "options": [
+        "西瓜",
+        "香蕉+哈哈哈哈"
+      ],
+      "description": "等等的点点滴滴描述",
+      "detailBlocks": [
+        {
+          "type": "text",
+          "text": "发斯蒂芬斯蒂芬斯蒂"
+        }
+      ]
+    }
+  ]
 }
