@@ -22,8 +22,7 @@
         "HOT",
         "上新",
         "5盒",
-        "5盒增主机",
-        "10盒送50现金"
+        "5盒增主机"
       ],
       "options": [
         {
@@ -242,7 +241,37 @@
           "price": 145
         }
       ],
-      "recommend": false
+      "detailBlocks": [
+        {
+          "type": "text",
+          "text": "舒服多了斯帝罗兰"
+        },
+        {
+          "type": "heading",
+          "text": "呃呃呃"
+        },
+        {
+          "type": "image",
+          "src": "/images/details/detail-20261128120012962451.webp",
+          "alt": "4500aededfe5d39a6f920d1ccb118aa5"
+        },
+        {
+          "type": "text",
+          "text": "但是克里斯丁考虑考虑"
+        },
+        {
+          "type": "heading",
+          "text": "这还四十品"
+        },
+        {
+          "type": "video",
+          "src": "/videos/products/video-20261128120019776549.mp4"
+        },
+        {
+          "type": "text",
+          "text": "LAMI Turbo 徕米冰爆 20K\nLAMI Turbo3.0：双陶瓷芯可调气流电子烟，20000口超长续航\nlami-turbo3.0-主图\nLAMI Turbo一次性电子烟提供高达10000口超长续航，搭载双陶瓷芯技术，确保雾化细腻稳定。30mg/mL尼古丁浓度，12mL烟油容量，带来持久满足的吸烟体验。\n\n口味选择：丰富风味阵容\nlami-turbo3.0-全口味图\n\nLAMI Turbo系列提供多种精选口味\n\n双陶瓷芯技术：双重雾化，口感升级\nlami-turbo-双陶瓷芯-雾化技术\n\n采用双陶瓷芯设计，相比传统单芯雾化，发热更均匀，雾化更充分。每一口都保持稳定浓郁的口感，烟油利用率更高，风味还原更真实。\n\n可调气流系统：自由掌控吸阻\nlami-turbo-茉莉青提冰-可调气流\n\n配备可调气流系统，用户可根据个人喜好自由调节吸阻松紧。紧密吸阻适合口吸慢品，宽松吸阻适合肺吸大烟雾，一机满足不同使用习惯。\n\n\n\n售后保障与正品承诺\n🛡️ 提供完善售后保障，支持商品退换服务"
+        }
+      ]
     },
     {
       "title": "LAMI BOOMSHAKE 徕米冰盒 30000 Puffs",
