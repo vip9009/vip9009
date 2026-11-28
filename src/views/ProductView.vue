@@ -395,7 +395,8 @@ watch(
           <div v-if="activeTab === 'description'" class="description">
             <template v-if="detailBlocks.length">
               <template v-for="(block, index) in detailBlocks" :key="index">
-                <h3 v-if="block.type === 'heading'" class="detail-heading">{{ block.text }}</h3>
+                <hr v-if="block.type === 'heading' && index > 0" class="detail-rule" />
+                <h2 v-if="block.type === 'heading'" class="detail-heading">{{ block.text }}</h2>
                 <p v-else-if="block.type === 'text'" class="detail-text">{{ block.text }}</p>
                 <figure v-else-if="block.type === 'image'" class="detail-figure">
                   <img
@@ -991,18 +992,25 @@ watch(
 
 .description p,
 .notice p {
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.9;
   color: #666666;
   white-space: pre-line;
 }
 
+.description .detail-rule {
+  height: 0;
+  margin: 15px 0;
+  border: 0;
+  border-top: 1px solid #e5e5e5;
+}
+
 .description .detail-heading {
-  margin: 18px 0 8px;
-  font-size: 15px;
-  font-weight: 800;
+  margin: 0 0 12.8px;
+  font-size: 22px;
+  font-weight: 700;
   line-height: 1.6;
-  color: #111111;
+  color: #555555;
 }
 
 .description .detail-heading:first-child {
@@ -1217,6 +1225,11 @@ watch(
     justify-content: center;
     padding: 0 0 0;
     font-size: 16px;
+  }
+
+  .description .detail-heading {
+    margin-bottom: 9.6px;
+    font-size: 19.2px;
   }
 
   .product-tabs {
