@@ -3,11 +3,7 @@
     "title": "一次性系列",
     "section": "disposables",
     "sort": 1,
-    "nav": true,
-    "children": [
-      "bingxiong",
-      "yueke"
-    ]
+    "nav": true
   },
   "pods": {
     "title": "换弹系列",
@@ -56,15 +52,5 @@
     "section": "recommend",
     "sort": 3,
     "nav": true
-  },
-  "bingxiong": {
-    "title": "冰熊",
-    "parent": "disposables",
-    "sort": 1
-  },
-  "yueke": {
-    "title": "悦刻",
-    "parent": "disposables",
-    "sort": 2
   }
 }
