@@ -170,11 +170,20 @@ select:focus-visible {
 
 @media (max-width: 1024px) {
   html {
-    background-image: url('../images/mobile-bg.webp');
+    background-color: #ffffff;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.60), rgba(255, 255, 255, 0.76)),
+      url('../images/backs.webp');
     background-repeat: no-repeat;
     background-position: center top;
     background-size: cover;
     background-attachment: fixed;
+  }
+
+  html.is-plain-ui {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.87), rgba(255, 255, 255, 0.91)),
+      url('../images/backs.webp');
   }
 
   body,

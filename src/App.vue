@@ -1,6 +1,6 @@
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from 'vue'
-import { RouterView, useRouter } from 'vue-router'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { RouterView, useRoute, useRouter } from 'vue-router'
 import SiteHeader from '@/components/SiteHeader.vue'
 import SiteFooter from '@/components/SiteFooter.vue'
 import ContactWidget from '@/components/ContactWidget.vue'
@@ -11,8 +11,16 @@ import logoSteamDuck from '@/assets/images/logo-steam-duck.webp'
 
 
 const booting = ref(true)
-
 const router = useRouter()
+const route = useRoute()
+
+function syncBackgroundMode(path) {
+  const plain = path === '/cart' || path === '/checkout' || path.startsWith('/product/')
+  document.documentElement.classList.toggle('is-plain-ui', plain)
+}
+
+watch(() => route.path, syncBackgroundMode, { immediate: true })
+
 const showProgress = ref(false)
 const mainRef = ref(null)
 
@@ -98,6 +106,7 @@ onBeforeUnmount(() => {
   removeAfter()
   removeError()
   clearTimeout(progressTimer)
+  document.documentElement.classList.remove('is-plain-ui')
 })
 </script>
 
