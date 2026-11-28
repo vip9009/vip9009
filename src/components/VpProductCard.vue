@@ -400,7 +400,7 @@ function addToCart() {
   font-size: 14.4px;
   font-weight: 400;
   line-height: 1.6;
-  color: #777777;
+  color: #334862;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
@@ -412,9 +412,9 @@ function addToCart() {
 .card-price {
   margin-bottom: 0;
   font-size: 14.4px;
-  font-weight: 400;
+  font-weight: 700;
   line-height: 1;
-  color: #777777;
+  color: black;
 }
 
 .card-buy {
