@@ -8,6 +8,8 @@
 - 使用说明.txt
 - src/data（商品与分类 JSON）
 - public/images/products（商品图片）
+- public/images/details（详情图片）
+- public/videos/products（详情视频）
 - public/images 下的客服头像、微信二维码、收款二维码
 
 用法：
@@ -29,6 +31,8 @@ ROOT = Path(__file__).resolve().parents[1]
 EXE = ROOT / "tools" / "dist" / "泡泡哥商品管理工具.exe"
 DATA_DIR = ROOT / "src" / "data"
 IMAGES_DIR = ROOT / "public" / "images" / "products"
+DETAIL_IMAGES_DIR = ROOT / "public" / "images" / "details"
+VIDEOS_DIR = ROOT / "public" / "videos" / "products"
 SITE_IMAGES = (
     ROOT / "public" / "images" / "paopao-qr.png",
     ROOT / "public" / "images" / "paopao-face.jpg",
@@ -110,6 +114,8 @@ def main() -> int:
             archive.write(MANUAL, f"{prefix}/{MANUAL.name}")
         json_count = add_folder(archive, DATA_DIR, prefix)
         image_count = add_folder(archive, IMAGES_DIR, prefix)
+        detail_count = add_folder(archive, DETAIL_IMAGES_DIR, prefix)
+        video_count = add_folder(archive, VIDEOS_DIR, prefix)
         site_image_count = 0
         for path in SITE_IMAGES:
             if not path.exists():
@@ -122,6 +128,8 @@ def main() -> int:
     print("大小：", size_mb, "MB")
     print("数据文件：", json_count)
     print("商品图片：", image_count)
+    print("详情图片：", detail_count)
+    print("详情视频：", video_count)
     print("客服图片：", site_image_count)
     if image_count == 0:
         print("提示：当前没有商品图片，压缩包里只有数据。")

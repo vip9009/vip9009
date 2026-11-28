@@ -28,7 +28,7 @@ import zipfile
 from datetime import datetime
 from pathlib import Path
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
+from tkinter import ttk, filedialog, messagebox, simpledialog
 
 try:
     from PIL import Image, ImageOps, ImageTk
@@ -62,6 +62,8 @@ CATEGORIES_FILE = DATA_DIR / "site" / "categories.json"
 GENERAL_FILE = DATA_DIR / "site" / "general.json"
 CONTACTS_FILE = DATA_DIR / "site" / "contacts.json"
 IMAGES_DIR = ROOT / "public" / "images" / "products"
+DETAIL_IMAGES_DIR = ROOT / "public" / "images" / "details"
+VIDEOS_DIR = ROOT / "public" / "videos" / "products"
 PAYMENT_IMAGE = ROOT / "public" / "images" / "payment-qr.webp"
 WECHAT_QR_IMAGE = ROOT / "public" / "images" / "wechat-qr.webp"
 WECHAT_AVATAR_IMAGE = ROOT / "public" / "images" / "wechat-avatar.webp"
@@ -171,6 +173,29 @@ def process_image(source: str, section_id: str) -> str:
     return f"/images/products/{filename}"
 
 
+def process_detail_image(source: str) -> str:
+    stamp = datetime.now().strftime("%Y%m%d%H%M%S%f")
+    filename = f"detail-{stamp}.webp"
+    save_webp(source, DETAIL_IMAGES_DIR / filename, 1600, 86)
+    return f"/images/details/{filename}"
+
+
+def process_video(source: str) -> str:
+    path = Path(source)
+    suffix = path.suffix.lower()
+    if suffix not in (".mp4", ".webm"):
+        raise ValueError("视频只支持 MP4 或 WebM 格式")
+    VIDEOS_DIR.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now().strftime("%Y%m%d%H%M%S%f")
+    filename = f"video-{stamp}{suffix}"
+    shutil.copy2(path, VIDEOS_DIR / filename)
+    return f"/videos/products/{filename}"
+
+
+def is_remote_url(value: str) -> bool:
+    return bool(re.match(r"^(https?:)?//", str(value or "").strip()))
+
+
 def check_data() -> int:
     errors = []
     warnings = []
@@ -262,6 +287,46 @@ def check_data() -> int:
                     errors.append(
                         f"{section_id}[{index}]: 二级分类 {subcategory} 不属于该一级分类"
                     )
+            detail_blocks = product.get("detailBlocks")
+            if detail_blocks is not None:
+                if not isinstance(detail_blocks, list):
+                    errors.append(f"{section_id}[{index}]: detailBlocks 应该是数组")
+                else:
+                    for block_index, block in enumerate(detail_blocks):
+                        if not isinstance(block, dict):
+                            errors.append(
+                                f"{section_id}[{index}].detailBlocks[{block_index}]: 内容块格式不正确"
+                            )
+                            continue
+                        kind = block.get("type")
+                        if kind in ("text", "heading"):
+                            if not str(block.get("text", "")).strip():
+                                errors.append(
+                                    f"{section_id}[{index}].detailBlocks[{block_index}]: 文字内容为空"
+                                )
+                        elif kind in ("image", "video"):
+                            src = str(block.get("src", "")).strip()
+                            if not src:
+                                errors.append(
+                                    f"{section_id}[{index}].detailBlocks[{block_index}]: 缺少文件路径"
+                                )
+                            elif not is_remote_url(src):
+                                asset_file = ROOT / "public" / src.lstrip("/")
+                                if not asset_file.exists():
+                                    errors.append(
+                                        f"{section_id}[{index}].detailBlocks[{block_index}]: 文件不存在：{src}"
+                                    )
+                            poster = block.get("poster")
+                            if poster and not is_remote_url(poster):
+                                poster_file = ROOT / "public" / str(poster).lstrip("/")
+                                if not poster_file.exists():
+                                    errors.append(
+                                        f"{section_id}[{index}].detailBlocks[{block_index}]: 封面不存在：{poster}"
+                                    )
+                        else:
+                            errors.append(
+                                f"{section_id}[{index}].detailBlocks[{block_index}]: 类型不正确：{kind}"
+                            )
 
     print(f"分区：{len(sections)}")
     print(f"商品：{product_count}")
@@ -570,6 +635,10 @@ class ProductAdmin(tk.Tk):
             side="left"
         )
         ttk.Button(buttons, text="更多信息", command=self.edit_extra).pack(side="left", padx=8)
+        self.detail_button_var = tk.StringVar(value="图文/视频详情")
+        ttk.Button(
+            buttons, textvariable=self.detail_button_var, command=self.edit_detail_blocks
+        ).pack(side="left", padx=8)
         ttk.Button(buttons, text="清空表单", command=self.new_product).pack(side="left", padx=8)
 
     # -- 分类页 -----------------------------------------------------------
@@ -1157,6 +1226,7 @@ class ProductAdmin(tk.Tk):
             "recommend": False,
             "options": [],
             "specs": {},
+            "detailBlocks": [],
         }
 
     def _extra_has_data(self):
@@ -1169,6 +1239,7 @@ class ProductAdmin(tk.Tk):
             or extra.get("recommend")
             or extra.get("options")
             or extra.get("specs")
+            or extra.get("detailBlocks")
             or extra.get("stock", True) is False
         )
 
@@ -1203,6 +1274,9 @@ class ProductAdmin(tk.Tk):
         extra["recommend"] = product.get("recommend") is True
         extra["options"] = list(product.get("options") or [])
         extra["specs"] = dict(product.get("specs") or {})
+        extra["detailBlocks"] = [
+            dict(block) for block in (product.get("detailBlocks") or []) if isinstance(block, dict)
+        ]
         return extra
 
     def _extra_to_product(self, product):
@@ -1247,6 +1321,18 @@ class ProductAdmin(tk.Tk):
             product["specs"] = extra["specs"]
         else:
             product.pop("specs", None)
+
+        blocks = [
+            dict(block)
+            for block in (extra.get("detailBlocks") or [])
+            if isinstance(block, dict)
+            and block.get("type") in ("text", "heading", "image", "video")
+            and (block.get("text") or block.get("src"))
+        ]
+        if blocks:
+            product["detailBlocks"] = blocks
+        else:
+            product.pop("detailBlocks", None)
 
     def _brand_choices(self):
         """固定品牌列表 + 现有商品里已经在用的品牌，避免老商品无法重新选择。"""
@@ -1365,14 +1451,28 @@ class ProductAdmin(tk.Tk):
             row=7, column=1, columnspan=2, sticky="w", padx=(0, 12)
         )
 
-        ttk.Checkbutton(dialog, text="现货（取消勾选显示“无货”）", variable=stock_var).grid(
-            row=8, column=1, sticky="w", padx=(0, 12), pady=6
+        ttk.Label(dialog, text="库存状态").grid(row=8, column=0, sticky="w", padx=12, pady=6)
+        stock_frame = ttk.Frame(dialog)
+        stock_frame.grid(row=8, column=1, columnspan=2, sticky="w", padx=(0, 12), pady=6)
+        ttk.Radiobutton(stock_frame, text="现货（可购买）", variable=stock_var, value=True).pack(side="left")
+        ttk.Radiobutton(stock_frame, text="无货（卡片显示“无货”）", variable=stock_var, value=False).pack(
+            side="left", padx=(16, 0)
         )
-        ttk.Checkbutton(dialog, text="在卡片显示 HOT 角标", variable=hot_var).grid(
-            row=9, column=1, sticky="w", padx=(0, 12), pady=6
+
+        ttk.Label(dialog, text="HOT 角标").grid(row=9, column=0, sticky="w", padx=12, pady=6)
+        hot_frame = ttk.Frame(dialog)
+        hot_frame.grid(row=9, column=1, columnspan=2, sticky="w", padx=(0, 12), pady=6)
+        ttk.Radiobutton(hot_frame, text="显示", variable=hot_var, value=True).pack(side="left")
+        ttk.Radiobutton(hot_frame, text="不显示", variable=hot_var, value=False).pack(side="left", padx=(16, 0))
+
+        ttk.Label(dialog, text="店长推荐").grid(row=10, column=0, sticky="w", padx=12, pady=6)
+        recommend_frame = ttk.Frame(dialog)
+        recommend_frame.grid(row=10, column=1, columnspan=2, sticky="w", padx=(0, 12), pady=6)
+        ttk.Radiobutton(recommend_frame, text="显示“店长推荐”", variable=recommend_var, value=True).pack(
+            side="left"
         )
-        ttk.Checkbutton(dialog, text="加入店长推荐（自动显示“店长推荐”标签）", variable=recommend_var).grid(
-            row=10, column=1, sticky="w", padx=(0, 12), pady=6
+        ttk.Radiobutton(recommend_frame, text="不显示", variable=recommend_var, value=False).pack(
+            side="left", padx=(16, 0)
         )
 
         ttk.Label(dialog, text="口味 / 规格").grid(row=11, column=0, sticky="nw", padx=12, pady=6)
@@ -1477,11 +1577,282 @@ class ProductAdmin(tk.Tk):
         ttk.Button(buttons, text="保存", style="Accent.TButton", command=save_extra).pack(side="left")
         ttk.Button(buttons, text="取消", command=dialog.destroy).pack(side="left", padx=8)
 
+    def _refresh_detail_button(self):
+        count = len(self.extra.get("detailBlocks") or [])
+        self.detail_button_var.set(f"图文/视频详情（{count}）" if count else "图文/视频详情")
+
+    @staticmethod
+    def _detail_block_label(block):
+        kind = block.get("type")
+        if kind in ("text", "heading"):
+            text = str(block.get("text", "")).replace("\n", " ").strip()
+            name = "小标题" if kind == "heading" else "文字"
+            return f"{name}：{text[:40]}{'…' if len(text) > 40 else ''}"
+        src = str(block.get("src", "")).strip()
+        name = src if is_remote_url(src) else Path(src).name
+        caption = str(block.get("caption", "")).strip()
+        suffix = f"（{caption}）" if caption else ""
+        if kind == "image":
+            return f"图片：{name}{suffix}"
+        if kind == "video":
+            return f"视频：{name}{suffix}"
+        return "未知内容"
+
+    def edit_detail_blocks(self):
+        dialog = tk.Toplevel(self)
+        dialog.title("商品图文 / 视频详情")
+        dialog.geometry("760x720")
+        dialog.minsize(680, 620)
+        dialog.transient(self)
+        dialog.grab_set()
+        dialog.columnconfigure(0, weight=1)
+        dialog.rowconfigure(1, weight=1)
+
+        ttk.Label(
+            dialog,
+            text="按顺序显示在商品详情页的“商品详情”标签。支持文字、小标题、多张图片和视频。",
+            foreground="#475569",
+            wraplength=700,
+            justify="left",
+        ).grid(row=0, column=0, sticky="w", padx=14, pady=(12, 8))
+
+        list_frame = ttk.Frame(dialog)
+        list_frame.grid(row=1, column=0, sticky="nsew", padx=14)
+        block_list = tk.Listbox(
+            list_frame,
+            height=16,
+            activestyle="none",
+            exportselection=False,
+            relief="solid",
+            borderwidth=1,
+            font=("Microsoft YaHei UI", 10),
+        )
+        list_scroll = ttk.Scrollbar(list_frame, orient="vertical", command=block_list.yview)
+        block_list.configure(yscrollcommand=list_scroll.set)
+        block_list.pack(side="left", fill="both", expand=True)
+        list_scroll.pack(side="right", fill="y")
+
+        blocks = [
+            dict(block) for block in (self.extra.get("detailBlocks") or []) if isinstance(block, dict)
+        ]
+
+        def selected_index():
+            selection = block_list.curselection()
+            return selection[0] if selection else None
+
+        def refresh(select=None):
+            block_list.delete(0, "end")
+            for block in blocks:
+                block_list.insert("end", self._detail_block_label(block))
+            if not blocks:
+                return
+            if select is None:
+                select = len(blocks) - 1
+            select = max(0, min(int(select), len(blocks) - 1))
+            block_list.selection_set(select)
+            block_list.see(select)
+
+        def ask_text(initial="", heading=False):
+            win = tk.Toplevel(dialog)
+            win.title("编辑小标题" if heading else "编辑文字")
+            win.geometry("640x440")
+            win.transient(dialog)
+            win.grab_set()
+            win.columnconfigure(0, weight=1)
+            win.rowconfigure(1, weight=1)
+            result = {"ok": False, "text": "", "heading": heading}
+
+            heading_var = tk.BooleanVar(value=heading)
+            ttk.Checkbutton(win, text="作为小标题（加粗显示）", variable=heading_var).grid(
+                row=0, column=0, sticky="w", padx=14, pady=(12, 6)
+            )
+            text = tk.Text(win, wrap="word", relief="solid", borderwidth=1, font=("Microsoft YaHei UI", 10))
+            text.grid(row=1, column=0, sticky="nsew", padx=14, pady=6)
+            text.insert("1.0", initial)
+
+            def confirm():
+                value = text.get("1.0", "end").strip()
+                if not value:
+                    messagebox.showwarning("内容为空", "请填写文字内容。", parent=win)
+                    return
+                result.update(ok=True, text=value, heading=bool(heading_var.get()))
+                win.destroy()
+
+            buttons = ttk.Frame(win)
+            buttons.grid(row=2, column=0, sticky="e", padx=14, pady=12)
+            ttk.Button(buttons, text="确定", style="Accent.TButton", command=confirm).pack(side="left")
+            ttk.Button(buttons, text="取消", command=win.destroy).pack(side="left", padx=8)
+            win.wait_window()
+            return result
+
+        def add_text():
+            result = ask_text()
+            if not result["ok"]:
+                return
+            blocks.append(
+                {"type": "heading" if result["heading"] else "text", "text": result["text"]}
+            )
+            refresh(len(blocks) - 1)
+
+        def add_images():
+            paths = filedialog.askopenfilenames(
+                title="选择详情图片（可多选）",
+                parent=dialog,
+                initialdir=self._last_image_dir or str(ROOT),
+                filetypes=[
+                    ("图片文件", "*.jpg *.jpeg *.png *.webp *.bmp"),
+                    ("所有文件", "*.*"),
+                ],
+            )
+            if not paths:
+                return
+            self._last_image_dir = str(Path(paths[0]).parent)
+            added = 0
+            for path in paths:
+                try:
+                    src = process_detail_image(path)
+                except Exception as error:
+                    messagebox.showerror("图片处理失败", f"{path}\n\n{error}", parent=dialog)
+                    break
+                blocks.append({"type": "image", "src": src, "alt": Path(path).stem})
+                added += 1
+            if added:
+                refresh(len(blocks) - 1)
+
+        def add_video():
+            path = filedialog.askopenfilename(
+                title="选择视频文件（建议 MP4 / WebM，30 秒内）",
+                parent=dialog,
+                initialdir=self._last_image_dir or str(ROOT),
+                filetypes=[("视频文件", "*.mp4 *.webm"), ("所有文件", "*.*")],
+            )
+            src = ""
+            if path:
+                self._last_image_dir = str(Path(path).parent)
+                try:
+                    size_mb = Path(path).stat().st_size / 1024 / 1024
+                except OSError:
+                    size_mb = 0
+                if size_mb > 60 and not messagebox.askyesno(
+                    "视频较大",
+                    f"这个视频约 {size_mb:.1f} MB，会让网站和分发包变大。\n\n仍要添加吗？",
+                    parent=dialog,
+                ):
+                    return
+                try:
+                    src = process_video(path)
+                except Exception as error:
+                    messagebox.showerror("视频处理失败", str(error), parent=dialog)
+                    return
+            else:
+                url = simpledialog.askstring(
+                    "视频链接",
+                    "没有选择本地文件。\n\n也可以填写视频地址（https://...mp4 或 .webm）：",
+                    parent=dialog,
+                )
+                if not url or not url.strip():
+                    return
+                src = url.strip()
+            blocks.append({"type": "video", "src": src})
+            refresh(len(blocks) - 1)
+
+        def edit_block():
+            index = selected_index()
+            if index is None:
+                return
+            block = blocks[index]
+            if block.get("type") in ("text", "heading"):
+                result = ask_text(
+                    str(block.get("text", "")), block.get("type") == "heading"
+                )
+                if not result["ok"]:
+                    return
+                blocks[index] = {
+                    "type": "heading" if result["heading"] else "text",
+                    "text": result["text"],
+                }
+                refresh(index)
+                return
+            caption = simpledialog.askstring(
+                "说明文字",
+                "可选：显示在图片/视频下方的说明文字。留空表示不显示。",
+                initialvalue=str(block.get("caption", "")),
+                parent=dialog,
+            )
+            if caption is None:
+                return
+            caption = caption.strip()
+            if caption:
+                block["caption"] = caption
+            else:
+                block.pop("caption", None)
+            refresh(index)
+
+        def remove_block():
+            index = selected_index()
+            if index is None:
+                return
+            blocks.pop(index)
+            if blocks:
+                refresh(min(index, len(blocks) - 1))
+            else:
+                refresh()
+
+        def move(step):
+            index = selected_index()
+            if index is None:
+                return
+            target = index + step
+            if target < 0 or target >= len(blocks):
+                return
+            blocks[index], blocks[target] = blocks[target], blocks[index]
+            refresh(target)
+
+        block_list.bind("<Double-Button-1>", lambda _event: edit_block())
+
+        toolbar = ttk.Frame(dialog)
+        toolbar.grid(row=2, column=0, sticky="ew", padx=14, pady=(10, 4))
+        for text, command in (
+            ("添加文字", add_text),
+            ("添加图片", add_images),
+            ("添加视频", add_video),
+            ("编辑", edit_block),
+            ("上移", lambda: move(-1)),
+            ("下移", lambda: move(1)),
+            ("删除", remove_block),
+        ):
+            ttk.Button(toolbar, text=text, command=command).pack(side="left", padx=(0, 6))
+
+        ttk.Label(
+            dialog,
+            text="图片自动压缩到 1600px WebP；视频原样复制，建议控制在 60MB 以内。",
+            foreground="#777",
+        ).grid(row=3, column=0, sticky="w", padx=14)
+
+        footer = ttk.Frame(dialog)
+        footer.grid(row=4, column=0, sticky="e", padx=14, pady=12)
+
+        def save_blocks():
+            self.extra["detailBlocks"] = [dict(block) for block in blocks]
+            self._refresh_detail_button()
+            dialog.destroy()
+            self.status_var.set(
+                f"图文详情已更新（{len(blocks)} 个内容块），记得点“保存商品”"
+            )
+
+        ttk.Button(footer, text="保存详情内容", style="Accent.TButton", command=save_blocks).pack(
+            side="left"
+        )
+        ttk.Button(footer, text="取消", command=dialog.destroy).pack(side="left", padx=8)
+
+        refresh(0)
+
     def new_product(self):
         self.current_section = None
         self.current_index = None
         self.pending_image = None
         self.extra = self._empty_extra()
+        self._refresh_detail_button()
         self.title_var.set("")
         self.price_var.set("")
         self.image_var.set("")
@@ -1521,6 +1892,7 @@ class ProductAdmin(tk.Tk):
         self.current_index = index
         self.pending_image = None
         self.extra = self._extra_from_product(product)
+        self._refresh_detail_button()
 
         self.title_var.set(product.get("title", ""))
         self.price_var.set(str(product.get("price", "")))
@@ -2014,13 +2386,24 @@ class ProductAdmin(tk.Tk):
             if IMAGES_DIR.exists()
             else 0
         )
-        if product_count == 0 and image_count == 0:
-            messagebox.showinfo("已经是空数据", "当前没有商品和商品图片，不需要初始化。")
+        detail_count = (
+            sum(1 for path in DETAIL_IMAGES_DIR.rglob("*") if path.is_file())
+            if DETAIL_IMAGES_DIR.exists()
+            else 0
+        )
+        video_count = (
+            sum(1 for path in VIDEOS_DIR.rglob("*") if path.is_file())
+            if VIDEOS_DIR.exists()
+            else 0
+        )
+        if product_count == 0 and image_count == 0 and detail_count == 0 and video_count == 0:
+            messagebox.showinfo("已经是空数据", "当前没有商品和图片视频，不需要初始化。")
             return
 
         if not messagebox.askyesno(
             "初始化数据",
-            f"将删除全部 {product_count} 个商品和 {image_count} 张商品图片。\n\n"
+            f"将删除全部 {product_count} 个商品、{image_count} 张商品图片、"
+            f"{detail_count} 张详情图片、{video_count} 个详情视频。\n\n"
             "分类、导航、品牌信息、微信二维码会保留。\n\n"
             "清空前会自动备份到 tools\\.backups\\。\n"
             "不会自动发布，线上数据要等你点「发布到 GitHub」才会更新。\n\n"
@@ -2035,7 +2418,7 @@ class ProductAdmin(tk.Tk):
         try:
             BACKUP_DIR.mkdir(parents=True, exist_ok=True)
             with zipfile.ZipFile(backup_path, "w", zipfile.ZIP_DEFLATED) as archive:
-                for folder in (DATA_DIR, IMAGES_DIR):
+                for folder in (DATA_DIR, IMAGES_DIR, DETAIL_IMAGES_DIR, VIDEOS_DIR):
                     if not folder.exists():
                         continue
                     for path in folder.rglob("*"):
@@ -2049,14 +2432,16 @@ class ProductAdmin(tk.Tk):
             section["products"] = []
         self.save_all()
 
-        removed_images = 0
-        if IMAGES_DIR.exists():
-            for path in IMAGES_DIR.rglob("*"):
+        removed_media = 0
+        for folder in (IMAGES_DIR, DETAIL_IMAGES_DIR, VIDEOS_DIR):
+            if not folder.exists():
+                continue
+            for path in folder.rglob("*"):
                 if not path.is_file():
                     continue
                 try:
                     path.unlink()
-                    removed_images += 1
+                    removed_media += 1
                 except OSError:
                     pass
 
@@ -2066,11 +2451,11 @@ class ProductAdmin(tk.Tk):
         self.new_product()
         self._refresh_all()
         self.status_var.set(
-            f"已初始化：删除 {product_count} 个商品、{removed_images} 张图片"
+            f"已初始化：删除 {product_count} 个商品、{removed_media} 个图片/视频文件"
         )
         messagebox.showinfo(
             "初始化完成",
-            f"已删除 {product_count} 个商品、{removed_images} 张商品图片。\n"
+            f"已删除 {product_count} 个商品、{removed_media} 个图片/视频文件。\n"
             "分类和导航已保留。\n\n"
             f"备份：{backup_path}\n\n"
             "添加完真实商品后，点「发布到 GitHub」才会更新线上。",
@@ -2098,7 +2483,7 @@ class ProductAdmin(tk.Tk):
             return
         try:
             with zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as archive:
-                for folder in (DATA_DIR, IMAGES_DIR):
+                for folder in (DATA_DIR, IMAGES_DIR, DETAIL_IMAGES_DIR, VIDEOS_DIR):
                     if not folder.exists():
                         continue
                     for path in folder.rglob("*"):
@@ -2154,7 +2539,7 @@ class ProductAdmin(tk.Tk):
             return
         if not messagebox.askyesno(
             "发布到 GitHub",
-            "将提交 src/data 和 public/images/products 的改动，并推送到 GitHub。\n\n"
+            "将提交 src/data、商品图片、详情图片/视频和二维码的改动，并推送到 GitHub。\n\n"
             "GitHub Actions 会自动重新构建和部署。继续吗？",
         ):
             return
@@ -2162,7 +2547,15 @@ class ProductAdmin(tk.Tk):
         self.status_var.set("正在提交并推送...")
         self.update_idletasks()
 
-        add_paths = ["src/data", "public/images/products", "public/images/categories", "public/images/brands"]
+        add_paths = [
+            "src/data",
+            "public/images/products",
+            "public/images/details",
+            "public/images/categories",
+            "public/images/brands",
+            "public/videos/products",
+        ]
+        add_paths = [path for path in add_paths if (ROOT / path).exists()]
         for image_path in (
             "public/images/payment-qr.webp",
             "public/images/wechat-qr.webp",

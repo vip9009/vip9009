@@ -13,7 +13,9 @@ const cart = useCart()
 
 const sectionId = computed(() => String(route.params.section || ''))
 const productIndex = computed(() => Number(route.params.index ?? -1))
-const section = computed(() => productsData.sections.find((entry) => entry.id === sectionId.value) || null)
+const section = computed(
+  () => productsData.sections.find((entry) => entry.id === sectionId.value) || null,
+)
 const product = computed(() => section.value?.products?.[productIndex.value] || null)
 const category = computed(() => site.categories[sectionId.value] || null)
 
@@ -32,6 +34,15 @@ const gallery = computed(() => {
   const list = Array.isArray(product.value?.gallery) ? product.value.gallery : []
   return list.length ? list.map(asset) : [image.value]
 })
+const detailBlocks = computed(() => {
+  const list = Array.isArray(product.value?.detailBlocks) ? product.value.detailBlocks : []
+  return list.filter((block) => {
+    if (!block || typeof block !== 'object') return false
+    if (block.type === 'text' || block.type === 'heading') return Boolean(String(block.text || '').trim())
+    if (block.type === 'image' || block.type === 'video') return Boolean(String(block.src || '').trim())
+    return false
+  })
+})
 const activeImage = ref('')
 const allBadges = computed(() => {
   const list = Array.isArray(product.value?.badges) ? [...product.value.badges] : []
@@ -41,12 +52,12 @@ const allBadges = computed(() => {
 const badges = computed(() =>
   allBadges.value
     .filter((badge) => String(badge).toUpperCase() !== 'HOT' && !isFeatureTag(badge))
-    .slice(0, 4)
+    .slice(0, 4),
 )
 const isHot = computed(
   () =>
     product.value?.hot === true ||
-    allBadges.value.some((badge) => String(badge).toUpperCase() === 'HOT')
+    allBadges.value.some((badge) => String(badge).toUpperCase() === 'HOT'),
 )
 const stock = computed(() => product.value?.stock !== false)
 const options = computed(() => {
@@ -58,27 +69,29 @@ const options = computed(() => {
         : {
             label: entry.label || entry.name || '',
             price: entry.price ?? product.value?.price,
-            stock: entry.stock !== false
-          }
+            stock: entry.stock !== false,
+          },
     )
     .filter((entry) => entry.label)
 })
 const selectedOption = computed(
-  () => options.value.find((entry) => entry.label === option.value) || null
+  () => options.value.find((entry) => entry.label === option.value) || null,
 )
 const priceLabel = computed(() => {
   const price = Number(product.value?.price)
   const max = Number(product.value?.priceMax)
-  if (Number.isFinite(max) && max > price) return `${formatPrice(price)} – ${formatPrice(max)}`
+  if (Number.isFinite(max) && max > price)
+    return `${formatPrice(price)} – ${formatPrice(max)}`
   return formatPrice(product.value?.price)
 })
 const activePrice = computed(() => selectedOption.value?.price ?? product.value?.price)
 const canAdd = computed(
-  () => stock.value && (selectedOption.value ? selectedOption.value.stock : true)
+  () => stock.value && (selectedOption.value ? selectedOption.value.stock : true),
 )
 const addLabel = computed(() => (added.value ? '已加入购物车' : '加入购物车'))
 const zoomOpen = ref(false)
 const zoomed = ref(false)
+const detailZoomSrc = ref('')
 const specRows = computed(() => {
   const specs = product.value?.specs
   if (specs && typeof specs === 'object' && !Array.isArray(specs)) {
@@ -89,14 +102,20 @@ const specRows = computed(() => {
   if (puffs) rows.push({ label: '口数', value: `${puffs[1]} 口` })
   rows.push({ label: '类型', value: section.value?.title || '' })
   if (brand.value) rows.push({ label: '品牌', value: brand.value })
-  if (options.value.length) rows.push({ label: '口味/规格', value: `${options.value.length} 种` })
+  if (options.value.length)
+    rows.push({ label: '口味/规格', value: `${options.value.length} 种` })
   return rows.filter((row) => row.value)
 })
 const related = computed(() => {
   if (!section.value || !product.value) return []
   const products = section.value.products || []
   return products
-    .map((item, index) => ({ product: item, index, sectionId: section.value.id, sectionTitle: section.value.title }))
+    .map((item, index) => ({
+      product: item,
+      index,
+      sectionId: section.value.id,
+      sectionTitle: section.value.title,
+    }))
     .filter((item) => item.index !== productIndex.value)
     .sort((a, b) => {
       const aMatch = a.product.subcategory === product.value.subcategory ? 0 : 1
@@ -128,7 +147,7 @@ function addToCart() {
     price: activePrice.value,
     image: image.value,
     option: option.value,
-    qty: quantity.value
+    qty: quantity.value,
   })
   added.value = true
   clearTimeout(addedTimer)
@@ -142,7 +161,8 @@ function clearOption() {
   error.value = ''
 }
 
-function openZoom() {
+function openZoom(src = '') {
+  detailZoomSrc.value = src
   zoomOpen.value = true
   zoomed.value = false
   document.body.style.overflow = 'hidden'
@@ -151,6 +171,7 @@ function openZoom() {
 function closeZoom() {
   zoomOpen.value = false
   zoomed.value = false
+  detailZoomSrc.value = ''
   document.body.style.overflow = ''
 }
 
@@ -170,7 +191,6 @@ onBeforeUnmount(() => {
   clearTimeout(addedTimer)
 })
 
-
 function changeQty(delta) {
   quantity.value = Math.max(1, Math.min(99, quantity.value + delta))
 }
@@ -180,7 +200,7 @@ watch(
   (value) => {
     activeImage.value = value
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 watch(
@@ -200,16 +220,22 @@ watch(
           index: productIndex.value,
           title: title.value,
           price: Number(product.value.price) || 0,
-          image: image.value
+          image: image.value,
         }
-        const next = [current, ...list.filter((item) => !(item.sectionId === current.sectionId && item.index === current.index))]
+        const next = [
+          current,
+          ...list.filter(
+            (item) =>
+              !(item.sectionId === current.sectionId && item.index === current.index),
+          ),
+        ]
         localStorage.setItem(key, JSON.stringify(next.slice(0, 6)))
       } catch {
         /* ignore storage errors */
       }
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 </script>
 
@@ -228,16 +254,26 @@ watch(
         <div class="gallery">
           <div class="gallery-stage">
             <div class="gallery-brand-row">
-              <img v-if="brandLogo" class="gallery-brand-logo" :src="asset(brandLogo)" :alt="brand" />
+              <img
+                v-if="brandLogo"
+                class="gallery-brand-logo"
+                :src="asset(brandLogo)"
+                :alt="brand" />
               <span v-else class="gallery-brand">{{ brand }}</span>
             </div>
             <div class="gallery-image">
               <img :src="activeImage || image" :alt="title" />
               <div v-if="badges.length" class="gallery-badges">
-                <span v-for="badge in badges" :key="badge" class="gallery-badge">{{ badge }}</span>
+                <span v-for="badge in badges" :key="badge" class="gallery-badge">{{
+                  badge
+                }}</span>
               </div>
               <span v-if="isHot" class="gallery-hot">HOT</span>
-              <button class="zoom-button" type="button" aria-label="查看大图" @click="openZoom">
+              <button
+                class="zoom-button"
+                type="button"
+                aria-label="查看大图"
+                @click="openZoom()">
                 <AppIcon name="expand" :size="15" />
               </button>
             </div>
@@ -248,8 +284,7 @@ watch(
               :key="thumb"
               type="button"
               :class="{ active: thumb === activeImage }"
-              @click="activeImage = thumb"
-            >
+              @click="activeImage = thumb">
               <img :src="thumb" :alt="title" />
             </button>
           </div>
@@ -265,7 +300,9 @@ watch(
 
           <div class="price-row">
             <div class="price">{{ priceLabel }}</div>
-            <button v-if="option" class="clear-option" type="button" @click="clearOption">清除</button>
+            <button v-if="option" class="clear-option" type="button" @click="clearOption">
+              清除
+            </button>
           </div>
 
           <div v-if="options.length" class="option-row">
@@ -291,7 +328,11 @@ watch(
               <input :value="quantity" readonly aria-label="数量" />
               <button type="button" aria-label="增加" @click="changeQty(1)">＋</button>
             </div>
-            <button class="add-cart" type="button" :class="{ 'is-unavailable': !canAdd }" @click="addToCart">
+            <button
+              class="add-cart"
+              type="button"
+              :class="{ 'is-unavailable': !canAdd }"
+              @click="addToCart">
               {{ addLabel }}
             </button>
           </div>
@@ -302,37 +343,85 @@ watch(
             <p>
               <span>分类：</span>&nbsp;
               <RouterLink :to="`/category/${sectionId}`">{{ section?.title }}</RouterLink>
-              <template v-if="product.subcategory && site.categories[product.subcategory]">
-                ，<RouterLink :to="`/category/${sectionId}?sub=${product.subcategory}`">{{ site.categories[product.subcategory].title }}</RouterLink>
+              <template
+                v-if="product.subcategory && site.categories[product.subcategory]">
+                ，<RouterLink :to="`/category/${sectionId}?sub=${product.subcategory}`">{{
+                  site.categories[product.subcategory].title
+                }}</RouterLink>
               </template>
             </p>
             <p v-if="allBadges.length">
               <span>标签：</span>&nbsp;
               <template v-for="(badge, badgeIndex) in allBadges" :key="badge">
-                <RouterLink :to="`/search?q=${encodeURIComponent(badge)}`">{{ badge }}</RouterLink><span v-if="badgeIndex < allBadges.length - 1" class="meta-sep">, </span>
+                <RouterLink :to="`/search?q=${encodeURIComponent(badge)}`">{{
+                  badge
+                }}</RouterLink
+                ><span v-if="badgeIndex < allBadges.length - 1" class="meta-sep">, </span>
               </template>
             </p>
             <p v-if="brand">
               <span>品牌：</span>&nbsp;
-              <RouterLink :to="`/search?q=${encodeURIComponent(brand)}`">{{ brand }}</RouterLink>
+              <RouterLink :to="`/search?q=${encodeURIComponent(brand)}`">{{
+                brand
+              }}</RouterLink>
             </p>
           </div>
-
         </div>
       </div>
 
       <div class="product-tabs">
         <div class="tab-head">
-          <button type="button" :class="{ active: activeTab === 'description' }" @click="activeTab = 'description'">描述</button>
-          <button type="button" :class="{ active: activeTab === 'specs' }" @click="activeTab = 'specs'">参数</button>
-          <button type="button" :class="{ active: activeTab === 'faq' }" @click="activeTab = 'faq'">常见问题</button>
-          <button type="button" :class="{ active: activeTab === 'links' }" @click="activeTab = 'links'">相关链接</button>
-          <button type="button" :class="{ active: activeTab === 'notice' }" @click="activeTab = 'notice'">声明 FAQ</button>
+          <button
+            type="button"
+            :class="{ active: activeTab === 'description' }"
+            @click="activeTab = 'description'">
+            描述
+          </button>
+          <button
+            type="button"
+            :class="{ active: activeTab === 'specs' }"
+            @click="activeTab = 'specs'">
+            参数
+          </button>
+          <button
+            type="button"
+            :class="{ active: activeTab === 'faq' }"
+            @click="activeTab = 'faq'">
+            声明 FAQ
+          </button>
         </div>
 
         <div class="tab-body">
           <div v-if="activeTab === 'description'" class="description">
-            <p>{{ product.description || '加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。泡泡哥只做正品，支持扫码验证，不同国家与地区的配送方式由泡泡哥一对一确认。' }}</p>
+            <template v-if="detailBlocks.length">
+              <template v-for="(block, index) in detailBlocks" :key="index">
+                <h3 v-if="block.type === 'heading'" class="detail-heading">{{ block.text }}</h3>
+                <p v-else-if="block.type === 'text'" class="detail-text">{{ block.text }}</p>
+                <figure v-else-if="block.type === 'image'" class="detail-figure">
+                  <img
+                    :src="asset(block.src)"
+                    :alt="block.alt || title"
+                    loading="lazy"
+                    @click="openZoom(asset(block.src))" />
+                  <figcaption v-if="block.caption">{{ block.caption }}</figcaption>
+                </figure>
+                <figure v-else-if="block.type === 'video'" class="detail-figure detail-video">
+                  <video
+                    :src="asset(block.src)"
+                    :poster="block.poster ? asset(block.poster) : undefined"
+                    controls
+                    playsinline
+                    preload="metadata"></video>
+                  <figcaption v-if="block.caption">{{ block.caption }}</figcaption>
+                </figure>
+              </template>
+            </template>
+            <p v-else>
+              {{
+                product.description ||
+                '加泡泡哥微信或 QQ 获取实时价格、口味与物流方案。泡泡哥只做正品，支持扫码验证，不同国家与地区的配送方式由泡泡哥一对一确认。'
+              }}
+            </p>
           </div>
 
           <table v-else-if="activeTab === 'specs'" class="spec-table">
@@ -347,32 +436,34 @@ watch(
           <div v-else-if="activeTab === 'faq'" class="faq">
             <details open>
               <summary>怎么确认是正品？</summary>
-              <p>收到货后扫描包装上的防伪二维码，在品牌官方渠道验证。有疑问把包装正面、防伪码和查询结果拍给泡泡哥核对。</p>
+              <p>本店郑重承诺：上架所有款式提供正品保障。</p>
+              <p>
+                收到货后扫描包装上的防伪二维码，在品牌官方渠道验证。有疑问把包装正面、防伪码和查询结果拍给客服核对。
+              </p>
             </details>
             <details>
-              <summary>哪些国家能发？大概多久？</summary>
-              <p>多数国家和地区可发，具体运费、时效和清关要求由泡泡哥按目的地确认。</p>
+              <summary>发货时间？</summary>
+              <p>通常24小时内发货，部分48小时内发货，特殊72小时内发货。</p>
             </details>
             <details>
-              <summary>口味怎么选？</summary>
-              <p>把你常抽的口感、凉度和预算发给泡泡哥，会按你的习惯推荐；不确定就先拿小规格试。</p>
+              <summary>电子烟小知识</summary>
+              <p>强击喉感：高尼古丁（盐碱）+ 高PG + 凉味剂 +高功率（如一次性小烟）。</p>
+              <p>柔和口感：低尼古丁 + 高VG + 低温雾化（如开放式大烟）。</p>
+              <p>PG：丙二醇，高PG（如70%PG）增强击喉感和风味清晰度，但烟雾量小。</p>
+              <p>
+                VG：植物甘油，高VG（如80%VG）烟雾量大、口感绵柔，但击喉感弱（常见于大烟设备）
+              </p>
+              <p>
+                感官误导：凉味剂（薄荷醇）或高PG的刺痛感（击喉感）可能让用户误以为“劲大=安全”，因电子烟的便捷性，可能会导致无意识连续摄入，忽视尼古丁摄入过多风险，建议误短频多次
+              </p>
+              <p>
+                英国公共卫生部（PHE）：电子烟尼古丁吸收效率约为纸烟的50–70%，但高浓度产品可能逆转这一差距。
+              </p>
+              <p>健康建议：选择低尼古丁浓度（如3–6mg/mL）和PG/VG平衡的品质烟油</p>
+              <p>口吸：类似吸烟的吸入方式，气流经过喉咙更集中，击喉感明显。</p>
+              <p>肺吸：直接入肺，烟雾分散，击喉感较弱（常见于大烟雾设备）。</p>
+              <p>重复注油：检测金属数据严重超标，健康建议选择一次性品牌产品。</p>
             </details>
-            <details>
-              <summary>收到货不合适怎么办？</summary>
-              <p>先联系泡泡哥说明情况，保留开箱视频和照片；未拆封商品按实际情况协商处理。</p>
-            </details>
-          </div>
-
-          <div v-else-if="activeTab === 'links'" class="links">
-            <RouterLink :to="`/category/${sectionId}`">← 返回 {{ section?.title }}</RouterLink>
-            <RouterLink to="/info/verification">真假验证说明</RouterLink>
-            <RouterLink to="/info/delivery">配送说明</RouterLink>
-            <RouterLink to="/info/returns">退换政策</RouterLink>
-          </div>
-
-          <div v-else class="notice">
-            <p>本站仅做商品信息展示与咨询，不向未成年人销售。电子雾化产品含尼古丁，具有成瘾性，请勿在禁烟场所使用。</p>
-            <p>页面价格为参考价，最终价格、库存与物流以泡泡哥微信 / QQ 确认为准。</p>
           </div>
         </div>
       </div>
@@ -390,8 +481,7 @@ watch(
             :section-id="item.sectionId"
             :section-title="item.sectionTitle"
             :index="item.index"
-            bordered
-          />
+            bordered />
         </div>
       </section>
     </template>
@@ -409,11 +499,12 @@ watch(
         </button>
         <img
           :class="{ zoomed }"
-          :src="activeImage || image"
+          :src="detailZoomSrc || activeImage || image"
           :alt="title"
-          @click="toggleZoom"
-        />
-        <span class="zoom-tip">{{ zoomed ? '点击图片缩小' : '点击图片放大' }} · ESC 关闭</span>
+          @click="toggleZoom" />
+        <span class="zoom-tip"
+          >{{ zoomed ? '点击图片缩小' : '点击图片放大' }} · ESC 关闭</span
+        >
       </div>
     </Teleport>
   </div>
@@ -560,7 +651,10 @@ watch(
   background: rgba(255, 255, 255, 0.7);
   border: 2px solid #c0c0c0;
   border-radius: 999px;
-  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  transition:
+    color 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
 }
 
 .zoom-button:hover {
@@ -862,8 +956,6 @@ watch(
   color: #999999;
 }
 
-
-
 .product-tabs {
   padding: 23px 15px 0;
 }
@@ -903,6 +995,51 @@ watch(
   line-height: 1.9;
   color: #666666;
   white-space: pre-line;
+}
+
+.description .detail-heading {
+  margin: 18px 0 8px;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.6;
+  color: #111111;
+}
+
+.description .detail-heading:first-child {
+  margin-top: 0;
+}
+
+.description .detail-figure {
+  margin: 14px 0;
+}
+
+.description .detail-figure:first-child {
+  margin-top: 0;
+}
+
+.description .detail-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #f7f7f7;
+  border-radius: 10px;
+  cursor: zoom-in;
+}
+
+.description .detail-video video {
+  display: block;
+  width: 100%;
+  max-height: 70vh;
+  background: #000000;
+  border-radius: 10px;
+}
+
+.description .detail-figure figcaption {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #999999;
+  text-align: center;
 }
 
 .notice p + p {

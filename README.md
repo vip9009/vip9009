@@ -41,7 +41,8 @@ vip9009/
 ├─ .opencode/skills/              # UI UX Pro Max 等开发期 skill（不参与打包）
 ├─ design-system/laovape/         # 设计系统 MASTER.md
 ├─ public/
-│  ├─ images/                     # 二维码、商品图（WebP）
+│  ├─ images/                     # 二维码、商品图、详情图（WebP）
+│  ├─ videos/products/            # 商品详情视频（MP4 / WebM）
 │  ├─ animations/                 # FAQ / 火箭 / NO SMOKING Lottie（占位）
 │  └─ .nojekyll
 ├─ src/
@@ -129,6 +130,7 @@ python tools/product_admin.py
 | 移动商品 | 改商品的一级 / 二级分类后保存，前台立即归到新分类 |
 | 选择图片 | 自动转成 800px WebP，写入 `public/images/products/` |
 | 商品更多信息 | 品牌、角标、价格区间、库存、HOT、店长推荐、口味/规格、参数 |
+| 图文/视频详情 | 文字、小标题、多张详情图片、视频，按顺序显示在商品详情页 |
 | 站点设置 | 公告、首页 Banner 链接、包邮门槛/运费、客服微信名称/头像/二维码、QQ、收款二维码/说明 |
 | 排序 | 商品上移 / 下移；分类用「排序」数字控制导航顺序 |
 | 保存 | 直接写回 `src/data/` 下的 JSON，并自动备份旧文件 |
@@ -209,7 +211,13 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
       "imageAlt": "图片描述",
       "localImage": "/images/products/disposables-1-800.webp",
       "subcategory": "relx-disposable",
-      "description": "可选：商品详情里的介绍文案，支持换行"
+      "description": "可选：商品详情里的介绍文案，支持换行",
+      "detailBlocks": [
+        { "type": "heading", "text": "产品细节" },
+        { "type": "text", "text": "支持换行的文字段落" },
+        { "type": "image", "src": "/images/details/detail-1.webp", "caption": "实拍图" },
+        { "type": "video", "src": "/videos/products/video-1.mp4", "poster": "/images/details/detail-1.webp" }
+      ]
     }
   ]
 }
@@ -232,7 +240,8 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
   - `options`：口味/规格，字符串数组或 `{label, price, stock}` 数组；有值时商品卡显示 SELECT 下拉。选中后显示对应口味价格；该口味 `stock: false` 时购买按钮置灰
   - `specs`：参数对象，显示在商品页“参数”Tab
   - `gallery`：详情图数组，留空使用 `localImage`
-- 工具里的「更多信息」可以编辑以上字段，不需要手改 JSON。
+  - `detailBlocks`：图文/视频详情块数组，按顺序显示在详情页「商品详情」Tab。类型支持 `text`、`heading`、`image`、`video`；有该字段时优先于 `description` 显示
+- 工具里的「更多信息」和「图文/视频详情」可以编辑以上字段，不需要手改 JSON。
 
 ### 分类与导航
 
