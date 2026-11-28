@@ -148,9 +148,34 @@ function tagStyle(label) {
     color: TAG_LIGHT_TEXT.has(label) ? '#ffffff' : '#000000'
   }
 }
-const brands = computed(() => site.brands || [])
+const HOME_BRANDS = [
+  'RELX',
+  'YOOZ',
+  'MOTI',
+  'SnowPlus',
+  'ZGAR',
+  'ELFBAR',
+  'VOZOL',
+  'LAMI',
+  'BEARFBAR',
+  'SOLOBAR',
+  'AL FAKHER',
+  'WE VAPE',
+  'SONG',
+  'GEEKBAR',
+  'UTBAR',
+  'TESIYI',
+  'OLIT',
+  'PANDORA',
+  'FLOAT X',
+  'COCONINA',
+  'DRAGONBAR',
+  'DOJO',
+  'JEX',
+  'other',
+]
 const brandItems = computed(() =>
-  brands.value.map((name) => ({ name, logo: site.brandLogos?.[name] || '' }))
+  HOME_BRANDS.map((name) => ({ name, logo: site.brandLogos?.[name] || '' }))
 )
 function setPage(index) {
   page.value = index
@@ -270,7 +295,7 @@ function setPage(index) {
             v-for="item in brandItems"
             :key="item.name"
             class="brand-word"
-            :to="`/search?q=${encodeURIComponent(item.name.split(' ').pop())}`"
+            :to="`/search?q=${encodeURIComponent(item.name)}`"
           >
             <img v-if="item.logo" :src="asset(item.logo)" :alt="item.name" />
             <span v-else>{{ item.name }}</span>
@@ -861,9 +886,9 @@ function setPage(index) {
 .brand-wall {
   display: grid;
   grid-template-columns: repeat(6, 61px);
-  gap: 5px 6px;
+  gap: 6px;
   justify-content: center;
-  padding: 18px 0 8px;
+  padding: 0;
   margin: 0 auto;
 }
 
@@ -872,8 +897,8 @@ function setPage(index) {
   align-items: center;
   justify-content: center;
   width: 61px;
-  height: 62px;
-  padding: 4px;
+  height: 59px;
+  padding: 10px 11px;
   font-family: var(--font-heading);
   font-size: 9px;
   font-weight: 900;
@@ -882,26 +907,27 @@ function setPage(index) {
   text-align: center;
   background: #ffffff;
   border: 2px double #000000;
-  transition: border-color 0.18s ease;
+  border-radius: 3px;
+  box-shadow: 0 0 1px 0 #020202;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .brand-word img {
-  max-width: 88%;
-  max-height: 58%;
-  object-fit: contain;
-  filter: grayscale(1);
-  opacity: 0.78;
-  transition: opacity 0.18s ease;
+  display: block;
+  width: 35px;
+  height: 35px;
+  max-width: none;
+  max-height: none;
+  object-fit: fill;
 }
 
 .brand-word:hover {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-}
-
-.brand-word:hover img {
-  filter: none;
-  opacity: 1;
+  color: #ffffff;
+  background: #ff0077;
+  border-color: #000000;
 }
 
 .news-carousel {
@@ -1208,18 +1234,23 @@ function setPage(index) {
 
   .brand-wall {
     grid-template-columns: repeat(6, 39px);
-    gap: 5px 6px;
-    padding: 12px 0 8px;
+    gap: 6px;
+    padding: 0;
   }
 
   .brand-word {
     width: 39px;
     height: 40px;
-    padding: 3px;
+    padding: 0;
     font-size: 7px;
     line-height: 1.1;
     letter-spacing: 0;
     word-break: break-word;
+  }
+
+  .brand-word img {
+    width: 35px;
+    height: 35px;
   }
 
   .news-carousel {
