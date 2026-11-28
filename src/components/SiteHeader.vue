@@ -4,7 +4,8 @@ import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { site } from '@/data'
 import AppIcon from '@/components/AppIcon.vue'
 import { useCart } from '@/stores/cart'
-import { asset, formatPrice } from '@/utils'
+import { formatPrice } from '@/utils'
+import logoSteamDuck from '@/assets/images/logo-steam-duck.webp'
 
 const route = useRoute()
 const router = useRouter()
@@ -171,7 +172,7 @@ onBeforeUnmount(() => {
         </nav>
 
         <RouterLink class="logo" to="/" aria-label="泡泡哥雾化首页">
-          <img class="logo-img" :src="asset('/images/ui/logo-vapepu.webp')" alt="VAPEPU" />
+          <img class="logo-img" :src="logoSteamDuck" alt="蒸汽鸭" />
         </RouterLink>
 
         <button class="cart-pill" type="button" aria-label="查看购物车" @click="cartOpen = true">
@@ -445,7 +446,7 @@ onBeforeUnmount(() => {
 .logo-img {
   display: block;
   width: auto;
-  height: 26px;
+  height: 44px;
 }
 
 .logo-dot {
@@ -1028,7 +1029,7 @@ onBeforeUnmount(() => {
   }
 
   .logo-img {
-    height: 26px;
+    height: 40px;
   }
 
   .logo-cn {

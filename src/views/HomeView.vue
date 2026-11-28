@@ -9,6 +9,7 @@ import { asset } from '@/utils'
 import newDividerImg from '@/assets/images/new-divider.png'
 import arrowDownImg from '@/assets/images/arrow-down.png'
 import noSmokingDividerImg from '@/assets/images/no-smoking-divider.png'
+import heroSteamDuck from '@/assets/images/hero-steam-duck.webp'
 
 const router = useRouter()
 const activeTab = ref('tag')
@@ -143,8 +144,8 @@ function setPage(index) {
     </div>
 
     <div class="wrapper home-top">
-      <RouterLink class="hero-banner hero-lottie" :to="hero.link || '/info/about'">
-        <LottieBox src="/animations/faq.json" label="常见问题 FAQ 动画" />
+      <RouterLink class="hero-banner hero-image" :to="hero.link || '/info/about'">
+        <img class="hero-banner-img" :src="heroSteamDuck" alt="蒸汽鸭只售正品，拒绝精工" />
       </RouterLink>
     </div>
 
@@ -339,6 +340,24 @@ function setPage(index) {
 
 .hero-banner.hero-lottie::before {
   display: none;
+}
+
+.hero-banner.hero-image {
+  height: auto;
+  padding: 0;
+  background: #000000;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.hero-banner.hero-image::before {
+  display: none;
+}
+
+.hero-banner-img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .hero-lottie .lottie-box {

@@ -7,7 +7,8 @@ import ContactWidget from '@/components/ContactWidget.vue'
 import AgeGate from '@/components/AgeGate.vue'
 import { preloadPrimaryViews, preloadView } from '@/router/lazyViews'
 import { prefetchPathImages } from '@/utils/prefetch'
-import { asset } from '@/utils'
+import logoSteamDuck from '@/assets/images/logo-steam-duck.webp'
+
 
 const booting = ref(true)
 
@@ -104,7 +105,7 @@ onBeforeUnmount(() => {
   <div class="site">
     <Transition name="boot-fade">
       <div v-if="booting" class="boot-loader" aria-hidden="true">
-        <img class="boot-logo" :src="asset('/images/ui/logo-vapepu.webp')" alt="" />
+        <img class="boot-logo" :src="logoSteamDuck" alt="蒸汽鸭" />
         <span class="boot-spinner" />
       </div>
     </Transition>
