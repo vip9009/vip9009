@@ -182,9 +182,6 @@ onBeforeUnmount(() => {
                     </RouterLink>
                   </div>
                 </div>
-                <div class="mega-links">
-                  <RouterLink v-if="site.categories.recommend" to="/category/recommend">店长推荐 🔥</RouterLink>
-                </div>
                 <RouterLink class="mega-all" to="/category/disposables">查看全部商品 →</RouterLink>
               </div>
             </li>
@@ -676,25 +673,6 @@ onBeforeUnmount(() => {
   font-weight: 700;
   color: var(--color-primary);
   border-top: 1px solid #eeeeee;
-}
-
-.mega-links {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 22px;
-  padding-top: 10px;
-  margin-top: 4px;
-  font-size: 12px;
-  border-top: 1px solid #eeeeee;
-}
-
-.mega-links a {
-  color: #666666;
-}
-
-.mega-links a:hover {
-  color: var(--color-primary);
 }
 
 .mobile-menu-btn,
