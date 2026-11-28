@@ -196,9 +196,15 @@ def is_remote_url(value: str) -> bool:
     return bool(re.match(r"^(https?:)?//", str(value or "").strip()))
 
 
+def is_forbidden_reference_link(value) -> bool:
+    text = str(value or "").lower()
+    return "vapepu.com" in text or "wp-content" in text
+
+
 def check_data() -> int:
     errors = []
     warnings = []
+    forbidden_links = []
     sections = load_sections()
     categories = load_json(CATEGORIES_FILE)
     try:
@@ -348,6 +354,23 @@ def check_data() -> int:
             f"{name}（{count}）" for name, count in sorted(unknown_brands.items())
         )
         warnings.append(f"以下商品品牌不在品牌墙列表中，新增商品时建议先在 general.json 补上：{names}")
+
+    def scan_forbidden(node, path):
+        if isinstance(node, dict):
+            for key, value in node.items():
+                scan_forbidden(value, f"{path}.{key}")
+        elif isinstance(node, list):
+            for index, value in enumerate(node):
+                scan_forbidden(value, f"{path}[{index}]")
+        elif isinstance(node, str) and is_forbidden_reference_link(node):
+            forbidden_links.append((path, node))
+
+    scan_forbidden(sections, "sections")
+    scan_forbidden(categories, "categories")
+    scan_forbidden(general, "general")
+    scan_forbidden(contacts, "contacts")
+    for path, value in forbidden_links[:30]:
+        errors.append(f"发现参考站外链，请改为本地素材：{path} -> {value}")
 
     if warnings:
         print("\n提醒：")
@@ -1765,6 +1788,14 @@ class ProductAdmin(tk.Tk):
                 if not url or not url.strip():
                     return
                 src = url.strip()
+                if is_forbidden_reference_link(src):
+                    messagebox.showerror(
+                        "不要使用参考站链接",
+                        "请不要填写 vapepu.com 或 wp-content 的图片/视频地址。\n\n"
+                        "请先把素材下载到本地，再用「添加视频」上传。",
+                        parent=dialog,
+                    )
+                    return
             blocks.append({"type": "video", "src": src})
             refresh(len(blocks) - 1)
 
