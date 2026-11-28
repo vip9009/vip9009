@@ -656,7 +656,7 @@ watch(
 .gallery-hint {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 12px;
   margin-top: 14px;
   font-size: 10px;
   color: #aaaaaa;
@@ -987,7 +987,7 @@ watch(
 .product-grid-3 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
+  gap: 12px;
 }
 
 .empty-state {
@@ -1165,7 +1165,7 @@ watch(
 
   .product-grid-3 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 6px;
+    gap: 12px;
     margin: 0 -10px;
   }
 
