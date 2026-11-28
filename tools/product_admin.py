@@ -1320,7 +1320,7 @@ class ProductAdmin(tk.Tk):
             values=["（无品牌）", *brand_values],
             state="readonly",
         ).grid(row=0, column=1, columnspan=2, sticky="ew", padx=(0, 12), pady=6)
-        ttk.Label(dialog, text="品牌来自站点品牌墙；这样前台 Logo、品牌链接才能匹配", foreground="#777").grid(
+        ttk.Label(dialog, text="品牌来自站点品牌墙和现有商品品牌；这样前台 Logo、品牌链接才能匹配", foreground="#777").grid(
             row=1, column=1, columnspan=2, sticky="w", padx=(0, 12)
         )
 
