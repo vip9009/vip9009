@@ -51,7 +51,6 @@ vip9009/
 │  ├─ data/
 │  │  ├─ index.js                 # 自动聚合 sections/*.json
 │  │  ├─ sections/                # 每个分类一个分区 JSON，可自由新增
-│  │  │  ├─ hot.json              # 优惠活动 / 热门
 │  │  │  ├─ disposables.json      # 一次性系列
 │  │  │  ├─ pods.json             # 换弹系列
 │  │  │  ├─ jimu.json             # 积木系列
@@ -224,7 +223,7 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
 ```
 
 - `src/data/index.js` 用 `import.meta.glob('./sections/*.json')` 自动加载全部分区，按 `sort` 升序排列；新增或删除分区文件不需要改代码。
-- 现有分区：`hot`（0，优惠活动）、`disposables`（1，一次性系列）、`gbxl`（2，国标系列）、`pods`（4，换弹系列）、`shisha`（5，水烟系列）、`jimu`（6，积木系列）、`combo`（7，组合专区）、`wanghong`（8，网红系列）。
+- 现有分区：`disposables`（1，一次性系列）、`gbxl`（2，国标系列）、`pods`（4，换弹系列）、`shisha`（5，水烟系列）、`jimu`（6，积木系列）、`combo`（7，组合专区）、`wanghong`（8，网红系列）、`recommend`（3，店长推荐）。
 - `localImage` 填 `public` 下的相对路径，建议使用 800px 宽的 WebP。
 - `subcategory` 是二级分类 ID，对应 `categories.json` 里的子分类；留空表示只归到一级分类。
 - `description` 可选，留空时商品详情使用默认介绍文案：
@@ -275,7 +274,7 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
 ```
 
 - 一级分类用 `section` 指向商品分区；二级分类用 `parent` 指向一级分类，商品通过 `subcategory` 归到二级。
-- `sort` 控制顺序，`nav: false` 表示不在顶部导航显示（例如「热门产品」）。
+- `sort` 控制顺序，`nav: false` 表示不在顶部导航显示。
 - `to` 用于非商品菜单，例如「联系客服」指向 `/contact`。
 - 二级分类页地址为 `/category/:一级ID?sub=:二级ID`，例如 `/category/disposables?sub=relx-disposable`。
 - 一级分类页显示该分类下全部商品，并带二级分类筛选条；二级分类页只显示对应商品。
@@ -415,7 +414,7 @@ python .opencode/skills/ui-ux-pro-max/scripts/search.py "mobile menu touch targe
 | 路由 | 页面 |
 | --- | --- |
 | `/` | 首页 |
-| `/category/:id` | 商品分类（`hot`、`disposables`、`jimu`、`pods` 等） |
+| `/category/:id` | 商品分类（`disposables`、`jimu`、`pods` 等） |
 | `/category/:id?sub=:subId` | 二级分类（例如 `/category/disposables?sub=relx-disposable`） |
 | `/product/:section/:index` | 商品详情 |
 | `/search?q=关键词` | 产品搜索 |

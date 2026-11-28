@@ -11,7 +11,7 @@ import { RouterLink } from 'vue-router'
         <p class="desc">你访问的页面可能已经被删除、移动，或者链接地址有误。</p>
         <div class="actions">
           <RouterLink class="btn btn-primary" to="/">返回首页</RouterLink>
-          <RouterLink class="btn btn-ghost" to="/category/hot">浏览热门产品</RouterLink>
+          <RouterLink class="btn btn-ghost" to="/category/disposables">浏览热门产品</RouterLink>
         </div>
       </div>
     </div>

@@ -79,7 +79,7 @@ function finishOrder() {
 
     <div v-else-if="!cart.items.length" class="empty-cart">
       <p>您的购物车目前是空的。</p>
-      <RouterLink class="black-btn" to="/category/hot">返回商店</RouterLink>
+      <RouterLink class="black-btn" to="/category/disposables">返回商店</RouterLink>
     </div>
 
     <div v-else class="checkout-layout">

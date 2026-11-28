@@ -41,7 +41,6 @@ const allProducts = computed(() => {
   const seen = new Set()
   const list = []
   productsData.sections
-    .filter((section) => section.id !== 'hot')
     .forEach((section) => {
       ;(section.products || []).forEach((product, index) => {
         const key = product.sourceId || product.title

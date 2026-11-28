@@ -2319,9 +2319,6 @@ class ProductAdmin(tk.Tk):
             parent["children"] = [cid for cid in parent.get("children", []) if cid != category_id]
             self.categories.pop(category_id, None)
         else:
-            if category_id == "hot":
-                messagebox.showwarning("不能删除", "“热门产品”是首页核心分类，不能删除。")
-                return
             children = children_of(self.categories, category_id)
             if children:
                 messagebox.showwarning(

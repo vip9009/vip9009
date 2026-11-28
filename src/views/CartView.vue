@@ -10,7 +10,7 @@
 
     <div v-if="!cart.items.length" class="empty-cart">
       <p>您的购物车目前是空的。</p>
-      <RouterLink class="black-btn" to="/category/hot">返回商店</RouterLink>
+      <RouterLink class="black-btn" to="/category/disposables">返回商店</RouterLink>
     </div>
 
     <div v-else class="cart-layout">
@@ -48,7 +48,7 @@
         </table>
 
         <div class="cart-actions">
-          <RouterLink class="ghost-btn" to="/category/hot">← 继续购物</RouterLink>
+          <RouterLink class="ghost-btn" to="/category/disposables">← 继续购物</RouterLink>
         </div>
       </div>
 

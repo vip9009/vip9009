@@ -105,7 +105,7 @@ onBeforeUnmount(() => {
 
 const topCategories = computed(() =>
   Object.entries(site.categories)
-    .filter(([id, item]) => !item.parent && id !== 'hot' && id !== 'contact' && item.section)
+    .filter(([id, item]) => !item.parent && id !== 'contact' && item.section)
     .sort((a, b) => (a[1].sort ?? 999) - (b[1].sort ?? 999))
     .map(([id, item]) => ({ id, title: item.title }))
 )

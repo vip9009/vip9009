@@ -10,7 +10,6 @@ const props = defineProps({
 })
 
 const labels = {
-  hot: 'HOT PICKS',
   disposables: 'DISPOSABLES',
   jimu: 'CREATOR KITS',
   pods: 'PODS'
@@ -40,7 +39,6 @@ const eyebrow = computed(() => labels[props.section.id] || 'COLLECTION')
           :product="product"
           :section-id="section.id"
           :index="index"
-          :eager="section.id === 'hot' && index < 4"
         />
       </div>
     </div>

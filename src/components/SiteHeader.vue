@@ -27,7 +27,7 @@ function focusSearch() {
 
 const categories = computed(() =>
   Object.entries(site.categories)
-    .filter(([id, item]) => !item.parent && id !== 'hot' && id !== 'contact' && item.section)
+    .filter(([id, item]) => !item.parent && id !== 'contact' && item.section)
     .sort((a, b) => (a[1].sort ?? 999) - (b[1].sort ?? 999))
     .map(([id, item]) => ({ id, title: item.title }))
 )
@@ -165,7 +165,7 @@ onBeforeUnmount(() => {
                 <div class="mega-links">
                   <RouterLink v-if="site.categories.recommend" to="/category/recommend">店长推荐 🔥</RouterLink>
                 </div>
-                <RouterLink class="mega-all" to="/category/hot">查看全部商品 →</RouterLink>
+                <RouterLink class="mega-all" to="/category/disposables">查看全部商品 →</RouterLink>
               </div>
             </li>
           </ul>
@@ -282,7 +282,7 @@ onBeforeUnmount(() => {
               <div v-if="!items.length" class="cart-pop-empty">
                 <AppIcon name="cart" :size="36" />
                 <p>购物车还是空的</p>
-                <RouterLink class="cart-pop-btn black" to="/category/hot" @click="cartOpen = false">去逛逛</RouterLink>
+                <RouterLink class="cart-pop-btn black" to="/category/disposables" @click="cartOpen = false">去逛逛</RouterLink>
               </div>
 
               <div v-else class="cart-pop-list">
