@@ -76,7 +76,10 @@ const tiles = computed(() => {
 
 const newProducts = computed(() => {
   const score = (product) => {
-    const badges = product.badges || []
+    const badges = [
+      ...(Array.isArray(product.badges) ? product.badges : []),
+      ...(Array.isArray(product.topTags) ? product.topTags : []),
+    ]
     if (badges.includes('上新')) return 0
     if (badges.includes('上新口味')) return 1
     if (product.hot) return 2

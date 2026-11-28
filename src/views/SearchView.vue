@@ -16,7 +16,24 @@ const products = computed(() => {
   if (!query.value) return []
   const word = query.value.toLowerCase()
   return allProducts(productsData.sections).filter((product) => {
-    const haystack = `${decodeEntities(product.title)} ${decodeEntities(product.imageAlt || '')}`.toLowerCase()
+    const tags = [
+      ...(Array.isArray(product.badges) ? product.badges : []),
+      ...(Array.isArray(product.topTags) ? product.topTags : []),
+      ...(Array.isArray(product.leftTags) ? product.leftTags : []),
+    ]
+    const optionLabels = (Array.isArray(product.options) ? product.options : []).map((option) =>
+      typeof option === 'string' ? option : option?.label || '',
+    )
+    const haystack = [
+      decodeEntities(product.title),
+      decodeEntities(product.imageAlt || ''),
+      product.brand || '',
+      product.sectionTitle || '',
+      ...tags.map((tag) => decodeEntities(tag)),
+      ...optionLabels.map((option) => decodeEntities(option)),
+    ]
+      .join(' ')
+      .toLowerCase()
     return haystack.includes(word)
   })
 })

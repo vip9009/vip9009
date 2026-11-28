@@ -6,7 +6,7 @@ import VpProductCard from '@/components/VpProductCard.vue'
 import AppIcon from '@/components/AppIcon.vue'
 import { useCart } from '@/stores/cart'
 import { asset, decodeEntities, detectBrand, formatPrice } from '@/utils'
-import { isFeatureTag } from '@/utils/tags'
+import { leftTagStyle } from '@/utils/tags'
 
 const route = useRoute()
 const cart = useCart()
@@ -44,21 +44,22 @@ const detailBlocks = computed(() => {
   })
 })
 const activeImage = ref('')
-const allBadges = computed(() => {
-  const list = Array.isArray(product.value?.badges) ? [...product.value.badges] : []
-  if (product.value?.recommend && !list.includes('店长推荐')) list.push('店长推荐')
-  return list
-})
-const badges = computed(() =>
-  allBadges.value
-    .filter((badge) => String(badge).toUpperCase() !== 'HOT' && !isFeatureTag(badge))
+const metaTags = computed(() =>
+  (Array.isArray(product.value?.badges) ? product.value.badges : []).filter((tag) =>
+    String(tag || '').trim(),
+  ),
+)
+const galleryTopTags = computed(() =>
+  (Array.isArray(product.value?.topTags) ? product.value.topTags : [])
+    .filter((tag) => String(tag || '').trim() && String(tag).toUpperCase() !== 'HOT')
     .slice(0, 4),
 )
-const isHot = computed(
-  () =>
-    product.value?.hot === true ||
-    allBadges.value.some((badge) => String(badge).toUpperCase() === 'HOT'),
+const galleryLeftTags = computed(() =>
+  (Array.isArray(product.value?.leftTags) ? product.value.leftTags : [])
+    .filter((tag) => String(tag || '').trim() && String(tag).toUpperCase() !== 'HOT')
+    .slice(0, 4),
 )
+const isHot = computed(() => product.value?.hot === true)
 const stock = computed(() => product.value?.stock !== false)
 const options = computed(() => {
   const list = Array.isArray(product.value?.options) ? product.value.options : []
@@ -263,12 +264,17 @@ watch(
             </div>
             <div class="gallery-image">
               <img :src="activeImage || image" :alt="title" />
-              <div v-if="badges.length" class="gallery-badges">
-                <span v-for="badge in badges" :key="badge" class="gallery-badge">{{
+              <div v-if="galleryTopTags.length" class="gallery-badges">
+                <span v-for="badge in galleryTopTags" :key="badge" class="gallery-badge">{{
                   badge
                 }}</span>
               </div>
               <span v-if="isHot" class="gallery-hot">HOT</span>
+              <div v-if="galleryLeftTags.length" class="gallery-left-tags">
+                <span v-for="tag in galleryLeftTags" :key="tag" :style="leftTagStyle(tag)">{{
+                  tag
+                }}</span>
+              </div>
               <button
                 class="zoom-button"
                 type="button"
@@ -350,13 +356,13 @@ watch(
                 }}</RouterLink>
               </template>
             </p>
-            <p v-if="allBadges.length">
+            <p v-if="metaTags.length">
               <span>标签：</span>&nbsp;
-              <template v-for="(badge, badgeIndex) in allBadges" :key="badge">
+              <template v-for="(badge, badgeIndex) in metaTags" :key="badge">
                 <RouterLink :to="`/search?q=${encodeURIComponent(badge)}`">{{
                   badge
                 }}</RouterLink
-                ><span v-if="badgeIndex < allBadges.length - 1" class="meta-sep">, </span>
+                ><span v-if="badgeIndex < metaTags.length - 1" class="meta-sep">, </span>
               </template>
             </p>
             <p v-if="brand">
@@ -618,6 +624,26 @@ watch(
   border-radius: 2px;
   transform-origin: center;
   animation: detail-bounce 2000ms ease-in-out 0ms infinite;
+}
+
+.gallery-left-tags {
+  position: absolute;
+  bottom: 56px;
+  left: 4px;
+  z-index: 6;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: calc(100% - 8px);
+}
+
+.gallery-left-tags span {
+  padding: 3px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  border-radius: 2px;
 }
 
 .gallery-hot {
@@ -1257,6 +1283,10 @@ watch(
 
   .zoom-button {
     display: none;
+  }
+
+  .gallery-left-tags {
+    bottom: 4px;
   }
 
   .gallery-brand-logo {

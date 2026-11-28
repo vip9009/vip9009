@@ -420,20 +420,6 @@ function finishOrder() {
   color: var(--color-primary);
 }
 
-.agree {
-  display: flex;
-  align-items: flex-start;
-  gap: 7px;
-  margin-bottom: 12px;
-  font-size: 11px;
-  line-height: 1.5;
-  color: #777777;
-}
-
-.agree a {
-  color: var(--color-primary);
-}
-
 .error {
   margin: 8px 0;
   font-size: 12px;
@@ -458,53 +444,6 @@ function finishOrder() {
 
 .place-order:hover {
   background: var(--color-primary);
-}
-
-.success {
-  max-width: 520px;
-  padding: 30px 20px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.success-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 54px;
-  height: 54px;
-  margin-bottom: 14px;
-  font-size: 24px;
-  color: #ffffff;
-  background: var(--color-primary);
-  border-radius: 50%;
-}
-
-.success h1 {
-  margin-bottom: 10px;
-  font-size: 24px;
-}
-
-.success p {
-  margin-bottom: 8px;
-  font-size: 13px;
-  color: #777777;
-}
-
-.success-note {
-  font-size: 11px;
-  color: #999999;
-}
-
-.success-qq {
-  color: #242125 !important;
-}
-
-.success-actions {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 18px;
 }
 
 .empty-cart {

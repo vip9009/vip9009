@@ -128,7 +128,7 @@ python tools/product_admin.py
 | 商品归类 | 保存商品时可直接选到末级分类，例如「一次性电子烟 / 悦刻一次性电子烟」 |
 | 移动商品 | 改商品的一级 / 二级分类后保存，前台立即归到新分类 |
 | 选择图片 | 自动转成 800px WebP，写入 `public/images/products/` |
-| 商品更多信息 | 品牌、角标、价格区间、库存、HOT、店长推荐、口味/规格、参数 |
+| 商品更多信息 | 品牌、常用标签、顶部标签、商品左侧标签、价格区间、库存、HOT、口味/规格、参数 |
 | 图文/视频详情 | 文字、小标题、多张详情图片、视频，按顺序显示在商品详情页 |
 | 站点设置 | 公告、首页 Banner 链接、包邮门槛/运费、客服微信名称/头像/二维码、QQ |
 | 排序 | 商品上移 / 下移；分类用「排序」数字控制导航顺序 |
@@ -202,7 +202,9 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
       "price": 288,
       "priceMax": 318,
       "brand": "ZGAR",
-      "badges": ["HOT", "上新"],
+      "badges": ["模式切换", "凉度调节"],
+      "topTags": ["上新口味"],
+      "leftTags": ["呼吸灯"],
       "stock": true,
       "hot": true,
       "options": ["黑色", { "label": "蓝色", "price": 298, "stock": false }],
@@ -231,11 +233,12 @@ python -m PyInstaller --noconfirm --clean --onefile --windowed --name "泡泡哥
 - 商品详情路由为 `/product/:sectionId/:index`，`index` 是商品在分区中的下标（从 0 开始）。
 - 可选字段：
   - `brand`：品牌，建议使用站点固定品牌名，确保前台 Logo 与品牌链接匹配；留空时自动从标题识别。工具下拉会同时列出固定品牌和现有商品已在用的品牌
-  - `badges`：活动角标显示在图片右上角，例如 `["HOT", "上新"]`；非活动标签（如自定义、呼吸灯、凉度调节）会自动显示在图片左下角。工具中从常用标签列表选择
+  - `badges`：商品详情页的标签，建议从站点常用标签 `general.json > tags` 里选择；详情页可点击搜索
+  - `topTags`：商品卡图片右上角标签，例如 `["上新口味"]`，工具里叫「顶部标签」
+  - `leftTags`：商品卡图片左下角标签，例如 `["呼吸灯"]`，前台背景色按标签随机生成，工具里叫「商品左侧标签」
   - `priceMax`：价格区间上限，前台显示 `¥最低 – ¥最高`
   - `stock`：`false` 时显示“无货”并禁用购买
   - `hot`：`true` 时显示 HOT 标记
-  - `recommend`：`true` 时自动显示“店长推荐”标签
   - `options`：口味/规格，字符串数组或 `{label, price, stock}` 数组；有值时商品卡显示 SELECT 下拉。选中后显示对应口味价格；该口味 `stock: false` 时购买按钮置灰
   - `specs`：参数对象，显示在商品页“参数”Tab
   - `gallery`：详情图数组，留空使用 `localImage`
