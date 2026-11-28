@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import { site } from '@/data'
 import { useCart } from '@/stores/cart'
-import { asset, formatPrice } from '@/utils'
+import { formatPrice } from '@/utils'
 import { buildOrderText, copyToClipboard } from '@/utils/orderText'
 
 const cart = useCart()
@@ -18,7 +18,6 @@ const shippingFee = computed(() =>
   cart.items.length && cart.subtotal.value < freeOver.value ? fee.value : 0
 )
 const total = computed(() => cart.subtotal.value + shippingFee.value)
-const paymentQr = computed(() => site.payment?.qr || '')
 const orderText = computed(() =>
   buildOrderText({
     items: cart.items,
@@ -71,7 +70,7 @@ function finishOrder() {
     <div v-if="finished" class="order-done">
       <span class="done-mark">✓</span>
       <h1>购物车已清空</h1>
-      <p>订单信息已复制。请把订单信息和付款截图发给客服，等待客服确认发货。</p>
+      <p>订单信息已复制。请把订单信息发给客服，等待客服确认商品、运费和付款方式。</p>
       <div class="done-actions">
         <RouterLink class="black-btn" to="/">继续购物</RouterLink>
         <RouterLink class="ghost-btn" to="/contact">联系客服</RouterLink>
@@ -85,7 +84,7 @@ function finishOrder() {
 
     <div v-else class="checkout-layout">
       <div class="checkout-main">
-        <p class="checkout-tip">填写收货信息 → 复制订单信息 → 加客服微信 / QQ，把信息和付款截图一起发过去。</p>
+        <p class="checkout-tip">填写收货信息 → 复制订单信息 → 加客服微信 / QQ，把信息发过去确认付款方式。</p>
 
         <h2>收货信息</h2>
         <textarea
@@ -100,7 +99,7 @@ function finishOrder() {
           <pre>{{ orderText }}</pre>
         </details>
 
-        <p class="checkout-tip">※ 「扫码支付」或微信 / QQ 转账后，请提供付款截图</p>
+        <p class="checkout-tip">※ 本站不提供在线支付，请加客服微信 / QQ 确认商品、运费和付款方式后再付款。</p>
       </div>
 
       <aside class="order-box">
@@ -125,27 +124,26 @@ function finishOrder() {
         <p class="order-note">满 {{ formatPrice(freeOver) }} 包邮</p>
         <div class="order-total"><span>合计</span><b>{{ formatPrice(total) }}</b></div>
 
-        <h3>[扫码支付]</h3>
-        <div class="method-qr">
-          <img v-if="paymentQr" :src="asset(paymentQr)" alt="收款二维码" />
-          <span v-else>收款二维码待上传</span>
+        <h3>联系客服付款</h3>
+        <div class="pay-contact">
+          <p><b>微信：</b>{{ site.contacts.wechat?.name || '客服微信' }}</p>
+          <p><b>QQ：</b>{{ site.contacts.qq?.number }}</p>
+          <p class="pay-note">
+            本站不提供在线支付。请加客服微信或 QQ，确认商品、运费和付款方式后再付款。
+          </p>
+          <RouterLink to="/contact">查看微信二维码 / QQ 联系方式 →</RouterLink>
         </div>
-        <p class="method-note">{{ site.payment?.note }}</p>
-        <p class="method-qq">
-          客服 QQ：{{ site.contacts.qq?.number }}（微信 / QQ 转账均可）
-        </p>
 
         <button class="place-order" type="button" @click="copyOrder">
           {{ copied ? '已复制，请发给客服' : '复制订单信息发给客服' }}
         </button>
         <p v-if="error" class="error">{{ error }}</p>
         <p v-if="copied" class="copy-success">
-          订单信息已复制。请加客服微信 / QQ，把信息和付款截图一起发过去。
+          订单信息已复制。请加客服微信 / QQ，把订单信息发过去确认付款方式。
         </p>
         <button v-if="copied" class="clear-cart-btn" type="button" @click="finishOrder">
           我已发给客服，清空购物车
         </button>
-        <RouterLink class="checkout-contact" to="/contact">查看客服微信 / QQ 联系方式 →</RouterLink>
       </aside>
     </div>
   </div>
@@ -389,36 +387,37 @@ function finishOrder() {
   border-top: 1px solid #eeeeee;
 }
 
-.method-qr {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 160px;
-  height: 160px;
-  margin-bottom: 8px;
-  font-size: 11px;
-  color: #999999;
+.pay-contact {
+  padding: 12px;
   background: #fafafa;
   border: 1px solid #eeeeee;
+  border-radius: 4px;
 }
 
-.method-qr img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+.pay-contact p {
+  margin: 0 0 6px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #242125;
 }
 
-.method-note {
-  margin-bottom: 4px;
-  font-size: 10px;
-  line-height: 1.5;
+.pay-contact b {
+  font-weight: 700;
+}
+
+.pay-contact .pay-note {
+  margin: 8px 0;
+  font-size: 11px;
   color: #999999;
 }
 
-.method-qq {
-  margin-bottom: 12px;
-  font-size: 11px;
-  color: #242125;
+.pay-contact a {
+  font-size: 12px;
+  color: #3372a2;
+}
+
+.pay-contact a:hover {
+  color: var(--color-primary);
 }
 
 .agree {
@@ -446,17 +445,6 @@ function finishOrder() {
   font-size: 11px;
   line-height: 1.6;
   color: #008000;
-}
-
-.checkout-contact {
-  display: inline-flex;
-  margin-top: 10px;
-  font-size: 12px;
-  color: #3372a2;
-}
-
-.checkout-contact:hover {
-  color: var(--color-primary);
 }
 
 .place-order {
@@ -506,23 +494,6 @@ function finishOrder() {
 .success-note {
   font-size: 11px;
   color: #999999;
-}
-
-.success-qr {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 200px;
-  height: 200px;
-  margin: 16px auto;
-  color: #999999;
-  border: 1px solid #eeeeee;
-}
-
-.success-qr img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
 }
 
 .success-qq {

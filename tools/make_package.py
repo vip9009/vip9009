@@ -10,7 +10,7 @@
 - public/images/products（商品图片）
 - public/images/details（详情图片）
 - public/videos/products（详情视频）
-- public/images 下的客服头像、微信二维码、收款二维码
+- public/images 下的客服头像、微信二维码
 
 用法：
     python tools/make_package.py
@@ -37,7 +37,6 @@ SITE_IMAGES = (
     ROOT / "public" / "images" / "paopao-qr.png",
     ROOT / "public" / "images" / "paopao-face.jpg",
     ROOT / "public" / "images" / "paopao-avatar-600.jpg",
-    ROOT / "public" / "images" / "payment-qr.webp",
     ROOT / "public" / "images" / "wechat-qr.webp",
     ROOT / "public" / "images" / "wechat-avatar.webp",
 )

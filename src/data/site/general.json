@@ -17,11 +17,6 @@
     "freeOver": 138,
     "fee": 8
   },
-  "payment": {
-    "title": "扫码支付",
-    "qr": "/images/paopao-qr.png",
-    "note": "扫码支付后，把付款截图发给泡泡哥。"
-  },
   "brands": [
     "RELX",
     "ZGAR",

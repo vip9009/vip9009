@@ -21,9 +21,9 @@ export function buildOrderText({ items, subtotal, shippingFee, total, address = 
   lines.push(`运费：${shippingFee ? formatPrice(shippingFee) : '免运费'}`)
   lines.push(`合计：${formatPrice(total)}`)
   lines.push('')
-  lines.push('支付方式：微信 / QQ 转账')
+  lines.push('付款方式：联系客服确认（微信 / QQ）')
   lines.push('客服 QQ：1220820788')
-  lines.push('付款后请把付款截图和这段订单信息一起发给客服。')
+  lines.push('请把这段订单信息发给客服，确认商品、运费和付款方式。')
   return lines.join('\n')
 }
 

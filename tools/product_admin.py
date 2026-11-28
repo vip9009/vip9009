@@ -64,7 +64,6 @@ CONTACTS_FILE = DATA_DIR / "site" / "contacts.json"
 IMAGES_DIR = ROOT / "public" / "images" / "products"
 DETAIL_IMAGES_DIR = ROOT / "public" / "images" / "details"
 VIDEOS_DIR = ROOT / "public" / "videos" / "products"
-PAYMENT_IMAGE = ROOT / "public" / "images" / "payment-qr.webp"
 WECHAT_QR_IMAGE = ROOT / "public" / "images" / "wechat-qr.webp"
 WECHAT_AVATAR_IMAGE = ROOT / "public" / "images" / "wechat-avatar.webp"
 BACKUP_DIR = ROOT / "tools" / ".backups"
@@ -339,7 +338,6 @@ def check_data() -> int:
     print(f"分类：{len(categories)}")
 
     for label, value in (
-        ("收款二维码", (general.get("payment") or {}).get("qr")),
         ("微信二维码", (contacts.get("wechat") or {}).get("image")),
         ("微信头像", (contacts.get("wechat") or {}).get("avatar")),
     ):
@@ -413,10 +411,8 @@ class ProductAdmin(tk.Tk):
         self._preview_photo = None
         self._last_image_dir = None
         self.extra = self._empty_extra()
-        self._pay_photo = None
         self._wechat_photo = None
         self._avatar_photo = None
-        self.pending_payment_image = None
         self.pending_wechat_image = None
         self.pending_avatar_image = None
 
@@ -808,7 +804,6 @@ class ProductAdmin(tk.Tk):
         general = self.general
         hero = general.get("hero", {})
         shipping = general.get("shipping", {})
-        payment = general.get("payment", {})
         wechat = self.contacts.get("wechat", {})
 
         ttk.Label(tab, text="公告文字").grid(row=0, column=0, sticky="w", pady=5)
@@ -863,34 +858,20 @@ class ProductAdmin(tk.Tk):
         self.qq_var = tk.StringVar(value=str((self.contacts.get("qq") or {}).get("number", "")))
         ttk.Entry(tab, textvariable=self.qq_var).grid(row=8, column=1, columnspan=2, sticky="ew", pady=5)
 
-        ttk.Label(tab, text="收款二维码").grid(row=9, column=0, sticky="w", pady=5)
-        self.payment_path_var = tk.StringVar(value=payment.get("qr", ""))
-        pay_row = ttk.Frame(tab)
-        pay_row.grid(row=9, column=1, columnspan=2, sticky="ew", pady=5)
-        ttk.Entry(pay_row, textvariable=self.payment_path_var, state="readonly").pack(
-            side="left", fill="x", expand=True
-        )
-        ttk.Button(pay_row, text="选择图片", command=self.choose_payment_image).pack(side="left", padx=(6, 0))
-
-        ttk.Label(tab, text="收款说明").grid(row=10, column=0, sticky="w", pady=5)
-        self.payment_note_var = tk.StringVar(value=payment.get("note", ""))
-        ttk.Entry(tab, textvariable=self.payment_note_var).grid(row=10, column=1, columnspan=2, sticky="ew", pady=5)
-
         preview_frame = ttk.LabelFrame(tab, text="图片预览", padding=6)
-        preview_frame.grid(row=11, column=0, columnspan=3, sticky="ew", pady=8)
+        preview_frame.grid(row=9, column=0, columnspan=3, sticky="ew", pady=8)
         self.avatar_preview = self._build_preview_cell(preview_frame, "微信头像", 0, 100)
         self.wechat_preview = self._build_preview_cell(preview_frame, "客服微信二维码", 1, 145)
-        self.payment_preview = self._build_preview_cell(preview_frame, "收款二维码", 2, 145)
         self._show_setting_previews()
 
         ttk.Label(
             tab,
-            text="保存后会写入 src/data/site/general.json 和 contacts.json；发布时会一并提交二维码图片。",
+            text="保存后会写入 src/data/site/general.json 和 contacts.json；发布时会一并提交微信头像和二维码。",
             foreground="#777",
-        ).grid(row=12, column=0, columnspan=3, sticky="w")
+        ).grid(row=10, column=0, columnspan=3, sticky="w")
 
         ttk.Button(tab, text="保存站点设置", style="Accent.TButton", command=self.save_settings).grid(
-            row=13, column=0, columnspan=3, sticky="w", pady=(14, 0)
+            row=11, column=0, columnspan=3, sticky="w", pady=(14, 0)
         )
 
     @staticmethod
@@ -952,9 +933,6 @@ class ProductAdmin(tk.Tk):
         self._show_setting_preview(
             self.wechat_preview, "_wechat_photo", self.wechat_path_var.get(), (135, 135), "未选择微信二维码"
         )
-        self._show_setting_preview(
-            self.payment_preview, "_pay_photo", self.payment_path_var.get(), (135, 135), "未选择收款码"
-        )
 
     def choose_avatar_image(self):
         path = self._pick_image("选择微信头像")
@@ -974,15 +952,6 @@ class ProductAdmin(tk.Tk):
         self._show_setting_previews()
         self.status_var.set("已选择微信二维码，点“保存站点设置”后生效")
 
-    def choose_payment_image(self):
-        path = self._pick_image("选择收款二维码图片")
-        if not path:
-            return
-        self.pending_payment_image = path
-        self.payment_path_var.set(path)
-        self._show_setting_previews()
-        self.status_var.set("已选择收款二维码，点“保存站点设置”后生效")
-
     def save_settings(self):
         try:
             free_over = compact_price(self.free_over_var.get().strip())
@@ -996,7 +965,6 @@ class ProductAdmin(tk.Tk):
         uploads = (
             ("微信头像", "pending_avatar_image", self.avatar_path_var, WECHAT_AVATAR_IMAGE, 320, 88),
             ("微信二维码", "pending_wechat_image", self.wechat_path_var, WECHAT_QR_IMAGE, 700, 90),
-            ("收款二维码", "pending_payment_image", self.payment_path_var, PAYMENT_IMAGE, 700, 90),
         )
         for label, attr, var, destination, max_size, quality in uploads:
             source = getattr(self, attr)
@@ -1016,8 +984,6 @@ class ProductAdmin(tk.Tk):
         hero["link"] = self.hero_link_var.get().strip()
         self.general.setdefault("shipping", {})["freeOver"] = free_over
         self.general["shipping"]["fee"] = ship_fee
-        self.general.setdefault("payment", {})["qr"] = self.payment_path_var.get().strip()
-        self.general["payment"]["note"] = self.payment_note_var.get().strip()
 
         wechat = self.contacts.setdefault("wechat", {})
         wechat["name"] = self.wechat_name_var.get().strip()
@@ -2540,7 +2506,6 @@ class ProductAdmin(tk.Tk):
                     ROOT / "public/images/paopao-qr.png",
                     ROOT / "public/images/paopao-face.jpg",
                     ROOT / "public/images/paopao-avatar-600.jpg",
-                    PAYMENT_IMAGE,
                     WECHAT_QR_IMAGE,
                     WECHAT_AVATAR_IMAGE,
                 ):
@@ -2604,7 +2569,6 @@ class ProductAdmin(tk.Tk):
         ]
         add_paths = [path for path in add_paths if (ROOT / path).exists()]
         for image_path in (
-            "public/images/payment-qr.webp",
             "public/images/wechat-qr.webp",
             "public/images/wechat-avatar.webp",
         ):
