@@ -2104,13 +2104,23 @@ class ProductAdmin(tk.Tk):
                     for path in folder.rglob("*"):
                         if path.is_file():
                             archive.write(path, path.relative_to(ROOT).as_posix())
+                for path in (
+                    ROOT / "public/images/paopao-qr.png",
+                    ROOT / "public/images/paopao-face.jpg",
+                    ROOT / "public/images/paopao-avatar-600.jpg",
+                    PAYMENT_IMAGE,
+                    WECHAT_QR_IMAGE,
+                    WECHAT_AVATAR_IMAGE,
+                ):
+                    if path.exists():
+                        archive.write(path, path.relative_to(ROOT).as_posix())
         except Exception as error:
             messagebox.showerror("导出失败", str(error))
             return
         self.status_var.set(f"已导出数据包：{target}")
         messagebox.showinfo(
             "导出成功",
-            "已导出商品数据和图片：\n\n"
+            "已导出商品数据、商品图片和客服二维码：\n\n"
             + target
             + "\n\n在另一台有 Git 的电脑上，把压缩包解压并覆盖到项目根目录，"
             "然后打开工具点「发布到 GitHub」即可。",
