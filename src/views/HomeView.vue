@@ -5,6 +5,7 @@ import { site, productsData } from '@/data'
 import VpProductCard from '@/components/VpProductCard.vue'
 import LottieBox from '@/components/LottieBox.vue'
 import AppIcon from '@/components/AppIcon.vue'
+import TagIcon from '@/components/TagIcon.vue'
 import { asset } from '@/utils'
 import newDividerImg from '@/assets/images/new-divider.png'
 import arrowDownImg from '@/assets/images/arrow-down.png'
@@ -116,6 +117,30 @@ const TAG_COLORS = {
   烟杆: '#8e8e8e'
 }
 const TAG_LIGHT_TEXT = new Set(['HOT', '强击喉', '极致顺滑'])
+const TAG_ICONS = {
+  HOT: 'hot',
+  上新: 'bulb',
+  上新口味: 'seedling',
+  模式切换: 'refresh',
+  凉度调节: 'snow',
+  自定义口感: 'fingerprint',
+  强击喉: 'target',
+  FREE: 'rocket',
+  'SMART VAPE': 'chip',
+  KOREA: 'globe',
+  'MINI GAME': 'gamepad',
+  呼吸灯: 'breath',
+  极致顺滑: 'smile',
+  口味切换: 'swap',
+  'NIC1-2%': 'dice',
+  免充电: 'battery',
+  适配悦刻: 'transfer',
+  烟杆: 'lines',
+}
+
+function tagIcon(label) {
+  return TAG_ICONS[label] || 'tag'
+}
 
 function tagStyle(label) {
   return {
@@ -222,11 +247,20 @@ function setPage(index) {
               v-for="tag in row"
               :key="tag.label"
               class="tag-pill"
-              :class="`tone-${tag.tone}`"
+              :class="[
+                `tone-${tag.tone}`,
+                {
+                  'tag-dashed-light': tag.label === 'HOT',
+                  'tag-dashed-pink': tag.label === '上新',
+                  'tag-hot': tag.label === 'HOT',
+                  'tag-free': tag.label === 'FREE',
+                },
+              ]"
               :style="tagStyle(tag.label)"
               :to="`/search?q=${encodeURIComponent(tag.label)}`"
             >
-              {{ tag.label }}
+              <TagIcon :name="tagIcon(tag.label)" :size="13" />
+              <span>{{ tag.label }}</span>
             </RouterLink>
           </div>
         </div>
@@ -714,14 +748,14 @@ function setPage(index) {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  max-width: 760px;
+  max-width: 1050px;
   padding: 14px 0 0;
   margin: 0 auto;
 }
 
 .tag-row {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 6px;
@@ -730,12 +764,88 @@ function setPage(index) {
 .tag-pill {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  gap: 1px;
   height: 27.5px;
-  padding: 0 8px;
+  padding: 0;
   font-size: 11px;
   font-weight: 400;
+  line-height: 1;
   color: #000000;
+  white-space: nowrap;
+  border: 0;
   border-radius: 5px;
+  box-shadow: 0 0 2px 0 #020202;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.tag-pill.tag-dashed-light {
+  border: 1px dashed #ededed;
+}
+
+.tag-pill.tag-dashed-pink {
+  border: 1px dashed #ff0077;
+}
+
+.tag-pill:hover {
+  color: #ffffff !important;
+  background: #ff0077 !important;
+  border-color: #ff0077;
+}
+
+.tag-pill:hover :deep(.tag-icon) {
+  color: #ffffff;
+}
+
+.tag-pill.tag-hot {
+  animation: tag-tada 1s ease-in-out infinite;
+}
+
+.tag-pill.tag-free {
+  animation: tag-pulse 1s ease-in-out 1s infinite;
+}
+
+@keyframes tag-tada {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  10%,
+  20% {
+    transform: scale(0.9) rotate(-3deg);
+  }
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: scale(1.1) rotate(3deg);
+  }
+  40%,
+  60%,
+  80% {
+    transform: scale(1.1) rotate(-3deg);
+  }
+}
+
+@keyframes tag-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tag-pill.tag-hot,
+  .tag-pill.tag-free {
+    animation: none;
+  }
 }
 
 .tone-pink { background: #e6007e; }
