@@ -18,6 +18,7 @@
 
 from __future__ import annotations
 
+import copy
 import json
 import os
 import re
@@ -597,9 +598,10 @@ class ProductAdmin(tk.Tk):
 
         actions = ttk.Frame(left)
         actions.pack(fill="x", pady=(10, 0))
-        ttk.Button(actions, text="删除商品", command=self.delete_product).pack(side="left")
-        ttk.Button(actions, text="上移", command=lambda: self.move_product(-1)).pack(side="left", padx=6)
-        ttk.Button(actions, text="下移", command=lambda: self.move_product(1)).pack(side="left")
+        ttk.Button(actions, text="复制商品", command=self.duplicate_product).pack(side="left")
+        ttk.Button(actions, text="删除商品", command=self.delete_product).pack(side="left", padx=6)
+        ttk.Button(actions, text="上移", command=lambda: self.move_product(-1)).pack(side="left")
+        ttk.Button(actions, text="下移", command=lambda: self.move_product(1)).pack(side="left", padx=6)
 
         right.columnconfigure(1, weight=1)
 
@@ -646,15 +648,15 @@ class ProductAdmin(tk.Tk):
 
         buttons = ttk.Frame(right)
         buttons.grid(row=6, column=0, columnspan=3, sticky="ew", pady=(12, 0))
-        ttk.Button(buttons, text="保存商品", style="Accent.TButton", command=self.save_product).pack(
-            side="left"
-        )
-        ttk.Button(buttons, text="更多信息", command=self.edit_extra).pack(side="left", padx=8)
+        ttk.Button(buttons, text="更多信息", command=self.edit_extra).pack(side="left")
         self.detail_button_var = tk.StringVar(value="图文/视频详情")
         ttk.Button(
             buttons, textvariable=self.detail_button_var, command=self.edit_detail_blocks
         ).pack(side="left", padx=8)
         ttk.Button(buttons, text="清空表单", command=self.new_product).pack(side="left", padx=8)
+        ttk.Button(buttons, text="保存商品", style="Accent.TButton", command=self.save_product).pack(
+            side="left", padx=(12, 0)
+        )
 
     # -- 分类页 -----------------------------------------------------------
 
@@ -1555,7 +1557,7 @@ class ProductAdmin(tk.Tk):
                 "detailBlocks": list(self.extra.get("detailBlocks") or []),
             }
             dialog.destroy()
-            self.status_var.set("更多信息已更新，记得点“保存商品”")
+            self._try_save_after_dialog()
 
         buttons = ttk.Frame(dialog)
         buttons.grid(row=16, column=0, columnspan=3, sticky="e", padx=12, pady=12)
@@ -1834,9 +1836,7 @@ class ProductAdmin(tk.Tk):
             self.extra["detailBlocks"] = [dict(block) for block in blocks]
             self._refresh_detail_button()
             dialog.destroy()
-            self.status_var.set(
-                f"图文详情已更新（{len(blocks)} 个内容块），记得点“保存商品”"
-            )
+            self._try_save_after_dialog()
 
         ttk.Button(footer, text="保存详情内容", style="Accent.TButton", command=save_blocks).pack(
             side="left"
@@ -2012,6 +2012,49 @@ class ProductAdmin(tk.Tk):
         self.pending_image = None
         self.status_var.set(f"已保存商品：{title}")
         return True
+
+    def _try_save_after_dialog(self):
+        title = self.title_var.get().strip()
+        price = self.price_var.get().strip()
+        image = self.image_var.get().strip() or self.pending_image
+        top_id = self.product_top_labels.get(self.product_top_var.get())
+        if not (title and price and image and top_id):
+            self.status_var.set("已应用当前修改；补齐名称、价格、图片和分类后点“保存商品”")
+            return
+        try:
+            if float(compact_price(price)) <= 0:
+                raise ValueError
+        except (TypeError, ValueError):
+            self.status_var.set("已应用当前修改；价格填写正确后点“保存商品”")
+            return
+        if self.save_product():
+            self.after(80, lambda: self.status_var.set("商品已保存"))
+
+    def duplicate_product(self):
+        selection = self.product_tree.selection()
+        if not selection:
+            messagebox.showinfo("未选择商品", "请先在列表中选择要复制的商品。")
+            return
+        section_id, index = self.row_map[selection[0]]
+        products = self.sections.get(section_id, {}).get("products", [])
+        if index >= len(products):
+            return
+        copied = copy.deepcopy(products[index])
+        base_title = str(copied.get("title", "")).strip() or "未命名商品"
+        copied["title"] = f"{base_title}（副本）"
+        copied["imageAlt"] = copied["title"]
+        copied.pop("sourceId", None)
+        copied.pop("description", None)
+        copied.pop("recommend", None)
+        products.insert(index + 1, copied)
+        self.save_all()
+        self._refresh_all()
+        iid = f"{section_id}:{index + 1}"
+        if iid in self.row_map:
+            self.product_tree.selection_set(iid)
+            self.product_tree.see(iid)
+            self.load_product()
+        self.after(80, lambda: self.status_var.set("已复制商品，请修改名称、价格、图片后点“保存商品”"))
 
     def delete_product(self):
         selection = self.product_tree.selection()
