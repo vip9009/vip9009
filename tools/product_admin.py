@@ -736,11 +736,18 @@ class ProductAdmin(tk.Tk):
             row=5, column=1, sticky="w", pady=4
         )
 
+        ttk.Label(right, text="顶部导航").grid(row=6, column=0, sticky="w", pady=4)
         self.category_nav_var = tk.BooleanVar(value=True)
-        self.category_nav_check = ttk.Checkbutton(
-            right, text="显示在顶部导航", variable=self.category_nav_var
+        nav_frame = ttk.Frame(right)
+        nav_frame.grid(row=6, column=1, sticky="w", pady=4)
+        self.category_nav_on = ttk.Radiobutton(
+            nav_frame, text="显示", variable=self.category_nav_var, value=True
         )
-        self.category_nav_check.grid(row=6, column=1, sticky="w", pady=4)
+        self.category_nav_off = ttk.Radiobutton(
+            nav_frame, text="隐藏", variable=self.category_nav_var, value=False
+        )
+        self.category_nav_on.pack(side="left")
+        self.category_nav_off.pack(side="left", padx=(16, 0))
 
         ttk.Label(right, text="自定义链接").grid(row=7, column=0, sticky="w", pady=4)
         self.category_link_var = tk.StringVar()
@@ -1663,9 +1670,14 @@ class ProductAdmin(tk.Tk):
             result = {"ok": False, "text": "", "heading": heading}
 
             heading_var = tk.BooleanVar(value=heading)
-            ttk.Checkbutton(win, text="作为小标题（加粗显示）", variable=heading_var).grid(
-                row=0, column=0, sticky="w", padx=14, pady=(12, 6)
+            heading_frame = ttk.Frame(win)
+            heading_frame.grid(row=0, column=0, sticky="w", padx=14, pady=(12, 6))
+            ttk.Radiobutton(heading_frame, text="正文", variable=heading_var, value=False).pack(
+                side="left"
             )
+            ttk.Radiobutton(
+                heading_frame, text="小标题（加粗显示）", variable=heading_var, value=True
+            ).pack(side="left", padx=(16, 0))
             text = tk.Text(win, wrap="word", relief="solid", borderwidth=1, font=("Microsoft YaHei UI", 10))
             text.grid(row=1, column=0, sticky="nsew", padx=14, pady=6)
             text.insert("1.0", initial)
@@ -2085,7 +2097,8 @@ class ProductAdmin(tk.Tk):
         max_sort = max((cat.get("sort", 0) for cat in self.categories.values()), default=0)
         self.category_sort_var.set(str(max_sort + 1))
         self.category_nav_var.set(True)
-        self.category_nav_check.configure(state="normal")
+        for widget in (self.category_nav_on, self.category_nav_off):
+            widget.configure(state="normal")
         self.status_var.set("新增一级分类：保存后会自动出现在顶部导航")
 
     def new_child_category(self):
@@ -2117,7 +2130,8 @@ class ProductAdmin(tk.Tk):
         self.category_parent_var.set(self._top_label_for(parent_id))
         self.category_sort_var.set(str(len(children_of(self.categories, parent_id)) + 1))
         self.category_nav_var.set(True)
-        self.category_nav_check.configure(state="disabled")
+        for widget in (self.category_nav_on, self.category_nav_off):
+            widget.configure(state="disabled")
         self.status_var.set("新增二级分类：商品可归到这个末级分类")
 
     def load_category(self, _event=None):
@@ -2139,7 +2153,9 @@ class ProductAdmin(tk.Tk):
         self.category_link_var.set(category.get("to", ""))
         self.category_sort_var.set(str(category.get("sort", 10)))
         self.category_nav_var.set(bool(category.get("nav", True)))
-        self.category_nav_check.configure(state="normal" if not category.get("parent") else "disabled")
+        state = "normal" if not category.get("parent") else "disabled"
+        for widget in (self.category_nav_on, self.category_nav_off):
+            widget.configure(state=state)
 
         parent_id = category.get("parent")
         self._refresh_parent_options()
